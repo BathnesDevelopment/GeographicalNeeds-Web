@@ -1,0 +1,36 @@
+﻿@model Data_Loading_Tool.Models.GeneralStagingModel
+
+@{
+    ViewBag.Title = "CreateStaging";
+}
+
+<h2>CreateStaging</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>CreateStagingModel</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TableName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.TableName)
+            @Html.ValidationMessageFor(model => model.TableName)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

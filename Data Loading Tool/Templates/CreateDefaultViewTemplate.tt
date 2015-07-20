@@ -1,0 +1,123 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".sql" #>
+
+CREATE VIEW [dbo].[<#= FactName #>]
+AS
+select 
+<#
+	Boolean firstSelect = true;
+	foreach(String dimensionName in DimensionNames)
+	{
+		if(firstSelect)
+		{
+#>
+			  [<#= dimensionName #>].LsoaName
+			, [<#= dimensionName #>].FactCount
+			, [<#= dimensionName #>].DimensionValue as [<#= dimensionName #>]
+<#
+			firstSelect = false;
+		}
+		else
+		{
+#>
+			, [<#= dimensionName #>].DimensionValue as [<#= dimensionName #>]
+<#
+		}
+	}
+#>
+from
+<#
+	Boolean firstPass = true;
+	String firstDimension = "";
+	foreach(String dimensionName in DimensionNames)
+	{
+		if(firstPass)
+		{
+#>
+			(
+				SELECT        
+					I.FactInstanceID,
+					L.LsoaName, 
+					V.DimensionValue , 
+					I.Value AS FactCount
+				FROM            
+					dbo.FactInstance AS I 
+				INNER JOIN
+					dbo.LSOA AS L 
+				ON 
+					L.LsoaID = I.LsoaID 
+				INNER JOIN
+					dbo.FactDimensionSet AS S 
+				ON 
+					I.FactDimensionSetID = S.FactDimensionSetID 
+				INNER JOIN
+					dbo.Fact AS F 
+				ON 
+					F.FactID = S.FactID 
+				INNER JOIN
+					dbo.FactDimensionMapping AS M 
+				ON 
+					S.FactDimensionSetID = M.FactDimensionSetID 
+				INNER JOIN
+					dbo.DimensionValue AS V 
+				ON 
+					V.DimensionValueID = M.DimensionValueID 
+				INNER JOIN
+					dbo.Dimension AS D 
+				ON 
+					D.DimensionID = V.DimensionID
+				WHERE        
+					(D.DimensionName = '<#= dimensionName #>') AND (F.FactName = '<#= FactName #>')
+			) [<#= dimensionName #>]	
+<#
+			firstPass = false;
+			firstDimension = dimensionName;
+		}
+		else
+		{
+#>
+			inner join
+			(
+				SELECT        
+					I.FactInstanceID,
+					L.LsoaName, 
+					V.DimensionValue, 
+					I.Value AS FactCount
+				FROM            
+					dbo.FactInstance AS I 
+				INNER JOIN
+					dbo.LSOA AS L 
+				ON 
+					L.LsoaID = I.LsoaID 
+				INNER JOIN
+					dbo.FactDimensionSet AS S 
+				ON 
+					I.FactDimensionSetID = S.FactDimensionSetID 
+				INNER JOIN
+					dbo.Fact AS F 
+				ON 
+					F.FactID = S.FactID 
+				INNER JOIN
+					dbo.FactDimensionMapping AS M 
+				ON 
+					S.FactDimensionSetID = M.FactDimensionSetID 
+				INNER JOIN
+					dbo.DimensionValue AS V 
+				ON 
+					V.DimensionValueID = M.DimensionValueID 
+				INNER JOIN
+					dbo.Dimension AS D 
+				ON 
+					D.DimensionID = V.DimensionID
+				WHERE        
+					(D.DimensionName = '<#= dimensionName #>') AND (F.FactName = '<#= FactName #>')
+			) [<#= dimensionName #>]	
+			on [<#= firstDimension#>].FactInstanceID = [<#= dimensionName #>].FactInstanceID
+<#
+		}
+	}
+#>

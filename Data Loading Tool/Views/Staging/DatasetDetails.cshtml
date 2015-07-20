@@ -1,0 +1,32 @@
+﻿@model Data_Loading_Tool.Models.StagingDetailModel
+
+@{
+    ViewBag.Title = "DatasetDetails";
+}
+
+<h2>DatasetDetails</h2>
+
+<fieldset>
+    <legend>DatasetDetailModel</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.StagingDatasetName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.StagingDatasetName)
+    </div>
+    <br />
+    
+    <div class="display-label">
+        Columns
+    </div>
+        @foreach (var column in Model.Columns)
+        {
+            <div class="display-field">
+                @Html.DisplayFor(model => column)
+            </div>
+        }
+</fieldset>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,61 @@
+﻿@model Data_Loading_Tool.Models.MeasureValueModel
+
+@{
+    ViewBag.Title = "AddMeasureValues";
+}
+
+<h2>AddMeasureValues</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>MeasureValueModel</legend>
+    
+        
+
+            @Html.HiddenFor(x => Model.StagingTableName)            
+            @Html.HiddenFor(x => Model.MeasureName)
+            @Html.HiddenFor(x => Model.StagingGeographyColumn)
+            @Html.HiddenFor(x => Model.UseMeasureColumn)
+            @Html.HiddenFor(x => Model.MeasureStagingColumnName)
+
+            @for (var i = 0; i < Model.MeasureValueDetails.Count(); i++)
+            {
+                @Html.HiddenFor(x => Model.MeasureValueDetails[i].DimensionID)
+                @Html.HiddenFor(x => Model.MeasureValueDetails[i].DimColumnInStaging)
+
+                @Html.HiddenFor(model => Model.MeasureValueDetails[i].DimValueID)
+                <div class="editor-label">
+                    @Html.LabelFor(model => Model.MeasureValueDetails[i].DimValue)
+                </div>
+                <div class="editor-field">
+                    @Html.ValueFor(model => Model.MeasureValueDetails[i].DimValue)
+                    @Html.HiddenFor(model => Model.MeasureValueDetails[i].DimValue)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => Model.MeasureValueDetails[i].DimValueInStaging)
+                </div>
+                <div class="editor-field">
+                    @Html.DropDownListFor(model => Model.MeasureValueDetails[i].DimValueInStaging, Model.MeasureValueDetails[i].StagingDimensionValues)
+                    @Html.ValidationMessageFor(model => Model.MeasureValueDetails[i].DimValueInStaging)
+                </div>
+            
+            }
+        
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

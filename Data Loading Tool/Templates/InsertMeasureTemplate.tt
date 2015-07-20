@@ -1,0 +1,188 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".sql" #>
+
+INSERT INTO Fact
+(
+	FactName
+)
+VALUES
+(
+	'<#= FactName #>'
+)
+
+Declare @FactID int
+Select
+	@FactID = FactID
+from
+	Fact
+where
+	FactName = '<#= FactName #>'
+
+
+
+
+
+INSERT INTO FactDimensionSet
+(
+	FactID,
+	DimString
+)
+	select @FactID, 
+<# 
+	bool firstSelect = true;
+
+	foreach(int id in DimensionIDs)
+	{
+		if(firstSelect)
+		{
+#>
+	[<#= id #>].DimensionValue
+<#
+		firstSelect = false;
+		}
+		else
+		{
+#>
+	+ '-' + [<#= id #>].DimensionValue
+<#
+		}
+	}
+
+	bool first = true;
+	int firstID = 0;
+
+	foreach(int id in DimensionIDs)
+	{
+	if(first)
+	{
+#>
+from
+(select 
+	V.DimensionID as ID,
+	V.DimensionValue
+from
+	Dimension D
+inner join 
+	DimensionValue V
+on D.DimensionID = v.DimensionID
+where D.DimensionID = <#= id #>) [<#= id #>]
+
+<#
+first = false;
+firstID = id; 
+}
+else{
+#>
+inner join 
+(select 
+	V.DimensionID as ID,
+	V.DimensionValue
+from
+	Dimension D
+inner join 
+	DimensionValue V
+on D.DimensionID = v.DimensionID
+where D.DimensionID = <#= id #>) [<#= id #>]
+on [<#= firstID #>].ID <> [<#= id #>].ID
+<#
+}
+}
+#>
+
+
+
+
+<# 
+	foreach(int dimension in DimensionIDs)
+	{
+#>
+	INSERT INTO FactDimensionMapping
+	(
+		DimensionValueID,
+		FactDimensionSetID
+	)
+	select 
+		XXX.ID, F.FactDimensionSetID
+	from 
+	(
+	select [<#= dimension#>].ID , 
+<# 
+	bool firstSelect2 = true;
+
+	foreach(int id in DimensionIDs)
+	{
+		if(firstSelect2)
+		{
+#>
+	[<#= id #>].DimensionValue
+<#
+		firstSelect2 = false;
+		}
+		else
+		{
+#>
+	+ '-' + [<#= id #>].DimensionValue
+<#
+		}
+	}
+#>
+	as string
+	from
+
+<#
+
+	bool first2 = true;
+	int firstID2 = 0;
+
+	foreach(int id in DimensionIDs)
+	{
+		if(first2)
+		{
+
+#>
+		(select 
+			V.DimensionValueID as ID,
+			V.DimensionValue
+		from
+			Dimension D
+		inner join 
+			DimensionValue V
+		on D.DimensionID = v.DimensionID
+		where D.DimensionID = <#= id #>) [<#= id #>]
+
+<#
+		first2 = false;
+		firstID2 = id; 
+		}
+		else
+		{
+#>
+		inner join 
+		(select 
+			V.DimensionValueID as ID,
+			V.DimensionValue
+		from
+			Dimension D
+		inner join 
+			DimensionValue V
+		on D.DimensionID = v.DimensionID
+		where D.DimensionID = <#= id #>) [<#= id #>]
+		on [<#= firstID2 #>].ID <> [<#= id #>].ID
+<#
+		}
+	}
+#>
+
+	) XXX
+	inner join FactDimensionSet F
+	on F.DimString = XXX.string
+<#
+
+	}
+
+#>
+

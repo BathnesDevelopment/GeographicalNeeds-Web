@@ -3,6 +3,7 @@
 
 # Settings
 *.config
+*.csv
 
 # Data
 Data Loading Tool/App_Data/CSVUploads/

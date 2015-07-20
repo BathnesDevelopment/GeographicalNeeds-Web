@@ -1,0 +1,688 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Dimension">
+          <Key>
+            <PropertyRef Name="DimensionID" />
+          </Key>
+          <Property Name="DimensionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DimensionName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DimensionValue">
+          <Key>
+            <PropertyRef Name="DimensionValueID" />
+          </Key>
+          <Property Name="DimensionValueID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DimensionID" Type="int" Nullable="false" />
+          <Property Name="DimensionValue" Type="varchar" MaxLength="1000" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Fact">
+          <Key>
+            <PropertyRef Name="FactID" />
+          </Key>
+          <Property Name="FactID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FactName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FactDimensionMapping">
+          <Key>
+            <PropertyRef Name="FactDimensionMappingID" />
+          </Key>
+          <Property Name="FactDimensionMappingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FactDimensionSetID" Type="int" Nullable="false" />
+          <Property Name="DimensionValueID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FactDimensionSet">
+          <Key>
+            <PropertyRef Name="FactDimensionSetID" />
+          </Key>
+          <Property Name="FactDimensionSetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FactID" Type="int" Nullable="false" />
+          <Property Name="DimString" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FactInstance">
+          <Key>
+            <PropertyRef Name="FactInstanceID" />
+          </Key>
+          <Property Name="FactInstanceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FactDimensionSetID" Type="int" Nullable="false" />
+          <Property Name="LsoaID" Type="int" />
+          <Property Name="PropertyID" Type="int" />
+          <Property Name="Value" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LSOA">
+          <Key>
+            <PropertyRef Name="LsoaID" />
+          </Key>
+          <Property Name="LsoaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LsoaCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="LsoaName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="WardCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="WardName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="MsoaCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MsoaName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CommunityArea" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PlanningPolicyArea" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LACode" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Properties">
+          <Key>
+            <PropertyRef Name="PropertyID" />
+          </Key>
+          <Property Name="PropertyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LsoaID" Type="int" />
+          <Property Name="NAMENUMBER" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="STREET" Type="nvarchar" MaxLength="100" />
+          <Property Name="LOCATION" Type="nvarchar" MaxLength="50" />
+          <Property Name="TOWN" Type="nvarchar" MaxLength="50" />
+          <Property Name="UPRN" Type="float" Nullable="false" />
+          <Property Name="USRN" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="POSTCODE" Type="nvarchar" MaxLength="8" />
+          <Property Name="EASTING" Type="numeric" Precision="22" Scale="4" Nullable="false" />
+          <Property Name="NORTHING" Type="numeric" Precision="22" Scale="4" Nullable="false" />
+          <Property Name="LATITUDE" Type="float" Nullable="false" />
+          <Property Name="LONGITUDE" Type="float" Nullable="false" />
+          <Property Name="SP_GEOMETRY" Type="geometry" />
+        </EntityType>
+        <EntityType Name="StagingColumns">
+          <Key>
+            <PropertyRef Name="StagingColumnID" />
+          </Key>
+          <Property Name="StagingColumnID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StagingDatasetID" Type="int" Nullable="false" />
+          <Property Name="ColumnName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StagingDatasets">
+          <Key>
+            <PropertyRef Name="StagingDatasetID" />
+          </Key>
+          <Property Name="StagingDatasetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DatasetName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Dimension__Dimen__182C9B23">
+          <End Role="Dimension" Type="Self.Dimension" Multiplicity="1" />
+          <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dimension">
+              <PropertyRef Name="DimensionID" />
+            </Principal>
+            <Dependent Role="DimensionValue">
+              <PropertyRef Name="DimensionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactDimen__Dimen__20C1E124">
+          <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="1" />
+          <End Role="FactDimensionMapping" Type="Self.FactDimensionMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionValue">
+              <PropertyRef Name="DimensionValueID" />
+            </Principal>
+            <Dependent Role="FactDimensionMapping">
+              <PropertyRef Name="DimensionValueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactDimen__FactD__1FCDBCEB">
+          <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="1" />
+          <End Role="FactDimensionMapping" Type="Self.FactDimensionMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactDimensionSet">
+              <PropertyRef Name="FactDimensionSetID" />
+            </Principal>
+            <Dependent Role="FactDimensionMapping">
+              <PropertyRef Name="FactDimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactDimen__FactI__1CF15040">
+          <End Role="Fact" Type="Self.Fact" Multiplicity="1" />
+          <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fact">
+              <PropertyRef Name="FactID" />
+            </Principal>
+            <Dependent Role="FactDimensionSet">
+              <PropertyRef Name="FactID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactInsta__FactD__239E4DCF">
+          <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="1" />
+          <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactDimensionSet">
+              <PropertyRef Name="FactDimensionSetID" />
+            </Principal>
+            <Dependent Role="FactInstance">
+              <PropertyRef Name="FactDimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactInsta__LsoaI__24927208">
+          <End Role="LSOA" Type="Self.LSOA" Multiplicity="0..1" />
+          <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LSOA">
+              <PropertyRef Name="LsoaID" />
+            </Principal>
+            <Dependent Role="FactInstance">
+              <PropertyRef Name="LsoaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactInsta__Prope__25869641">
+          <End Role="Properties" Type="Self.Properties" Multiplicity="0..1" />
+          <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Properties">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="FactInstance">
+              <PropertyRef Name="PropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Propertie__LsoaI__1367E606">
+          <End Role="LSOA" Type="Self.LSOA" Multiplicity="0..1" />
+          <End Role="Properties" Type="Self.Properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LSOA">
+              <PropertyRef Name="LsoaID" />
+            </Principal>
+            <Dependent Role="Properties">
+              <PropertyRef Name="LsoaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StagingCo__Stagi__45F365D3">
+          <End Role="StagingDatasets" Type="Self.StagingDatasets" Multiplicity="1" />
+          <End Role="StagingColumns" Type="Self.StagingColumns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StagingDatasets">
+              <PropertyRef Name="StagingDatasetID" />
+            </Principal>
+            <Dependent Role="StagingColumns">
+              <PropertyRef Name="StagingDatasetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddColumnToTable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="tableName" Type="varchar" Mode="In" />
+          <Parameter Name="columnName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CreateStagingTable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="tableName" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Dimension" EntityType="Self.Dimension" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DimensionValue" EntityType="Self.DimensionValue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Fact" EntityType="Self.Fact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FactDimensionMapping" EntityType="Self.FactDimensionMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FactDimensionSet" EntityType="Self.FactDimensionSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FactInstance" EntityType="Self.FactInstance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LSOA" EntityType="Self.LSOA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Properties" EntityType="Self.Properties" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StagingColumns" EntityType="Self.StagingColumns" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StagingDatasets" EntityType="Self.StagingDatasets" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Dimension__Dimen__182C9B23" Association="Self.FK__Dimension__Dimen__182C9B23">
+            <End Role="Dimension" EntitySet="Dimension" />
+            <End Role="DimensionValue" EntitySet="DimensionValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactDimen__Dimen__20C1E124" Association="Self.FK__FactDimen__Dimen__20C1E124">
+            <End Role="DimensionValue" EntitySet="DimensionValue" />
+            <End Role="FactDimensionMapping" EntitySet="FactDimensionMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactDimen__FactD__1FCDBCEB" Association="Self.FK__FactDimen__FactD__1FCDBCEB">
+            <End Role="FactDimensionSet" EntitySet="FactDimensionSet" />
+            <End Role="FactDimensionMapping" EntitySet="FactDimensionMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactDimen__FactI__1CF15040" Association="Self.FK__FactDimen__FactI__1CF15040">
+            <End Role="Fact" EntitySet="Fact" />
+            <End Role="FactDimensionSet" EntitySet="FactDimensionSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactInsta__FactD__239E4DCF" Association="Self.FK__FactInsta__FactD__239E4DCF">
+            <End Role="FactDimensionSet" EntitySet="FactDimensionSet" />
+            <End Role="FactInstance" EntitySet="FactInstance" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactInsta__LsoaI__24927208" Association="Self.FK__FactInsta__LsoaI__24927208">
+            <End Role="LSOA" EntitySet="LSOA" />
+            <End Role="FactInstance" EntitySet="FactInstance" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactInsta__Prope__25869641" Association="Self.FK__FactInsta__Prope__25869641">
+            <End Role="Properties" EntitySet="Properties" />
+            <End Role="FactInstance" EntitySet="FactInstance" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Propertie__LsoaI__1367E606" Association="Self.FK__Propertie__LsoaI__1367E606">
+            <End Role="LSOA" EntitySet="LSOA" />
+            <End Role="Properties" EntitySet="Properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StagingCo__Stagi__45F365D3" Association="Self.FK__StagingCo__Stagi__45F365D3">
+            <End Role="StagingDatasets" EntitySet="StagingDatasets" />
+            <End Role="StagingColumns" EntitySet="StagingColumns" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Dimension">
+          <Key>
+            <PropertyRef Name="DimensionID" />
+          </Key>
+          <Property Name="DimensionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DimensionName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DimensionValues" Relationship="Self.FK__Dimension__Dimen__182C9B23" FromRole="Dimension" ToRole="DimensionValue" />
+        </EntityType>
+        <EntityType Name="DimensionValue">
+          <Key>
+            <PropertyRef Name="DimensionValueID" />
+          </Key>
+          <Property Name="DimensionValueID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DimensionID" Type="Int32" Nullable="false" />
+          <Property Name="DimensionValue1" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Dimension" Relationship="Self.FK__Dimension__Dimen__182C9B23" FromRole="DimensionValue" ToRole="Dimension" />
+          <NavigationProperty Name="FactDimensionMappings" Relationship="Self.FK__FactDimen__Dimen__20C1E124" FromRole="DimensionValue" ToRole="FactDimensionMapping" />
+        </EntityType>
+        <EntityType Name="Fact">
+          <Key>
+            <PropertyRef Name="FactID" />
+          </Key>
+          <Property Name="FactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FactName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="FactDimensionSets" Relationship="Self.FK__FactDimen__FactI__1CF15040" FromRole="Fact" ToRole="FactDimensionSet" />
+        </EntityType>
+        <EntityType Name="FactDimensionMapping">
+          <Key>
+            <PropertyRef Name="FactDimensionMappingID" />
+          </Key>
+          <Property Name="FactDimensionMappingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FactDimensionSetID" Type="Int32" Nullable="false" />
+          <Property Name="DimensionValueID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DimensionValue" Relationship="Self.FK__FactDimen__Dimen__20C1E124" FromRole="FactDimensionMapping" ToRole="DimensionValue" />
+          <NavigationProperty Name="FactDimensionSet" Relationship="Self.FK__FactDimen__FactD__1FCDBCEB" FromRole="FactDimensionMapping" ToRole="FactDimensionSet" />
+        </EntityType>
+        <EntityType Name="FactDimensionSet">
+          <Key>
+            <PropertyRef Name="FactDimensionSetID" />
+          </Key>
+          <Property Name="FactDimensionSetID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FactID" Type="Int32" Nullable="false" />
+          <Property Name="DimString" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Fact" Relationship="Self.FK__FactDimen__FactI__1CF15040" FromRole="FactDimensionSet" ToRole="Fact" />
+          <NavigationProperty Name="FactDimensionMappings" Relationship="Self.FK__FactDimen__FactD__1FCDBCEB" FromRole="FactDimensionSet" ToRole="FactDimensionMapping" />
+          <NavigationProperty Name="FactInstances" Relationship="Self.FK__FactInsta__FactD__239E4DCF" FromRole="FactDimensionSet" ToRole="FactInstance" />
+        </EntityType>
+        <EntityType Name="FactInstance">
+          <Key>
+            <PropertyRef Name="FactInstanceID" />
+          </Key>
+          <Property Name="FactInstanceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FactDimensionSetID" Type="Int32" Nullable="false" />
+          <Property Name="LsoaID" Type="Int32" />
+          <Property Name="PropertyID" Type="Int32" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="FactDimensionSet" Relationship="Self.FK__FactInsta__FactD__239E4DCF" FromRole="FactInstance" ToRole="FactDimensionSet" />
+          <NavigationProperty Name="LSOA" Relationship="Self.FK__FactInsta__LsoaI__24927208" FromRole="FactInstance" ToRole="LSOA" />
+          <NavigationProperty Name="Property" Relationship="Self.FK__FactInsta__Prope__25869641" FromRole="FactInstance" ToRole="Properties" />
+        </EntityType>
+        <EntityType Name="LSOA">
+          <Key>
+            <PropertyRef Name="LsoaID" />
+          </Key>
+          <Property Name="LsoaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LsoaCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LsoaName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WardCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WardName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MsoaCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MsoaName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CommunityArea" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PlanningPolicyArea" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LACode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="FactInstances" Relationship="Self.FK__FactInsta__LsoaI__24927208" FromRole="LSOA" ToRole="FactInstance" />
+          <NavigationProperty Name="Properties" Relationship="Self.FK__Propertie__LsoaI__1367E606" FromRole="LSOA" ToRole="Properties" />
+        </EntityType>
+        <EntityType Name="Property">
+          <Key>
+            <PropertyRef Name="PropertyID" />
+          </Key>
+          <Property Name="PropertyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LsoaID" Type="Int32" />
+          <Property Name="NAMENUMBER" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="STREET" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LOCATION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TOWN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UPRN" Type="Double" Nullable="false" />
+          <Property Name="USRN" Type="Decimal" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="POSTCODE" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="EASTING" Type="Decimal" Precision="22" Scale="4" Nullable="false" />
+          <Property Name="NORTHING" Type="Decimal" Precision="22" Scale="4" Nullable="false" />
+          <Property Name="LATITUDE" Type="Double" Nullable="false" />
+          <Property Name="LONGITUDE" Type="Double" Nullable="false" />
+          <Property Name="SP_GEOMETRY" Type="Geometry" />
+          <NavigationProperty Name="FactInstances" Relationship="Self.FK__FactInsta__Prope__25869641" FromRole="Properties" ToRole="FactInstance" />
+          <NavigationProperty Name="LSOA" Relationship="Self.FK__Propertie__LsoaI__1367E606" FromRole="Properties" ToRole="LSOA" />
+        </EntityType>
+        <EntityType Name="StagingDataset">
+          <Key>
+            <PropertyRef Name="StagingDatasetID" />
+          </Key>
+          <Property Name="StagingDatasetID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DatasetName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="StagingColumns" Relationship="Model.FK__StagingCo__Stagi__45F365D3" FromRole="StagingDataset" ToRole="StagingColumn" />
+        </EntityType>
+        <Association Name="FK__Dimension__Dimen__182C9B23">
+          <End Role="Dimension" Type="Self.Dimension" Multiplicity="1" />
+          <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dimension">
+              <PropertyRef Name="DimensionID" />
+            </Principal>
+            <Dependent Role="DimensionValue">
+              <PropertyRef Name="DimensionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactDimen__Dimen__20C1E124">
+          <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="1" />
+          <End Role="FactDimensionMapping" Type="Self.FactDimensionMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionValue">
+              <PropertyRef Name="DimensionValueID" />
+            </Principal>
+            <Dependent Role="FactDimensionMapping">
+              <PropertyRef Name="DimensionValueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactDimen__FactI__1CF15040">
+          <End Role="Fact" Type="Self.Fact" Multiplicity="1" />
+          <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fact">
+              <PropertyRef Name="FactID" />
+            </Principal>
+            <Dependent Role="FactDimensionSet">
+              <PropertyRef Name="FactID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactDimen__FactD__1FCDBCEB">
+          <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="1" />
+          <End Role="FactDimensionMapping" Type="Self.FactDimensionMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactDimensionSet">
+              <PropertyRef Name="FactDimensionSetID" />
+            </Principal>
+            <Dependent Role="FactDimensionMapping">
+              <PropertyRef Name="FactDimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactInsta__FactD__239E4DCF">
+          <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="1" />
+          <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactDimensionSet">
+              <PropertyRef Name="FactDimensionSetID" />
+            </Principal>
+            <Dependent Role="FactInstance">
+              <PropertyRef Name="FactDimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactInsta__LsoaI__24927208">
+          <End Role="LSOA" Type="Self.LSOA" Multiplicity="0..1" />
+          <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LSOA">
+              <PropertyRef Name="LsoaID" />
+            </Principal>
+            <Dependent Role="FactInstance">
+              <PropertyRef Name="LsoaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactInsta__Prope__25869641">
+          <End Role="Properties" Type="Self.Property" Multiplicity="0..1" />
+          <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Properties">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="FactInstance">
+              <PropertyRef Name="PropertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Propertie__LsoaI__1367E606">
+          <End Role="LSOA" Type="Self.LSOA" Multiplicity="0..1" />
+          <End Role="Properties" Type="Self.Property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LSOA">
+              <PropertyRef Name="LsoaID" />
+            </Principal>
+            <Dependent Role="Properties">
+              <PropertyRef Name="LsoaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Geographical_NeedsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Dimensions" EntityType="Self.Dimension" />
+          <EntitySet Name="DimensionValues" EntityType="Self.DimensionValue" />
+          <EntitySet Name="Facts" EntityType="Self.Fact" />
+          <EntitySet Name="FactDimensionMappings" EntityType="Self.FactDimensionMapping" />
+          <EntitySet Name="FactDimensionSets" EntityType="Self.FactDimensionSet" />
+          <EntitySet Name="FactInstances" EntityType="Self.FactInstance" />
+          <EntitySet Name="LSOAs" EntityType="Self.LSOA" />
+          <EntitySet Name="Properties" EntityType="Self.Property" />
+          <EntitySet Name="StagingDatasets" EntityType="Self.StagingDataset" />
+          <AssociationSet Name="FK__Dimension__Dimen__182C9B23" Association="Self.FK__Dimension__Dimen__182C9B23">
+            <End Role="Dimension" EntitySet="Dimensions" />
+            <End Role="DimensionValue" EntitySet="DimensionValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactDimen__Dimen__20C1E124" Association="Self.FK__FactDimen__Dimen__20C1E124">
+            <End Role="DimensionValue" EntitySet="DimensionValues" />
+            <End Role="FactDimensionMapping" EntitySet="FactDimensionMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactDimen__FactI__1CF15040" Association="Self.FK__FactDimen__FactI__1CF15040">
+            <End Role="Fact" EntitySet="Facts" />
+            <End Role="FactDimensionSet" EntitySet="FactDimensionSets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactDimen__FactD__1FCDBCEB" Association="Self.FK__FactDimen__FactD__1FCDBCEB">
+            <End Role="FactDimensionSet" EntitySet="FactDimensionSets" />
+            <End Role="FactDimensionMapping" EntitySet="FactDimensionMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactInsta__FactD__239E4DCF" Association="Self.FK__FactInsta__FactD__239E4DCF">
+            <End Role="FactDimensionSet" EntitySet="FactDimensionSets" />
+            <End Role="FactInstance" EntitySet="FactInstances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactInsta__LsoaI__24927208" Association="Self.FK__FactInsta__LsoaI__24927208">
+            <End Role="LSOA" EntitySet="LSOAs" />
+            <End Role="FactInstance" EntitySet="FactInstances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactInsta__Prope__25869641" Association="Self.FK__FactInsta__Prope__25869641">
+            <End Role="Properties" EntitySet="Properties" />
+            <End Role="FactInstance" EntitySet="FactInstances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Propertie__LsoaI__1367E606" Association="Self.FK__Propertie__LsoaI__1367E606">
+            <End Role="LSOA" EntitySet="LSOAs" />
+            <End Role="Properties" EntitySet="Properties" />
+          </AssociationSet>
+          <FunctionImport Name="CreateStagingTable">
+          <Parameter Name="tableName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddColumnToTable">
+            <Parameter Name="tableName" Mode="In" Type="String" />
+            <Parameter Name="columnName" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="StagingColumns" EntityType="Model.StagingColumn" />
+          <AssociationSet Name="FK__StagingCo__Stagi__45F365D3" Association="Model.FK__StagingCo__Stagi__45F365D3">
+            <End Role="StagingDataset" EntitySet="StagingDatasets" />
+            <End Role="StagingColumn" EntitySet="StagingColumns" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="StagingColumn">
+          <Key>
+            <PropertyRef Name="StagingColumnID" />
+          </Key>
+          <Property Name="StagingColumnID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StagingDatasetID" Type="Int32" Nullable="false" />
+          <Property Name="ColumnName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="StagingDataset" Relationship="Model.FK__StagingCo__Stagi__45F365D3" FromRole="StagingColumn" ToRole="StagingDataset" />
+        </EntityType>
+        <Association Name="FK__StagingCo__Stagi__45F365D3">
+          <End Type="Model.StagingDataset" Role="StagingDataset" Multiplicity="1" />
+          <End Type="Model.StagingColumn" Role="StagingColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StagingDataset">
+              <PropertyRef Name="StagingDatasetID" />
+            </Principal>
+            <Dependent Role="StagingColumn">
+              <PropertyRef Name="StagingDatasetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Geographical_NeedsEntities">
+          <EntitySetMapping Name="Dimensions">
+            <EntityTypeMapping TypeName="Model.Dimension">
+              <MappingFragment StoreEntitySet="Dimension">
+                <ScalarProperty Name="DimensionID" ColumnName="DimensionID" />
+                <ScalarProperty Name="DimensionName" ColumnName="DimensionName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DimensionValues">
+            <EntityTypeMapping TypeName="Model.DimensionValue">
+              <MappingFragment StoreEntitySet="DimensionValue">
+                <ScalarProperty Name="DimensionValueID" ColumnName="DimensionValueID" />
+                <ScalarProperty Name="DimensionID" ColumnName="DimensionID" />
+                <ScalarProperty Name="DimensionValue1" ColumnName="DimensionValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Facts">
+            <EntityTypeMapping TypeName="Model.Fact">
+              <MappingFragment StoreEntitySet="Fact">
+                <ScalarProperty Name="FactID" ColumnName="FactID" />
+                <ScalarProperty Name="FactName" ColumnName="FactName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactDimensionMappings">
+            <EntityTypeMapping TypeName="Model.FactDimensionMapping">
+              <MappingFragment StoreEntitySet="FactDimensionMapping">
+                <ScalarProperty Name="FactDimensionMappingID" ColumnName="FactDimensionMappingID" />
+                <ScalarProperty Name="FactDimensionSetID" ColumnName="FactDimensionSetID" />
+                <ScalarProperty Name="DimensionValueID" ColumnName="DimensionValueID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactDimensionSets">
+            <EntityTypeMapping TypeName="Model.FactDimensionSet">
+              <MappingFragment StoreEntitySet="FactDimensionSet">
+                <ScalarProperty Name="FactDimensionSetID" ColumnName="FactDimensionSetID" />
+                <ScalarProperty Name="FactID" ColumnName="FactID" />
+                <ScalarProperty Name="DimString" ColumnName="DimString" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactInstances">
+            <EntityTypeMapping TypeName="Model.FactInstance">
+              <MappingFragment StoreEntitySet="FactInstance">
+                <ScalarProperty Name="FactInstanceID" ColumnName="FactInstanceID" />
+                <ScalarProperty Name="FactDimensionSetID" ColumnName="FactDimensionSetID" />
+                <ScalarProperty Name="LsoaID" ColumnName="LsoaID" />
+                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LSOAs">
+            <EntityTypeMapping TypeName="Model.LSOA">
+              <MappingFragment StoreEntitySet="LSOA">
+                <ScalarProperty Name="LsoaID" ColumnName="LsoaID" />
+                <ScalarProperty Name="LsoaCode" ColumnName="LsoaCode" />
+                <ScalarProperty Name="LsoaName" ColumnName="LsoaName" />
+                <ScalarProperty Name="WardCode" ColumnName="WardCode" />
+                <ScalarProperty Name="WardName" ColumnName="WardName" />
+                <ScalarProperty Name="MsoaCode" ColumnName="MsoaCode" />
+                <ScalarProperty Name="MsoaName" ColumnName="MsoaName" />
+                <ScalarProperty Name="CommunityArea" ColumnName="CommunityArea" />
+                <ScalarProperty Name="PlanningPolicyArea" ColumnName="PlanningPolicyArea" />
+                <ScalarProperty Name="LACode" ColumnName="LACode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Properties">
+            <EntityTypeMapping TypeName="Model.Property">
+              <MappingFragment StoreEntitySet="Properties">
+                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
+                <ScalarProperty Name="LsoaID" ColumnName="LsoaID" />
+                <ScalarProperty Name="NAMENUMBER" ColumnName="NAMENUMBER" />
+                <ScalarProperty Name="STREET" ColumnName="STREET" />
+                <ScalarProperty Name="LOCATION" ColumnName="LOCATION" />
+                <ScalarProperty Name="TOWN" ColumnName="TOWN" />
+                <ScalarProperty Name="UPRN" ColumnName="UPRN" />
+                <ScalarProperty Name="USRN" ColumnName="USRN" />
+                <ScalarProperty Name="POSTCODE" ColumnName="POSTCODE" />
+                <ScalarProperty Name="EASTING" ColumnName="EASTING" />
+                <ScalarProperty Name="NORTHING" ColumnName="NORTHING" />
+                <ScalarProperty Name="LATITUDE" ColumnName="LATITUDE" />
+                <ScalarProperty Name="LONGITUDE" ColumnName="LONGITUDE" />
+                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StagingDatasets">
+            <EntityTypeMapping TypeName="Model.StagingDataset">
+              <MappingFragment StoreEntitySet="StagingDatasets">
+                <ScalarProperty Name="StagingDatasetID" ColumnName="StagingDatasetID" />
+                <ScalarProperty Name="DatasetName" ColumnName="DatasetName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CreateStagingTable" FunctionName="Model.Store.CreateStagingTable" />
+          <FunctionImportMapping FunctionImportName="AddColumnToTable" FunctionName="Model.Store.AddColumnToTable" />
+          <EntitySetMapping Name="StagingColumns">
+            <EntityTypeMapping TypeName="Model.StagingColumn">
+              <MappingFragment StoreEntitySet="StagingColumns">
+                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
+                <ScalarProperty Name="StagingDatasetID" ColumnName="StagingDatasetID" />
+                <ScalarProperty Name="StagingColumnID" ColumnName="StagingColumnID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

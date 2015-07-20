@@ -1,0 +1,155 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Data_Loading_Tool.Models" #>
+<#@ output extension=".sql" #>
+
+
+Insert into FactInstance
+(
+	FactDimensionSetID,
+	LsoaID,
+	Value
+)
+select 
+	BBB.FactDimensionSetID, 
+	AAA.LsoaID, 
+	AAA.Value 
+from 
+	(select 
+		<#
+			if(UseMeasureColumn)
+			{
+		#>
+			S.<#= MeasureColumnName #> as Value,
+		<#
+			}
+			else
+			{
+		#>
+			1 as Value,
+		<#
+			}
+		#>
+		L.LsoaId
+	from 
+		<#= StagingTableName #> S
+	inner join
+		LSOA L
+	on
+		S.<#= StagingGeographyColumn #> = L.LsoaCode
+	where 
+	<# 
+			bool firstWhere = true;
+
+			foreach(StagingDimensionModel dimModel in Details.StagingDimensions)
+			{
+				if(firstWhere)
+				{
+	#>
+			S.<#= dimModel.StagingColumnName #> = '<#= dimModel.StagingColumnValue #>'
+	<#
+					firstWhere = false;
+				}
+				else
+				{
+	#>
+		and 
+			S.<#= dimModel.StagingColumnName #> = '<#= dimModel.StagingColumnValue #>'
+	<#
+				}
+			}
+	#>
+	) AAA
+cross join
+	(select 
+		F.FactDimensionSetID, string
+	from 
+	(
+		select 
+		<# 
+			bool firstSelect = true;
+
+			foreach(DimensionModel dimModel in Details.Dimensions)
+			{
+				if(firstSelect)
+				{
+		#>
+		[<#= dimModel.DimensionID #>].DimensionValue
+		<#
+				firstSelect = false;
+				}
+				else
+				{
+		#>
+		+ '-' + [<#= dimModel.DimensionID #>].DimensionValue
+		<#
+				}
+			} 
+		#>
+		as string
+		<#
+		bool first = true;
+		int firstID = 0;
+
+		foreach(DimensionModel dimModel in Details.Dimensions)
+		{
+		if(first)
+		{
+		#>
+		from
+			(select 
+				V.DimensionID as ID,
+				V.DimensionValue
+			from
+				Dimension D
+			inner join 
+				DimensionValue V
+			on D.DimensionID = v.DimensionID
+			where D.DimensionID = <#= dimModel.DimensionID #>
+			and V.DimensionValue = '<#= dimModel.DimensionValue #>') [<#= dimModel.DimensionID #>]
+
+		<#
+			first = false;
+			firstID = dimModel.DimensionID; 
+			}
+			else{
+		#>
+			inner join 
+			(select 
+				V.DimensionID as ID,
+				V.DimensionValue
+			from
+				Dimension D
+			inner join 
+				DimensionValue V
+			on D.DimensionID = v.DimensionID
+			where D.DimensionID = <#= dimModel.DimensionID #>
+			and V.DimensionValue = '<#= dimModel.DimensionValue #>') [<#= dimModel.DimensionID #>]
+			on [<#= firstID #>].ID <> [<#= dimModel.DimensionID #>].ID
+		<#
+			}
+			}
+		#>
+	) XXX
+	inner join 
+		FactDimensionSet F
+	on 
+		F.DimString = XXX.string
+	inner join 
+		Fact FF
+	on 
+		FF.FactID = F.FactID
+	where 
+		FF.FactName = '<#= MeasureName #>'
+	) BBB
+
+
+
+
+
+
+
+	
