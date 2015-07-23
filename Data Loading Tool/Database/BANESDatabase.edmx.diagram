@@ -24,6 +24,9 @@
         <AssociationConnector Association="Model.FK__Propertie__LsoaI__1367E606" ManuallyRouted="false" />
         <EntityTypeShape EntityType="Model.StagingColumn" Width="1.5" PointX="12.875" PointY="3.25" />
         <AssociationConnector Association="Model.FK__StagingCo__Stagi__45F365D3" />
+        <EntityTypeShape EntityType="Model.DataViewColumn" Width="1.5" PointX="12.875" PointY="8.125" />
+        <EntityTypeShape EntityType="Model.DataView" Width="1.5" PointX="12.875" PointY="5.625" />
+        <AssociationConnector Association="Model.FK__DataViewC__DataV__66EA454A" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

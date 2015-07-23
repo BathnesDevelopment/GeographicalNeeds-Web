@@ -79,23 +79,11 @@ namespace Data_Loading_Tool.Database
 
             model.StagingColumnsForDimension = stagingColumns;
 
-            //model.AvailableDimensions = context.Dimensions.Select(x => new SelectListItem() { 
-            //                                                                                    Text = x.DimensionName, 
-            //                                                                                    Value = SqlFunctions.StringConvert((double)x.DimensionID).Trim() 
-            //                                                                                });
-
-            //model.StagingColumnsForDimension = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns.Select(x => new SelectListItem()
-            //                                                                                                                                                        {
-            //                                                                                                                                                            Text = x.ColumnName,
-            //                                                                                                                                                            Value = x.StagingColumnID.ToString()
-            //                                                                                                                                                        });
-
             model.StagingColumnsForMeasure = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns.Select(x => new SelectListItem()
                                                                                                                                                                     {
                                                                                                                                                                         Text = x.ColumnName,
                                                                                                                                                                         Value = x.StagingColumnID.ToString()
                                                                                                                                                                     });
-
 
             return model;
         }
@@ -205,7 +193,7 @@ namespace Data_Loading_Tool.Database
 
             template.FactName = model.MeasureName;
 
-            template.DimensionIDs = model.MeasureDetails.Where(x=> x.DimensionValueID.HasValue).Select(x => x.DimensionValueID.Value);
+            template.DimensionIDs = model.MeasureDetails.Where(x=> x.DimensionValueID.HasValue).Select(x => x.DimensionValueID.Value).OrderByDescending(x => x);
 
             String output = template.TransformText();
 
@@ -304,103 +292,25 @@ namespace Data_Loading_Tool.Database
 
             String viewOutput = viewTemplate.TransformText();
 
+            DataView newView = context.DataViews.Create();
+            newView.ViewName = model.MeasureName;
+
+            newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "FactCount" });
+            newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "LsoaName" });
+
+            foreach (String column in dimensions)
+            {
+                newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = column });
+            }
+
+            context.DataViews.Add(newView);
+
+            context.SaveChanges();
+
             context.Database.ExecuteSqlCommand(viewOutput);
 
             context.Dispose();
 
-        }
-
-        
-        public void createMeasureValuesTemp(MeasureLoadingModel calculatedModel)
-        {
-            InsertMeasureValuesTemplate template = new InsertMeasureValuesTemplate();
-
-            template.UseMeasureColumn = false;
-            template.StagingTableName = "StagingNCMP";
-            template.StagingGeographyColumn = "Pupil_LSOA_2011";
-            template.MeasureName = "ObesityTest";
-            
-            MeasureLoadingModel model = new MeasureLoadingModel();
-
-            model.Dimensions = new List<DimensionModel>();
-
-            model.Dimensions.Add(new DimensionModel() { DimensionID = 4, DimensionValue = "R" });
-            model.Dimensions.Add(new DimensionModel() { DimensionID = 3, DimensionValue = "Obese" });
-
-            model.StagingDimensions = new List<StagingDimensionModel>();
-            model.StagingDimensions.Add(new StagingDimensionModel() { StagingColumnValue = "R", StagingColumnName = "School_yr" });
-            model.StagingDimensions.Add(new StagingDimensionModel() { StagingColumnValue = "Obese", StagingColumnName = "Weight_Status_population" });
-
-            template.Details = calculatedModel;
-
-            String output = template.TransformText();
-
-        }
-
-        public void createMeasureValuesTemp2()
-        {
-            MeasureValueModel model = new MeasureValueModel();
-
-            model.UseMeasureColumn = false;
-            model.StagingTableName = "StagingNCMP";
-            model.StagingGeographyColumn = "Pupil_LSOA_2011";
-            model.MeasureName = "ObesityTest";
-
-            List<MeasureValueDetailModel> details = new List<MeasureValueDetailModel>();
-
-            details.Add(new MeasureValueDetailModel() { DimensionID = 4, DimValueInStaging = "R", DimValue = "R", DimColumnInStaging = "School_yr" });
-            details.Add(new MeasureValueDetailModel() { DimensionID = 4, DimValueInStaging = "6", DimValue = "6", DimColumnInStaging = "School_yr" });
-            details.Add(new MeasureValueDetailModel() { DimensionID = 3, DimValueInStaging = "Obese", DimValue = "Obese", DimColumnInStaging = "Weight_Status_population" });
-            details.Add(new MeasureValueDetailModel() { DimensionID = 3, DimValueInStaging = "Underweight", DimValue = "Underweight", DimColumnInStaging = "Weight_Status_population" });
-            details.Add(new MeasureValueDetailModel() { DimensionID = 3, DimValueInStaging = "Overweight", DimValue = "Overweight", DimColumnInStaging = "Weight_Status_population" });
-            details.Add(new MeasureValueDetailModel() { DimensionID = 3, DimValueInStaging = "Healthy Weight", DimValue = "Healthy Weight", DimColumnInStaging = "Weight_Status_population" });
-
-            model.MeasureValueDetails = details;
-
-
-            MeasureLoadingModel xxx = new MeasureLoadingModel();
-
-
-            IEnumerable<int> dimIDs = model.MeasureValueDetails.Select(x => x.DimensionID).Distinct();
-
-            if (dimIDs.Count() > 2)
-            {
-                //recurse
-            }
-            else if (dimIDs.Count() == 2)
-            {
-                //cross product
-
-
-                int maxID = dimIDs.Max();
-                int minID = dimIDs.Min();
-
-                foreach (MeasureValueDetailModel maxItem in details.Where(x => x.DimensionID.Equals(maxID)))
-                {
-                    foreach (MeasureValueDetailModel minItem in details.Where(y => y.DimensionID.Equals(minID)))
-                    {
-                        xxx.Dimensions = new List<DimensionModel>();
-                        xxx.StagingDimensions = new List<StagingDimensionModel>();
-
-                        xxx.Dimensions.Add(new DimensionModel() { DimensionID = maxItem.DimensionID, DimensionValue = maxItem.DimValue });
-                        xxx.Dimensions.Add(new DimensionModel() { DimensionID = minItem.DimensionID, DimensionValue = minItem.DimValue });
-
-
-                        xxx.StagingDimensions.Add(new StagingDimensionModel() { StagingColumnName = maxItem.DimColumnInStaging, StagingColumnValue = maxItem.DimValueInStaging });
-                        xxx.StagingDimensions.Add(new StagingDimensionModel() { StagingColumnName = minItem.DimColumnInStaging, StagingColumnValue = minItem.DimValueInStaging });
-
-                        createMeasureValuesTemp(xxx);
-                    }
-                }
-
-            }
-            else 
-            {
-                ///return simple case
-            }
-
-            String yyy = xxx.ToString();
-
-        }
+        }                     
     }
 }

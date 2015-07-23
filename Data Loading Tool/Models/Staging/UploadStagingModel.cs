@@ -11,6 +11,8 @@ namespace Data_Loading_Tool.Models
 
         public String UniqueUploadRef { get; set; }
 
+        public String GeographyColumn { get; set; }
+
         public Boolean FirstUpload { get; set; }
         
         public Boolean UnpivotData { get; set; }

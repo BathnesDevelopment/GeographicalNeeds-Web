@@ -42,6 +42,13 @@
             @Html.ValidationMessageFor(model => model.UnpivotData)
         </div>
 
+        <div class="editor-label">
+            @Html.LabelFor(model => model.GeographyColumn)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.GeographyColumn)
+            @Html.ValidationMessageFor(model => model.GeographyColumn)
+        </div>
 
         <input type="file" name="FileUpload" />
         <input type="submit" name="Submit" id="Submit" value="Upload" />

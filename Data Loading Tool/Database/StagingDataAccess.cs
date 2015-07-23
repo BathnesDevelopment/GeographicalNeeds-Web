@@ -49,13 +49,13 @@ namespace Data_Loading_Tool.Database
             return model;
         }
 
-        public void updateTableFromCSV(String fileName, int tableID, string uniqueRef, bool unpivot, bool firstLoad)
+        public void updateTableFromCSV(String fileName, int tableID, String uniqueRef, bool unpivot, bool firstLoad, String geographyColumn)
         {
             DataTable dt = readCSVtoDataTable(fileName, uniqueRef);
 
             if (unpivot)
             {
-                dt = unPivotData(dt);                
+                dt = unPivotData(dt, geographyColumn);                
             }
 
             if (firstLoad)
@@ -108,7 +108,7 @@ namespace Data_Loading_Tool.Database
             return dt;
         }
 
-        private DataTable unPivotData(DataTable table)
+        private DataTable unPivotData(DataTable table, String geographyColumn)
         {
             DataTable retVal = new DataTable();
 
@@ -121,12 +121,12 @@ namespace Data_Loading_Tool.Database
             {
                 foreach (DataColumn column in table.Columns)
                 {
-                    if (column.ColumnName != "UploadRef" && column.ColumnName != "super output areas - lower layer")
+                    if (column.ColumnName != "UploadRef" && column.ColumnName != geographyColumn)
                     {
                         DataRow newRow = retVal.NewRow();
 
                         newRow["UploadRef"] = row["UploadRef"];
-                        newRow["Geography"] = row["super output areas - lower layer"];
+                        newRow["Geography"] = row[geographyColumn];
                         newRow["DimValue"] = column.ColumnName;
                         newRow["Count"] = row[column.ColumnName];
 

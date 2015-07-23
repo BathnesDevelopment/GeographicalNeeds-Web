@@ -81,16 +81,6 @@ namespace Data_Loading_Tool.Controllers
             dataAccess.createMeasureValues(model);                           
 
             return RedirectToAction("Index", "Staging");
-        }
-
-        public ActionResult Temp()
-        {
-            DatasetDataAccess dataAccess = new DatasetDataAccess();
-
-            dataAccess.createMeasureValuesTemp2();
-            
-            return View();
-        }
-
+        }       
     }
 }

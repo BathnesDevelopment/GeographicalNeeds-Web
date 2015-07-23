@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Data_Loading_Tool.Models.DataViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DataViewName)
+        </th>       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>        
+        <td>
+            @Html.ActionLink(item.DataViewName, "ViewDetails", new {viewID = item.DataViewID })
+        </td>        
+    </tr>
+}
+
+</table>

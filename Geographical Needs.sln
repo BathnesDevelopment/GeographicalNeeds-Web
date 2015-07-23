@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data_Loading_Tool", "Data Loading Tool\Data_Loading_Tool.csproj", "{EC5C97E9-5AFB-4645-ACF0-7F6C388170E4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5FDB5670-4B7E-4284-B2C3-E1AAB36EECF6} = {5FDB5670-4B7E-4284-B2C3-E1AAB36EECF6}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessServices", "DataAccessServices\DataAccessServices.csproj", "{5FDB5670-4B7E-4284-B2C3-E1AAB36EECF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{EC5C97E9-5AFB-4645-ACF0-7F6C388170E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC5C97E9-5AFB-4645-ACF0-7F6C388170E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC5C97E9-5AFB-4645-ACF0-7F6C388170E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FDB5670-4B7E-4284-B2C3-E1AAB36EECF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FDB5670-4B7E-4284-B2C3-E1AAB36EECF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FDB5670-4B7E-4284-B2C3-E1AAB36EECF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FDB5670-4B7E-4284-B2C3-E1AAB36EECF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

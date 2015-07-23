@@ -58,7 +58,7 @@ namespace Data_Loading_Tool.Controllers
 
                 StagingDataAccess dataAccess = new StagingDataAccess();
 
-                dataAccess.updateTableFromCSV(path, model.StagingTableID, model.UniqueUploadRef, model.UnpivotData, model.FirstUpload);
+                dataAccess.updateTableFromCSV(path, model.StagingTableID, model.UniqueUploadRef, model.UnpivotData, model.FirstUpload, model.GeographyColumn);
             }
 
             return RedirectToAction("Index");

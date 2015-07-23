@@ -1,0 +1,50 @@
+﻿@model Data_Loading_Tool.Models.DataViewDetailModel
+
+@{
+    ViewBag.Title = "ViewDetails";
+}
+
+@section scripts
+{
+<link href="~/Content/dataTables.tableTools.min.css" rel="stylesheet" />    
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.JS"></script>
+<script src="~/Scripts/dataTables.tableTools.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#dataView').DataTable(
+                                    {
+                                        dom: 'T<"clear">lfrtip',
+                                        tableTools: { "sSwfPath": "../Content/copy_csv_xls_pdf.swf" }
+                                    }
+                                    );
+
+        });
+    </script>
+}
+    <h2>Index</h2>
+
+    <table border="1" cellpadding="5" id="dataView" class="display" cellspacing="0">
+
+    <thead>
+        <tr>
+            @foreach (System.Data.DataColumn col in Model.ViewData.Columns)
+            {
+                <th>@col.Caption</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (System.Data.DataRow row in Model.ViewData.Rows)
+        {
+            <tr>
+                @foreach (var cell in row.ItemArray)
+                {
+                    <td>@cell.ToString()</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

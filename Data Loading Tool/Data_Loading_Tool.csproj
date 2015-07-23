@@ -46,6 +46,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -129,6 +130,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DatasetController.cs" />
+    <Compile Include="Controllers\DataViewController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StagingController.cs" />
     <Compile Include="Database\BANESDatabase.Context.cs">
@@ -147,6 +149,13 @@
       <DependentUpon>BANESDatabase.edmx</DependentUpon>
     </Compile>
     <Compile Include="Database\DatasetDataAccess.cs" />
+    <Compile Include="Database\DataView.cs">
+      <DependentUpon>BANESDatabase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\DataViewColumn.cs">
+      <DependentUpon>BANESDatabase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\DataViewDataAccess.cs" />
     <Compile Include="Database\Dimension.cs">
       <DependentUpon>BANESDatabase.tt</DependentUpon>
     </Compile>
@@ -186,6 +195,13 @@
     <Compile Include="Models\Datasets\CreateDimensionModel.cs" />
     <Compile Include="Models\Datasets\CreateMeasureModel.cs" />
     <Compile Include="Models\Datasets\MeasureLoadingModel.cs" />
+    <Compile Include="Models\DataViews\DataViewDetailModel.cs" />
+    <Compile Include="Models\DataViews\DataViewModel.cs" />
+    <Compile Include="Service References\GeographicalNeedsService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Templates\CreateDefaultViewTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -212,6 +228,9 @@
     <Compile Include="Templates\TemplateCode\InsertMeasureValueTemplateCode.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\copy_csv_xls_pdf.swf" />
+    <Content Include="Content\dataTables.tableTools.min.css" />
+    <Content Include="Content\jquery.dataTables.min.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -285,6 +304,28 @@
       <DependentUpon>BANESDatabase.edmx</DependentUpon>
       <LastGenOutput>BANESDatabase.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\dataTables.tableTools.min.js" />
+    <Content Include="Scripts\jquery.dataTables.min.JS" />
+    <Content Include="Service References\GeographicalNeedsService\Data_Loading_Tool.GeographicalNeedsService.CompositeType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\GeographicalNeedsService\Data_Loading_Tool.GeographicalNeedsService.GetDataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\GeographicalNeedsService\Data_Loading_Tool.GeographicalNeedsService.GetDataUsingDataContractResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\GeographicalNeedsService\Data_Loading_Tool.GeographicalNeedsService.GetViewDataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Properties\DataSources\System.Data.DataTable.datasource" />
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService.disco" />
+    <None Include="Service References\GeographicalNeedsService\configuration91.svcinfo" />
+    <None Include="Service References\GeographicalNeedsService\configuration.svcinfo" />
+    <None Include="Service References\GeographicalNeedsService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Templates\CreateDefaultViewTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>CreateDefaultViewTemplate.cs</LastGenOutput>
@@ -334,6 +375,22 @@
     <Content Include="Views\Dataset\CreateDimension.cshtml" />
     <Content Include="Views\Dataset\MapMeasureDimensions.cshtml" />
     <Content Include="Views\Dataset\CreateMeasure.cshtml" />
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService.wsdl" />
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Views\DataView\Index-old.cshtml" />
+    <Content Include="Views\DataView\Index.cshtml" />
+    <Content Include="Views\DataView\ViewDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\CSVUploads\" />
@@ -343,6 +400,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\GeographicalNeedsService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

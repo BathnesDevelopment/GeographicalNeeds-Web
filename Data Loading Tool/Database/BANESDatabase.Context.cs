@@ -38,6 +38,8 @@ namespace Data_Loading_Tool.Database
         public DbSet<Property> Properties { get; set; }
         public DbSet<StagingDataset> StagingDatasets { get; set; }
         public DbSet<StagingColumn> StagingColumns { get; set; }
+        public DbSet<DataViewColumn> DataViewColumns { get; set; }
+        public DbSet<DataView> DataViews { get; set; }
     
         public virtual int CreateStagingTable(string tableName)
         {
