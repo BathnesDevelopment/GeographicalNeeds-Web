@@ -1,4 +1,4 @@
-﻿body {
+﻿/*body {
     font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     color: #232323;
@@ -7,12 +7,12 @@
 
 header, footer, nav, section {
     display: block;
-}
+}*/
 
 
 /* Styles for basic forms
 -----------------------------------------------------------*/
-fieldset {
+/*fieldset {
     border: 1px solid #ddd;
     padding: 0 1.4em 1.4em 1.4em;
     margin: 0 0 1.5em 0;
@@ -33,12 +33,12 @@ textarea {
 
 .editor-field {
     margin: 0.5em 0 0 0;
-}
+}*/
 
 
 /* Styles for validation helpers
 -----------------------------------------------------------*/
-.field-validation-error {
+/*.field-validation-error {
     color: #f00;
 }
 
@@ -59,3 +59,4 @@ textarea {
 .validation-summary-valid {
     display: none;
 }
+*/

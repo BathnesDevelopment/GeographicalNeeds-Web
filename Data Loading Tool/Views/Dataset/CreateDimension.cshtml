@@ -13,25 +13,25 @@
     <fieldset>
         <legend>CreateDimensionModel</legend>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.DimensionName)
+        <div class="form-group">
+            @Html.LabelFor(model => model.DimensionName, new { @class = "control-label" })
         </div>
-        <div class="editor-field">
+        <div class="form-group">
             @Html.EditorFor(model => model.DimensionName)
             @Html.ValidationMessageFor(model => model.DimensionName)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.DimColumnInStaging)
+        <div class="form-group">
+            @Html.LabelFor(model => model.DimColumnInStaging, new { @class = "control-label" })
         </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(x => Model.DimColumnInStaging, Model.StagingColumnsForDimension)
+        <div class="form-group">
+            @Html.DropDownListFor(x => Model.DimColumnInStaging, Model.StagingColumnsForDimension, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.DimColumnInStaging)
         </div>
 
-        <p>
-            <input type="submit" value="Create" />
-        </p>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Create" />
+        </div>
     </fieldset>
 }
 

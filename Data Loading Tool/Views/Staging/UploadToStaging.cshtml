@@ -7,52 +7,54 @@
 <h2>UploadToStaging</h2>
 
 
- 
- @using (Html.BeginForm("UploadToStaging", "Staging", FormMethod.Post, new { enctype = "multipart/form-data" }))
- {
+
+@using (Html.BeginForm("UploadToStaging", "Staging", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
     <fieldset>
         <legend>CreateStagingModel</legend>
-        
+
         @Html.HiddenFor(model => model.StagingTableID)
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.UniqueUploadRef)
+        <div class="form-group">
+            @Html.LabelFor(model => model.UniqueUploadRef, new { @class = "control-label" })
         </div>
-        <div class="editor-field">
+        <div class="form-group">
             @Html.EditorFor(model => model.UniqueUploadRef)
             @Html.ValidationMessageFor(model => model.UniqueUploadRef)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.FirstUpload)
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstUpload, new { @class = "control-label" })
         </div>
-        <div class="editor-field">
+        <div class="form-group">
             @Html.EditorFor(model => model.FirstUpload)
             @Html.ValidationMessageFor(model => model.FirstUpload)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.UnpivotData)
+        <div class="form-group">
+            @Html.LabelFor(model => model.UnpivotData, new { @class = "control-label" })
         </div>
-        <div class="editor-field">
+        <div class="form-group">
             @Html.EditorFor(model => model.UnpivotData)
             @Html.ValidationMessageFor(model => model.UnpivotData)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.GeographyColumn)
-        </div>
-        <div class="editor-field">
+        <div class="form-group">
+            @Html.LabelFor(model => model.GeographyColumn, new { @class = "control-label" })
             @Html.EditorFor(model => model.GeographyColumn)
             @Html.ValidationMessageFor(model => model.GeographyColumn)
         </div>
 
-        <input type="file" name="FileUpload" />
-        <input type="submit" name="Submit" id="Submit" value="Upload" />
+        <div class="form-group">
+            <input type="file" class="form-control" name="FileUpload" />
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" name="Submit" id="Submit" value="Upload" />
+        </div>
 
     </fieldset>
- }
+}
 

@@ -7,7 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "CreateStaging")
+    @Html.ActionLink("Create New", "CreateStaging", new { }, new { @class = "btn" })
 </p>
 <table>
     <tr>
@@ -20,16 +20,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.ActionLink(item.TableName, "DatasetDetails", new { datasetID = item.TableID })
+            @Html.ActionLink(item.TableName, "DatasetDetails", new { datasetID = item.TableID }, new { @class = "btn btn-link" })
         </td>        
         <td>
-            @Html.ActionLink("Upload Data", "UploadToStaging", new { tableID = item.TableID })
+            @Html.ActionLink("Upload Data", "UploadToStaging", new { tableID = item.TableID }, new { @class = "btn btn-link" })
         </td>
         <td>
-            @Html.ActionLink("Create Measure", "CreateMeasure", "Dataset", new { stagingDatasetID = item.TableID }, new { })
+            @Html.ActionLink("Create Measure", "CreateMeasure", "Dataset", new { stagingDatasetID = item.TableID }, new { @class = "btn btn-link" })
         </td>
         <td>
-            @Html.ActionLink("Create Dimension", "CreateDimension", "Dataset", new { stagingDatasetID = item.TableID }, new { })
+            @Html.ActionLink("Create Dimension", "CreateDimension", "Dataset", new { stagingDatasetID = item.TableID }, new { @class = "btn btn-link" })
         </td>
     </tr>
 }

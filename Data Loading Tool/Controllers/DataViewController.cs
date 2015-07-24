@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data;
 
+using Data_Loading_Tool.Models;
 using Data_Loading_Tool.Database;
 
 namespace Data_Loading_Tool.Controllers
@@ -25,8 +26,14 @@ namespace Data_Loading_Tool.Controllers
         {
             DataViewDataAccess dataAccess = new DataViewDataAccess();
 
-            return View(dataAccess.getViewData(viewID));
+            DataViewDetailModel model = dataAccess.getViewData(viewID);
+
+            return View(model);
         }
 
+        public ActionResult CreateView()
+        {
+            return View();
+        }
     }
 }

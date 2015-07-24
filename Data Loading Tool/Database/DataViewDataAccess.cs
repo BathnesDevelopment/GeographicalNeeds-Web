@@ -32,5 +32,13 @@ namespace Data_Loading_Tool.Database
             return model;
         }
 
+        public CreateViewModel getCreateViewModel()
+        {
+            CreateViewModel model = new CreateViewModel();
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();            
+
+            return model;
+        }
+
     }
 }

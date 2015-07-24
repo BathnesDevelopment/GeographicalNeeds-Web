@@ -55,30 +55,67 @@ namespace Data_Loading_Tool.Templates
             
             #line default
             #line hidden
-            this.Write("].LsoaName\r\n\t\t\t, [");
+            this.Write("].LsoaName\r\n\t\t\t");
             
             #line 19 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+
+				if(AggregateQuery)
+				{
+			
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t, sum([");
+            
+            #line 23 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
             
             #line default
             #line hidden
-            this.Write("].FactCount\r\n\t\t\t, [");
+            this.Write("].FactCount) as FactCount\r\n\t\t\t\r\n\t\t\t");
             
-            #line 20 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 25 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+
+				}
+				else
+				{
+			
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t, [");
+            
+            #line 30 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
+            
+            #line default
+            #line hidden
+            this.Write("].FactCount\r\n\t\t\t");
+            
+            #line 31 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+
+				}
+			
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t, [");
+            
+            #line 34 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
             
             #line default
             #line hidden
             this.Write("].DimensionValue as [");
             
-            #line 20 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 34 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
             
             #line default
             #line hidden
             this.Write("]\r\n");
             
-            #line 21 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 35 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
 
 			firstSelect = false;
 		}
@@ -90,21 +127,21 @@ namespace Data_Loading_Tool.Templates
             #line hidden
             this.Write("\t\t\t, [");
             
-            #line 27 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 41 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
             
             #line default
             #line hidden
             this.Write("].DimensionValue as [");
             
-            #line 27 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 41 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
             
             #line default
             #line hidden
             this.Write("]\r\n");
             
-            #line 28 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 42 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
 
 		}
 	}
@@ -114,7 +151,7 @@ namespace Data_Loading_Tool.Templates
             #line hidden
             this.Write("from\r\n");
             
-            #line 33 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 47 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
 
 	Boolean firstPass = true;
 	String firstDimension = "";
@@ -161,28 +198,28 @@ namespace Data_Loading_Tool.Templates
 				WHERE        
 					(D.DimensionName = '");
             
-            #line 74 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 88 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
             
             #line default
             #line hidden
             this.Write("\') AND (F.FactName = \'");
             
-            #line 74 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 88 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FactName));
             
             #line default
             #line hidden
             this.Write("\')\r\n\t\t\t) [");
             
-            #line 75 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 89 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
             
             #line default
             #line hidden
             this.Write("]\t\r\n");
             
-            #line 76 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 90 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
 
 			firstPass = false;
 			firstDimension = dimensionName;
@@ -229,44 +266,110 @@ namespace Data_Loading_Tool.Templates
 				WHERE        
 					(D.DimensionName = '");
             
-            #line 117 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 131 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
             
             #line default
             #line hidden
             this.Write("\') AND (F.FactName = \'");
             
-            #line 117 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 131 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FactName));
             
             #line default
             #line hidden
             this.Write("\')\r\n\t\t\t) [");
             
-            #line 118 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 132 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
             
             #line default
             #line hidden
             this.Write("]\t\r\n\t\t\ton [");
             
-            #line 119 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 133 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(firstDimension));
             
             #line default
             #line hidden
             this.Write("].FactInstanceID = [");
             
-            #line 119 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 133 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
             
             #line default
             #line hidden
             this.Write("].FactInstanceID\r\n");
             
-            #line 120 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 134 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
 
 		}
+	}
+
+            
+            #line default
+            #line hidden
+            
+            #line 138 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+
+	if(AggregateQuery)
+	{	
+	Boolean firstAggregate = true;
+
+            
+            #line default
+            #line hidden
+            this.Write("\tgroup by\r\n");
+            
+            #line 144 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+
+	foreach(String dimensionName in DimensionNames)
+	{
+		if(firstAggregate)
+		{
+
+            
+            #line default
+            #line hidden
+            this.Write("\t\t[");
+            
+            #line 150 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
+            
+            #line default
+            #line hidden
+            this.Write("].LsoaName\r\n\t\t,[");
+            
+            #line 151 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
+            
+            #line default
+            #line hidden
+            this.Write("].DimensionValue\r\n");
+            
+            #line 152 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+
+			firstAggregate = false;
+		}
+		else
+		{
+
+            
+            #line default
+            #line hidden
+            this.Write("\t\t,[");
+            
+            #line 158 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
+            
+            #line default
+            #line hidden
+            this.Write("].DimensionValue\r\n");
+            
+            #line 159 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+
+		}
+	}
 	}
 
             

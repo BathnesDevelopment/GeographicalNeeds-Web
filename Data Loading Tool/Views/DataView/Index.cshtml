@@ -6,7 +6,7 @@
 
 <h2>Index</h2>
 
-<table>
+<table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.DataViewName)
@@ -16,7 +16,7 @@
 @foreach (var item in Model) {
     <tr>        
         <td>
-            @Html.ActionLink(item.DataViewName, "ViewDetails", new {viewID = item.DataViewID })
+            @Html.ActionLink(item.DataViewName, "ViewDetails", new { viewID = item.DataViewID }, new { @class = "btn btn-link" })
         </td>        
     </tr>
 }

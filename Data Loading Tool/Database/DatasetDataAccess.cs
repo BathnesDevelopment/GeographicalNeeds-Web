@@ -54,40 +54,6 @@ namespace Data_Loading_Tool.Database
             return model;
         }
 
-        public GeneralDatasetModel populateInitialModel(int datasetID)
-        {
-            GeneralDatasetModel model = new GeneralDatasetModel();
-
-            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
-
-            model.StagingTableName = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).DatasetName;
-
-            MultiSelectList dimensions = new MultiSelectList(context.Dimensions.Select(x => new SelectListItem()
-            {
-                Text = x.DimensionName,
-                Value = SqlFunctions.StringConvert((double)x.DimensionID).Trim()
-                //Value = x.DimensionID.ToString()
-            }), "Value", "Text");
-
-            MultiSelectList stagingColumns = new MultiSelectList(context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns.Select(x => new SelectListItem()
-            {
-                Text = x.ColumnName,
-                Value = x.StagingColumnID.ToString()
-            }), "Value", "Text");
-
-            model.AvailableDimensions = dimensions;
-
-            model.StagingColumnsForDimension = stagingColumns;
-
-            model.StagingColumnsForMeasure = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns.Select(x => new SelectListItem()
-                                                                                                                                                                    {
-                                                                                                                                                                        Text = x.ColumnName,
-                                                                                                                                                                        Value = x.StagingColumnID.ToString()
-                                                                                                                                                                    });
-
-            return model;
-        }
-
         public CreateDimensionModel populateCreateDimensionModel(int datasetID)
         {
             CreateDimensionModel model = new CreateDimensionModel();
@@ -289,6 +255,7 @@ namespace Data_Loading_Tool.Database
             CreateDefaultViewTemplate viewTemplate = new CreateDefaultViewTemplate();
             viewTemplate.DimensionNames = dimensions;
             viewTemplate.FactName = model.MeasureName;
+            viewTemplate.AggregateQuery = !model.UseMeasureColumn;
 
             String viewOutput = viewTemplate.TransformText();
 

@@ -2,15 +2,57 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Styles.Render("~/Content/internal.css")
+
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    @RenderBody()
+    <div class="container">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <!-- Replace logo with custom -->
+                    <a class="navbar-brand" href="/">Geographic Needs</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav"></ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="mailto:IT_Helpdesk@bathnes.gov.uk">Report Issue</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
 
-    @Scripts.Render("~/bundles/jquery")
+    <div class="container">
+        @RenderBody()
+
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-unstyled">
+                        <li class="pull-right"><a href="#top">Back to top</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/Scripts/jquery.min.js")
+    @Scripts.Render("~/Scripts/jquery-migrate-1.2.1.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
     @RenderSection("scripts", required: false)
 </body>
 </html>

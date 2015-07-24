@@ -16,7 +16,21 @@ select
 		{
 #>
 			  [<#= dimensionName #>].LsoaName
+			<#
+				if(AggregateQuery)
+				{
+			#>
+			, sum([<#= dimensionName #>].FactCount) as FactCount
+			
+			<#
+				}
+				else
+				{
+			#>
 			, [<#= dimensionName #>].FactCount
+			<#
+				}
+			#>
 			, [<#= dimensionName #>].DimensionValue as [<#= dimensionName #>]
 <#
 			firstSelect = false;
@@ -119,5 +133,31 @@ from
 			on [<#= firstDimension#>].FactInstanceID = [<#= dimensionName #>].FactInstanceID
 <#
 		}
+	}
+#>
+<#
+	if(AggregateQuery)
+	{	
+	Boolean firstAggregate = true;
+#>
+	group by
+<#
+	foreach(String dimensionName in DimensionNames)
+	{
+		if(firstAggregate)
+		{
+#>
+		[<#= dimensionName #>].LsoaName
+		,[<#= dimensionName #>].DimensionValue
+<#
+			firstAggregate = false;
+		}
+		else
+		{
+#>
+		,[<#= dimensionName #>].DimensionValue
+<#
+		}
+	}
 	}
 #>

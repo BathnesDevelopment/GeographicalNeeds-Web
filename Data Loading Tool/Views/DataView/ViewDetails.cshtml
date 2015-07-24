@@ -17,6 +17,7 @@
             $('#dataView').DataTable(
                                     {
                                         dom: 'T<"clear">lfrtip',
+                                        "orderClasses": false,
                                         tableTools: { "sSwfPath": "../Content/copy_csv_xls_pdf.swf" }
                                     }
                                     );
@@ -26,7 +27,7 @@
 }
     <h2>Index</h2>
 
-    <table border="1" cellpadding="5" id="dataView" class="display" cellspacing="0">
+    <table border="1" cellpadding="5" id="dataView" class="table display" cellspacing="0">
 
     <thead>
         <tr>

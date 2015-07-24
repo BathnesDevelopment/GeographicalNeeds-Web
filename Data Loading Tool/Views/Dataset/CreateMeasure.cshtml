@@ -15,53 +15,49 @@
 
         @Html.HiddenFor(x => x.StagingTableName)
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.MeasureName)
+        <div class="form-group">
+            @Html.LabelFor(model => model.MeasureName, new { @class = "control-label" })
         </div>
-        <div class="editor-field">
+        <div class="form-group">
             @Html.EditorFor(model => model.MeasureName)
             @Html.ValidationMessageFor(model => model.MeasureName)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.MeasureColumnID)
+        <div class="form-group">
+            @Html.LabelFor(model => model.MeasureColumnID, new { @class = "control-label" })
         </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.MeasureColumnID, Model.StagingColumnsForMeasure, "Single Count per Row")
+        <div class="form-group">
+            @Html.DropDownListFor(model => model.MeasureColumnID, Model.StagingColumnsForMeasure, "Single Count per Row", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.MeasureColumnID)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.GeographyColumnID)
+        <div class="form-group">
+            @Html.LabelFor(model => model.GeographyColumnID, new { @class = "control-label" })
         </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.GeographyColumnID, Model.StagingColumnsForGeography)            
+        <div class="form-group">
+            @Html.DropDownListFor(model => model.GeographyColumnID, Model.StagingColumnsForGeography, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.GeographyColumnID)
         </div>
 
         @for (var i = 0; i < Model.MeasureDetails.Count(); i++ )
         {
             @Html.HiddenFor(model => Model.MeasureDetails[i].StagingColumnID)
-            <div class="editor-label">
-                @Html.LabelFor(model => Model.MeasureDetails[i].StagingColumnName)
-            </div>
-            <div class="editor-field">
+            <div class="form-group">
+                @Html.LabelFor(model => Model.MeasureDetails[i].StagingColumnName, new { @class = "control-label" })
                 @Html.ValueFor(model => Model.MeasureDetails[i].StagingColumnName)
             </div>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => Model.MeasureDetails[i].DimensionValueID)
-            </div>
-            <div class="editor-field">
-                @Html.DropDownListFor(model => Model.MeasureDetails[i].DimensionValueID, Model.MeasureDetails[i].AvailableDimensions, "--- Not Applicable ---")
+            <div class="form-group">
+                @Html.LabelFor(model => Model.MeasureDetails[i].DimensionValueID, new { @class = "control-label" })
+                @Html.DropDownListFor(model => Model.MeasureDetails[i].DimensionValueID, Model.MeasureDetails[i].AvailableDimensions, "--- Not Applicable ---", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => Model.MeasureDetails[i].DimensionValueID)
             </div>
 
         }
 
-        <p>
-            <input type="submit" value="Create" />
-        </p>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Create" />
+        </div>
     </fieldset>
 }
 

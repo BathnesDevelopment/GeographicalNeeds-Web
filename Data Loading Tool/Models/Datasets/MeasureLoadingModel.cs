@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel;
 
 namespace Data_Loading_Tool.Models
 {
@@ -13,8 +14,10 @@ namespace Data_Loading_Tool.Models
 
     public class StagingDimensionModel
     {
+        [DisplayName("Column Name in Staging")]
         public String StagingColumnName { get; set; }
 
+        [DisplayName("Value in Staging")]
         public String StagingColumnValue { get; set; }
     }
 
@@ -22,6 +25,7 @@ namespace Data_Loading_Tool.Models
     {
         public int DimensionID { get; set; }
 
+        [DisplayName("Dimension Value")]
         public String DimensionValue { get; set; }
     }
 }

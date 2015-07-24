@@ -10,5 +10,7 @@ namespace Data_Loading_Tool.Templates
         public IEnumerable<String> DimensionNames { get; set; }
 
         public String FactName { get; set; }
+
+        public Boolean AggregateQuery { get; set; }
     }
 }
