@@ -12,20 +12,13 @@ namespace Data_Loading_Tool.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class FactDimensionSet
+    public partial class DimensionToFact
     {
-        public FactDimensionSet()
-        {
-            this.FactDimensionMappings = new HashSet<FactDimensionMapping>();
-            this.FactInstances = new HashSet<FactInstance>();
-        }
-    
-        public int FactDimensionSetID { get; set; }
+        public int DimensionToFactID { get; set; }
         public int FactID { get; set; }
-        public string DimString { get; set; }
+        public int DimensionID { get; set; }
     
+        public virtual Dimension Dimension { get; set; }
         public virtual Fact Fact { get; set; }
-        public virtual ICollection<FactDimensionMapping> FactDimensionMappings { get; set; }
-        public virtual ICollection<FactInstance> FactInstances { get; set; }
     }
 }

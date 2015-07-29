@@ -23,6 +23,23 @@ where
 	FactName = '<#= FactName #>'
 
 
+<#
+	foreach(int id in DimensionIDs)
+	{
+#>
+	INSERT INTO DimensionToFact
+	(
+		FactID,
+		DimensionID
+	)
+	VALUES
+	(
+		@FactID,
+		<#= id #>
+	)
+<#
+	}
+#>
 
 
 

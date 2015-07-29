@@ -10,34 +10,56 @@ namespace Data_Loading_Tool.Models
     {
         public String ViewName { get; set; }
 
-        public IEnumerable<ViewMeasureModel> MeasureModels { get; set; }
-
-        public MultiSelectList Measures { get; set; }
+        public IEnumerable<SelectListItem> Measures { get; set; }
 
         public IEnumerable<int> SelectedMeasureIDs { get; set; }
     }
 
-    public class ViewMeasureModel 
+    public class CreateViewMeasureModel 
     {
+        public String ViewName { get; set; }
+
         public String MeasureName { get; set; }
 
-        public IEnumerable<ViewDimensionModel> DimensionModels { get; set; }
+        public IEnumerable<CreateViewDimensionModel> DimensionModels { get; set; }
 
-        public MultiSelectList Dimensions { get; set; }
+        public IEnumerable<SelectListItem> Dimensions { get; set; }
 
         public IEnumerable<int> SelectedDimensionIDs { get; set; }
 
     }
 
-    public class ViewDimensionModel
+    public class CreateViewDimensionModel
     {
+        public String ViewName { get; set; }
+
+        public String MeasureName { get; set; }
+
         public String DimensionName { get; set; }
-
-        public IEnumerable<String> ValueModels { get; set; }
-
-        public MultiSelectList DimensionValues { get; set; }
+        
+        public IEnumerable<SelectListItem> DimensionValues { get; set; }
 
         public IEnumerable<int> SelectedDimensionValueIDs { get; set; }
+    }
+
+    public class CreateViewCompleteModel
+    {
+        public String ViewName { get; set; }
+
+        public IEnumerable<CreateViewMeasureDimensionModel> Measures { get; set; }
+    }
+
+    public class CreateViewMeasureDimensionModel
+    {
+        public int MeasureID {get; set;}
+        public String MeasureName { get; set; }
+        public IEnumerable<CreateViewDimValueModel> DimValues {get; set;}
+    }
+
+    public class CreateViewDimValueModel
+    {
+        public int DimensionID {get; set;}
+        public IEnumerable<int>  DimensionValueIDs{ get; set;}
     }
    
 }

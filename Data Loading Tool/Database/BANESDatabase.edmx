@@ -27,6 +27,14 @@
           <Property Name="DimensionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DimensionName" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <EntityType Name="DimensionToFact">
+          <Key>
+            <PropertyRef Name="DimensionToFactID" />
+          </Key>
+          <Property Name="DimensionToFactID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FactID" Type="int" Nullable="false" />
+          <Property Name="DimensionID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="DimensionValue">
           <Key>
             <PropertyRef Name="DimensionValueID" />
@@ -117,7 +125,7 @@
           <Property Name="StagingDatasetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DatasetName" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
-        <Association Name="FK__DataViewC__DataV__66EA454A">
+        <Association Name="FK__DataViewC__DataV__60C757A0">
           <End Role="DataViews" Type="Self.DataViews" Multiplicity="1" />
           <End Role="DataViewColumn" Type="Self.DataViewColumn" Multiplicity="*" />
           <ReferentialConstraint>
@@ -129,7 +137,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Dimension__Dimen__467D75B8">
+        <Association Name="FK__Dimension__Dimen__46136164">
           <End Role="Dimension" Type="Self.Dimension" Multiplicity="1" />
           <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="*" />
           <ReferentialConstraint>
@@ -141,7 +149,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactDimen__Dimen__4F12BBB9">
+        <Association Name="FK__Dimension__Dimen__4BCC3ABA">
+          <End Role="Dimension" Type="Self.Dimension" Multiplicity="1" />
+          <End Role="DimensionToFact" Type="Self.DimensionToFact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dimension">
+              <PropertyRef Name="DimensionID" />
+            </Principal>
+            <Dependent Role="DimensionToFact">
+              <PropertyRef Name="DimensionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__FactI__4AD81681">
+          <End Role="Fact" Type="Self.Fact" Multiplicity="1" />
+          <End Role="DimensionToFact" Type="Self.DimensionToFact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fact">
+              <PropertyRef Name="FactID" />
+            </Principal>
+            <Dependent Role="DimensionToFact">
+              <PropertyRef Name="FactID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactDimen__Dimen__52793849">
           <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="1" />
           <End Role="FactDimensionMapping" Type="Self.FactDimensionMapping" Multiplicity="*" />
           <ReferentialConstraint>
@@ -153,7 +185,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactDimen__FactD__4E1E9780">
+        <Association Name="FK__FactDimen__FactD__51851410">
           <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="1" />
           <End Role="FactDimensionMapping" Type="Self.FactDimensionMapping" Multiplicity="*" />
           <ReferentialConstraint>
@@ -165,7 +197,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactDimen__FactI__4B422AD5">
+        <Association Name="FK__FactDimen__FactI__4EA8A765">
           <End Role="Fact" Type="Self.Fact" Multiplicity="1" />
           <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="*" />
           <ReferentialConstraint>
@@ -177,7 +209,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactInsta__FactD__51EF2864">
+        <Association Name="FK__FactInsta__FactD__5555A4F4">
           <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="1" />
           <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -189,7 +221,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactInsta__LsoaI__52E34C9D">
+        <Association Name="FK__FactInsta__LsoaI__5649C92D">
           <End Role="LSOA" Type="Self.LSOA" Multiplicity="0..1" />
           <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -201,7 +233,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactInsta__Prope__53D770D6">
+        <Association Name="FK__FactInsta__Prope__573DED66">
           <End Role="Properties" Type="Self.Properties" Multiplicity="0..1" />
           <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -213,7 +245,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Propertie__LsoaI__41B8C09B">
+        <Association Name="FK__Propertie__LsoaI__414EAC47">
           <End Role="LSOA" Type="Self.LSOA" Multiplicity="0..1" />
           <End Role="Properties" Type="Self.Properties" Multiplicity="*" />
           <ReferentialConstraint>
@@ -225,7 +257,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__StagingCo__Stagi__589C25F3">
+        <Association Name="FK__StagingCo__Stagi__5C02A283">
           <End Role="StagingDatasets" Type="Self.StagingDatasets" Multiplicity="1" />
           <End Role="StagingColumns" Type="Self.StagingColumns" Multiplicity="*" />
           <ReferentialConstraint>
@@ -248,6 +280,7 @@
           <EntitySet Name="DataViewColumn" EntityType="Self.DataViewColumn" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DataViews" EntityType="Self.DataViews" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Dimension" EntityType="Self.Dimension" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DimensionToFact" EntityType="Self.DimensionToFact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DimensionValue" EntityType="Self.DimensionValue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Fact" EntityType="Self.Fact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FactDimensionMapping" EntityType="Self.FactDimensionMapping" Schema="dbo" store:Type="Tables" />
@@ -257,43 +290,51 @@
           <EntitySet Name="Properties" EntityType="Self.Properties" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StagingColumns" EntityType="Self.StagingColumns" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StagingDatasets" EntityType="Self.StagingDatasets" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__DataViewC__DataV__66EA454A" Association="Self.FK__DataViewC__DataV__66EA454A">
+          <AssociationSet Name="FK__DataViewC__DataV__60C757A0" Association="Self.FK__DataViewC__DataV__60C757A0">
             <End Role="DataViews" EntitySet="DataViews" />
             <End Role="DataViewColumn" EntitySet="DataViewColumn" />
           </AssociationSet>
-          <AssociationSet Name="FK__Dimension__Dimen__467D75B8" Association="Self.FK__Dimension__Dimen__467D75B8">
+          <AssociationSet Name="FK__Dimension__Dimen__46136164" Association="Self.FK__Dimension__Dimen__46136164">
             <End Role="Dimension" EntitySet="Dimension" />
             <End Role="DimensionValue" EntitySet="DimensionValue" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactDimen__Dimen__4F12BBB9" Association="Self.FK__FactDimen__Dimen__4F12BBB9">
+          <AssociationSet Name="FK__Dimension__Dimen__4BCC3ABA" Association="Self.FK__Dimension__Dimen__4BCC3ABA">
+            <End Role="Dimension" EntitySet="Dimension" />
+            <End Role="DimensionToFact" EntitySet="DimensionToFact" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__FactI__4AD81681" Association="Self.FK__Dimension__FactI__4AD81681">
+            <End Role="Fact" EntitySet="Fact" />
+            <End Role="DimensionToFact" EntitySet="DimensionToFact" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactDimen__Dimen__52793849" Association="Self.FK__FactDimen__Dimen__52793849">
             <End Role="DimensionValue" EntitySet="DimensionValue" />
             <End Role="FactDimensionMapping" EntitySet="FactDimensionMapping" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactDimen__FactD__4E1E9780" Association="Self.FK__FactDimen__FactD__4E1E9780">
+          <AssociationSet Name="FK__FactDimen__FactD__51851410" Association="Self.FK__FactDimen__FactD__51851410">
             <End Role="FactDimensionSet" EntitySet="FactDimensionSet" />
             <End Role="FactDimensionMapping" EntitySet="FactDimensionMapping" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactDimen__FactI__4B422AD5" Association="Self.FK__FactDimen__FactI__4B422AD5">
+          <AssociationSet Name="FK__FactDimen__FactI__4EA8A765" Association="Self.FK__FactDimen__FactI__4EA8A765">
             <End Role="Fact" EntitySet="Fact" />
             <End Role="FactDimensionSet" EntitySet="FactDimensionSet" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactInsta__FactD__51EF2864" Association="Self.FK__FactInsta__FactD__51EF2864">
+          <AssociationSet Name="FK__FactInsta__FactD__5555A4F4" Association="Self.FK__FactInsta__FactD__5555A4F4">
             <End Role="FactDimensionSet" EntitySet="FactDimensionSet" />
             <End Role="FactInstance" EntitySet="FactInstance" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactInsta__LsoaI__52E34C9D" Association="Self.FK__FactInsta__LsoaI__52E34C9D">
+          <AssociationSet Name="FK__FactInsta__LsoaI__5649C92D" Association="Self.FK__FactInsta__LsoaI__5649C92D">
             <End Role="LSOA" EntitySet="LSOA" />
             <End Role="FactInstance" EntitySet="FactInstance" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactInsta__Prope__53D770D6" Association="Self.FK__FactInsta__Prope__53D770D6">
+          <AssociationSet Name="FK__FactInsta__Prope__573DED66" Association="Self.FK__FactInsta__Prope__573DED66">
             <End Role="Properties" EntitySet="Properties" />
             <End Role="FactInstance" EntitySet="FactInstance" />
           </AssociationSet>
-          <AssociationSet Name="FK__Propertie__LsoaI__41B8C09B" Association="Self.FK__Propertie__LsoaI__41B8C09B">
+          <AssociationSet Name="FK__Propertie__LsoaI__414EAC47" Association="Self.FK__Propertie__LsoaI__414EAC47">
             <End Role="LSOA" EntitySet="LSOA" />
             <End Role="Properties" EntitySet="Properties" />
           </AssociationSet>
-          <AssociationSet Name="FK__StagingCo__Stagi__589C25F3" Association="Self.FK__StagingCo__Stagi__589C25F3">
+          <AssociationSet Name="FK__StagingCo__Stagi__5C02A283" Association="Self.FK__StagingCo__Stagi__5C02A283">
             <End Role="StagingDatasets" EntitySet="StagingDatasets" />
             <End Role="StagingColumns" EntitySet="StagingColumns" />
           </AssociationSet>
@@ -309,6 +350,7 @@
           <Property Name="DimensionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DimensionName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="DimensionValues" Relationship="Self.FK__Dimension__Dimen__182C9B23" FromRole="Dimension" ToRole="DimensionValue" />
+          <NavigationProperty Name="DimensionToFacts" Relationship="Model.FK__Dimension__Dimen__4BCC3ABA" FromRole="Dimension" ToRole="DimensionToFact" />
         </EntityType>
         <EntityType Name="DimensionValue">
           <Key>
@@ -327,6 +369,7 @@
           <Property Name="FactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FactName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="FactDimensionSets" Relationship="Self.FK__FactDimen__FactI__1CF15040" FromRole="Fact" ToRole="FactDimensionSet" />
+          <NavigationProperty Name="DimensionToFacts" Relationship="Model.FK__Dimension__FactI__4AD81681" FromRole="Fact" ToRole="DimensionToFact" />
         </EntityType>
         <EntityType Name="FactDimensionMapping">
           <Key>
@@ -564,6 +607,15 @@
             <End Role="DataView" EntitySet="DataViews" />
             <End Role="DataViewColumn" EntitySet="DataViewColumns" />
           </AssociationSet>
+          <EntitySet Name="DimensionToFacts" EntityType="Model.DimensionToFact" />
+          <AssociationSet Name="FK__Dimension__Dimen__4BCC3ABA" Association="Model.FK__Dimension__Dimen__4BCC3ABA">
+            <End Role="Dimension" EntitySet="Dimensions" />
+            <End Role="DimensionToFact" EntitySet="DimensionToFacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__FactI__4AD81681" Association="Model.FK__Dimension__FactI__4AD81681">
+            <End Role="Fact" EntitySet="Facts" />
+            <End Role="DimensionToFact" EntitySet="DimensionToFacts" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="StagingColumn">
           <Key>
@@ -612,6 +664,40 @@
             </Principal>
             <Dependent Role="DataViewColumn">
               <PropertyRef Name="DataViewID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="DimensionToFact">
+          <Key>
+            <PropertyRef Name="DimensionToFactID" />
+          </Key>
+          <Property Name="DimensionToFactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FactID" Type="Int32" Nullable="false" />
+          <Property Name="DimensionID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Dimension" Relationship="Model.FK__Dimension__Dimen__4BCC3ABA" FromRole="DimensionToFact" ToRole="Dimension" />
+          <NavigationProperty Name="Fact" Relationship="Model.FK__Dimension__FactI__4AD81681" FromRole="DimensionToFact" ToRole="Fact" />
+        </EntityType>
+        <Association Name="FK__Dimension__Dimen__4BCC3ABA">
+          <End Type="Model.Dimension" Role="Dimension" Multiplicity="1" />
+          <End Type="Model.DimensionToFact" Role="DimensionToFact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dimension">
+              <PropertyRef Name="DimensionID" />
+            </Principal>
+            <Dependent Role="DimensionToFact">
+              <PropertyRef Name="DimensionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__FactI__4AD81681">
+          <End Type="Model.Fact" Role="Fact" Multiplicity="1" />
+          <End Type="Model.DimensionToFact" Role="DimensionToFact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fact">
+              <PropertyRef Name="FactID" />
+            </Principal>
+            <Dependent Role="DimensionToFact">
+              <PropertyRef Name="FactID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -744,6 +830,15 @@
               <MappingFragment StoreEntitySet="DataViews">
                 <ScalarProperty Name="ViewName" ColumnName="ViewName" />
                 <ScalarProperty Name="DataViewID" ColumnName="DataViewID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DimensionToFacts">
+            <EntityTypeMapping TypeName="Model.DimensionToFact">
+              <MappingFragment StoreEntitySet="DimensionToFact">
+                <ScalarProperty Name="DimensionID" ColumnName="DimensionID" />
+                <ScalarProperty Name="FactID" ColumnName="FactID" />
+                <ScalarProperty Name="DimensionToFactID" ColumnName="DimensionToFactID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

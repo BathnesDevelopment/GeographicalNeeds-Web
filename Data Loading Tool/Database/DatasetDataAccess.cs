@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Data.Objects.SqlClient;
+using System.Data.SqlClient;
 
 using Data_Loading_Tool.Models;
 using Data_Loading_Tool.Templates;
@@ -137,7 +137,7 @@ namespace Data_Loading_Tool.Database
                     MeasureValueDetailModel modelDetail = new MeasureValueDetailModel();
 
                     modelDetail.DimensionID = tuple.Item2;
-                    modelDetail.StagingDimensionValues = stagingMeasureValues.Select(x => new SelectListItem { Text = x, Value = x });
+                    modelDetail.StagingDimensionValues = stagingMeasureValues.Select(x => new SelectListItem { Text = x, Value = x, Selected = dim.DimensionValue1.Equals(x) });
 
                     modelDetail.DimValue = dim.DimensionValue1;
                     modelDetail.DimValueID = dim.DimensionValueID;

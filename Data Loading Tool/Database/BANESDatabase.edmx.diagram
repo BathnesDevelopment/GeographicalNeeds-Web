@@ -5,9 +5,9 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="9f35367cf64b44b7b84914bcf6618a26" Name="Diagram1">
-        <EntityTypeShape EntityType="Model.Dimension" Width="1.5" PointX="9.625" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Dimension" Width="1.5" PointX="9.625" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.DimensionValue" Width="1.5" PointX="9.625" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Fact" Width="1.5" PointX="4.875" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Fact" Width="1.5" PointX="5" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.FactDimensionMapping" Width="1.5" PointX="7.25" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.FactDimensionSet" Width="1.5" PointX="5" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.FactInstance" Width="1.5" PointX="5.125" PointY="6.5" IsExpanded="true" />
@@ -27,6 +27,9 @@
         <EntityTypeShape EntityType="Model.DataViewColumn" Width="1.5" PointX="12.875" PointY="8.125" />
         <EntityTypeShape EntityType="Model.DataView" Width="1.5" PointX="12.875" PointY="5.625" />
         <AssociationConnector Association="Model.FK__DataViewC__DataV__66EA454A" />
+        <EntityTypeShape EntityType="Model.DimensionToFact" Width="1.5" PointX="7.25" PointY="0.5" />
+        <AssociationConnector Association="Model.FK__Dimension__Dimen__4BCC3ABA" />
+        <AssociationConnector Association="Model.FK__Dimension__FactI__4AD81681" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

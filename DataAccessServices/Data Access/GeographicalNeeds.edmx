@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="DataViewColumn">
           <Key>
             <PropertyRef Name="DataViewColumnID" />
@@ -20,7 +20,7 @@
           <Property Name="DataViewID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ViewName" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
-        <Association Name="FK__DataViewC__DataV__66EA454A">
+        <Association Name="FK__DataViewC__DataV__60C757A0">
           <End Role="DataViews" Type="Self.DataViews" Multiplicity="1" />
           <End Role="DataViewColumn" Type="Self.DataViewColumn" Multiplicity="*" />
           <ReferentialConstraint>
@@ -35,45 +35,38 @@
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="DataViewColumn" EntityType="Self.DataViewColumn" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DataViews" EntityType="Self.DataViews" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__DataViewC__DataV__66EA454A" Association="Self.FK__DataViewC__DataV__66EA454A">
+          <AssociationSet Name="FK__DataViewC__DataV__60C757A0" Association="Self.FK__DataViewC__DataV__60C757A0">
             <End Role="DataViews" EntitySet="DataViews" />
             <End Role="DataViewColumn" EntitySet="DataViewColumn" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="Geographical_NeedsEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="DataViewColumns" EntityType="Model.DataViewColumn" />
-          <EntitySet Name="DataViews" EntityType="Model.DataView" />
-          <AssociationSet Name="FK__DataViewC__DataV__66EA454A" Association="Model.FK__DataViewC__DataV__66EA454A">
-            <End Role="DataView" EntitySet="DataViews" />
-            <End Role="DataViewColumn" EntitySet="DataViewColumns" />
-          </AssociationSet>
-        </EntityContainer>
         <EntityType Name="DataViewColumn">
           <Key>
             <PropertyRef Name="DataViewColumnID" />
           </Key>
           <Property Name="DataViewColumnID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DataViewID" Type="Int32" Nullable="false" />
-          <Property Name="ColumnName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="DataView" Relationship="Model.FK__DataViewC__DataV__66EA454A" FromRole="DataViewColumn" ToRole="DataView" />
+          <Property Name="ColumnName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DataView" Relationship="Self.FK__DataViewC__DataV__60C757A0" FromRole="DataViewColumn" ToRole="DataViews" />
         </EntityType>
         <EntityType Name="DataView">
           <Key>
             <PropertyRef Name="DataViewID" />
           </Key>
           <Property Name="DataViewID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ViewName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="DataViewColumns" Relationship="Model.FK__DataViewC__DataV__66EA454A" FromRole="DataView" ToRole="DataViewColumn" />
+          <Property Name="ViewName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DataViewColumns" Relationship="Self.FK__DataViewC__DataV__60C757A0" FromRole="DataViews" ToRole="DataViewColumn" />
         </EntityType>
-        <Association Name="FK__DataViewC__DataV__66EA454A">
-          <End Type="Model.DataView" Role="DataView" Multiplicity="1" />
-          <End Type="Model.DataViewColumn" Role="DataViewColumn" Multiplicity="*" />
+        <Association Name="FK__DataViewC__DataV__60C757A0">
+          <End Role="DataViews" Type="Self.DataView" Multiplicity="1" />
+          <End Role="DataViewColumn" Type="Self.DataViewColumn" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="DataView">
+            <Principal Role="DataViews">
               <PropertyRef Name="DataViewID" />
             </Principal>
             <Dependent Role="DataViewColumn">
@@ -81,6 +74,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityContainer Name="Geographical_NeedsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DataViewColumns" EntityType="Self.DataViewColumn" />
+          <EntitySet Name="DataViews" EntityType="Self.DataView" />
+          <AssociationSet Name="FK__DataViewC__DataV__60C757A0" Association="Self.FK__DataViewC__DataV__60C757A0">
+            <End Role="DataViews" EntitySet="DataViews" />
+            <End Role="DataViewColumn" EntitySet="DataViewColumns" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -90,17 +91,17 @@
           <EntitySetMapping Name="DataViewColumns">
             <EntityTypeMapping TypeName="Model.DataViewColumn">
               <MappingFragment StoreEntitySet="DataViewColumn">
-                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
-                <ScalarProperty Name="DataViewID" ColumnName="DataViewID" />
                 <ScalarProperty Name="DataViewColumnID" ColumnName="DataViewColumnID" />
+                <ScalarProperty Name="DataViewID" ColumnName="DataViewID" />
+                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DataViews">
             <EntityTypeMapping TypeName="Model.DataView">
               <MappingFragment StoreEntitySet="DataViews">
-                <ScalarProperty Name="ViewName" ColumnName="ViewName" />
                 <ScalarProperty Name="DataViewID" ColumnName="DataViewID" />
+                <ScalarProperty Name="ViewName" ColumnName="ViewName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

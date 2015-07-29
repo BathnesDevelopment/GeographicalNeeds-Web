@@ -1,0 +1,258 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Data_Loading_Tool.Models" #>
+<#@ output extension=".sql" #>
+
+create view [<#= model.ViewName #>]
+as
+select 
+<#
+	Boolean firstSelect = true;
+
+	foreach(CreateViewMeasureDimensionModel measure in model.Measures)
+	{
+		if(firstSelect)
+		{
+#>	
+	[<#= measure.MeasureName #>].LsoaName
+	,[<#= measure.MeasureName #>].FactCount as [<#= measure.MeasureName #> Count]
+<#
+		}
+		else
+		{
+#>
+	,[<#= measure.MeasureName #>].FactCount as [<#= measure.MeasureName #> Count]
+<#
+		}
+	firstSelect = false;
+	}
+#>
+
+from
+<#
+
+bool firstMeasure = true;
+String firstMeasureName = "";
+
+foreach(CreateViewMeasureDimensionModel measure in model.Measures)
+{
+	if(!firstMeasure)
+	{
+#>
+	inner join
+<#
+	}
+#>
+(
+select 
+<#
+	if(measure.DimValues.Count() == 0)
+	{
+
+#>
+				[<#= measure.MeasureName #>].LsoaID
+				, [<#= measure.MeasureName #>].LsoaName			
+				, sum([<#= measure.MeasureName #>].FactCount) as FactCount
+<#
+	}
+	else
+	{	
+		Boolean firstDimension = true;
+
+		foreach(CreateViewDimValueModel dimension in measure.DimValues)
+		{
+			if(firstDimension)
+			{
+#>
+				[<#= dimension.DimensionID #>].LsoaID
+				, [<#= dimension.DimensionID #>].LsoaName			
+				, sum([<#= dimension.DimensionID #>].FactCount) as FactCount
+<#			
+			}
+			
+			firstDimension = false;		
+		}
+	}
+
+#>
+			
+
+from
+
+<#
+	if(measure.DimValues.Count() == 0)
+	{
+
+#>
+			(
+				SELECT        
+					I.FactInstanceID,
+					L.LsoaID,
+					L.LsoaName, 
+					V.DimensionValue , 
+					I.Value AS FactCount
+				FROM            
+					dbo.FactInstance AS I 
+				INNER JOIN
+					dbo.LSOA AS L 
+				ON 
+					L.LsoaID = I.LsoaID 
+				INNER JOIN
+					dbo.FactDimensionSet AS S 
+				ON 
+					I.FactDimensionSetID = S.FactDimensionSetID 
+				INNER JOIN
+					dbo.Fact AS F 
+				ON 
+					F.FactID = S.FactID 
+				INNER JOIN
+					dbo.FactDimensionMapping AS M 
+				ON 
+					S.FactDimensionSetID = M.FactDimensionSetID 
+				INNER JOIN
+					dbo.DimensionValue AS V 
+				ON 
+					V.DimensionValueID = M.DimensionValueID 
+				INNER JOIN
+					dbo.Dimension AS D 
+				ON 
+					D.DimensionID = V.DimensionID
+				WHERE        					
+					(F.FactID = <#= measure.MeasureID #>)
+			) [<#= measure.MeasureName #>]	
+group by [<#= measure.MeasureName #>].LsoaID, [<#= measure.MeasureName #>].LsoaName
+<#
+	}
+	else
+	{
+		Boolean firstPass = true;
+		int firstDimension = -1;
+
+		foreach(CreateViewDimValueModel dimension in measure.DimValues)
+		{
+			if(firstPass)
+			{
+#>
+			(
+				SELECT        
+					I.FactInstanceID,
+					L.LsoaID,
+					L.LsoaName, 
+					V.DimensionValue , 
+					I.Value AS FactCount
+				FROM            
+					dbo.FactInstance AS I 
+				INNER JOIN
+					dbo.LSOA AS L 
+				ON 
+					L.LsoaID = I.LsoaID 
+				INNER JOIN
+					dbo.FactDimensionSet AS S 
+				ON 
+					I.FactDimensionSetID = S.FactDimensionSetID 
+				INNER JOIN
+					dbo.Fact AS F 
+				ON 
+					F.FactID = S.FactID 
+				INNER JOIN
+					dbo.FactDimensionMapping AS M 
+				ON 
+					S.FactDimensionSetID = M.FactDimensionSetID 
+				INNER JOIN
+					dbo.DimensionValue AS V 
+				ON 
+					V.DimensionValueID = M.DimensionValueID 
+				INNER JOIN
+					dbo.Dimension AS D 
+				ON 
+					D.DimensionID = V.DimensionID
+				WHERE        
+					(D.DimensionID = <#= dimension.DimensionID #>) 
+					AND (F.FactID = <#= measure.MeasureID #>)
+					AND (V.DimensionValueID in (<#= String.Join(",", dimension.DimensionValueIDs.Select(x => String.Format("{0}", x))) #>))
+
+			) [<#= dimension.DimensionID #>]	
+<#
+			firstPass = false;
+			firstDimension = dimension.DimensionID;
+			}
+			else
+			{
+#>
+			inner join
+			(
+				SELECT        
+					I.FactInstanceID,
+					L.LsoaID,
+					L.LsoaName, 
+					V.DimensionValue, 
+					I.Value AS FactCount
+				FROM            
+					dbo.FactInstance AS I 
+				INNER JOIN
+					dbo.LSOA AS L 
+				ON 
+					L.LsoaID = I.LsoaID 
+				INNER JOIN
+					dbo.FactDimensionSet AS S 
+				ON 
+					I.FactDimensionSetID = S.FactDimensionSetID 
+				INNER JOIN
+					dbo.Fact AS F 
+				ON 
+					F.FactID = S.FactID 
+				INNER JOIN
+					dbo.FactDimensionMapping AS M 
+				ON 
+					S.FactDimensionSetID = M.FactDimensionSetID 
+				INNER JOIN
+					dbo.DimensionValue AS V 
+				ON 
+					V.DimensionValueID = M.DimensionValueID 
+				INNER JOIN
+					dbo.Dimension AS D 
+				ON 
+					D.DimensionID = V.DimensionID
+				WHERE        
+					(D.DimensionID = <#= dimension.DimensionID #>) 
+				AND 
+					(F.FactID = <#= measure.MeasureID #>)
+				AND
+					(V.DimensionValueID in (<#= String.Join(",", dimension.DimensionValueIDs.Select(x => String.Format("{0}", x))) #>))
+			) [<#= dimension.DimensionID #>]	
+			on [<#= firstDimension#>].FactInstanceID = [<#= dimension.DimensionID #>].FactInstanceID
+<#
+			}
+		}
+#>
+	group by
+	[<#= firstDimension#>].LsoaID
+	,[<#= firstDimension#>].LsoaName
+<#
+		foreach(CreateViewDimValueModel dimension in measure.DimValues)
+		{
+#>
+		
+		,[<#= dimension.DimensionID #>].DimensionValue
+<#
+		}	
+	}
+#>
+) as [<#= measure.MeasureName#>] 
+<#
+	if(!firstMeasure)
+	{
+#>
+	on [<#= firstMeasureName #>].LsoaID = [<#= measure.MeasureName #>].LsoaID
+<#
+	}
+
+	
+	firstMeasureName = measure.MeasureName;
+	
+	firstMeasure = false;
+}
+#>

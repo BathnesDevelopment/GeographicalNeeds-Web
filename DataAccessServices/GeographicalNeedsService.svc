@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="DataAccessServices.GeographicalNeedsService" CodeBehind="GeographicalNeedsService.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="DataAccessServices.GeographicalNeedsService" CodeBehind="GeographicalNeedsService.svc.cs" Factory="System.ServiceModel.Activation.WebScriptServiceHostFactory"%>

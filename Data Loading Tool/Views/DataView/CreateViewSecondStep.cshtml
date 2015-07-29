@@ -1,0 +1,37 @@
+﻿@model List<Data_Loading_Tool.Models.CreateViewMeasureModel>
+
+@{
+    ViewBag.Title = "CreateViewSecondStep";
+}
+
+<h2>CreateViewSecondStep</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>CreateViewModel</legend>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <div class="form-group">
+                @Html.DisplayFor(model => Model[i].MeasureName, new { @class = "control-label" })
+                @Html.HiddenFor(model => Model[i].MeasureName)
+            </div>            
+
+            <div class="form-group">
+                @Html.LabelFor(model => Model[i].SelectedDimensionIDs, new { @class = "control-label" })
+            </div>
+            <div class="form-group">
+                @Html.ListBoxFor(model => model[i].SelectedDimensionIDs, Model[i].Dimensions, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => Model[i].SelectedDimensionIDs)
+            </div>           
+        }
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Create" />
+        </div>
+
+    </fieldset>
+
+}
