@@ -51,15 +51,19 @@ namespace Data_Loading_Tool.Models
 
     public class CreateViewMeasureDimensionModel
     {
+        private IEnumerable<String> _dimValues;
+
         public int MeasureID {get; set;}
         public String MeasureName { get; set; }
-        public IEnumerable<CreateViewDimValueModel> DimValues {get; set;}
+        public IEnumerable<String> DimensionValues { get{return Dimensions.SelectMany(x => x.DimensionValues);} }
+        public IEnumerable<CreateViewDimValueModel> Dimensions {get; set;}
     }
 
     public class CreateViewDimValueModel
     {
         public int DimensionID {get; set;}
         public IEnumerable<int>  DimensionValueIDs{ get; set;}
+        public IEnumerable<String> DimensionValues { get; set; }
     }
    
 }

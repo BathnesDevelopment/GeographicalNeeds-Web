@@ -12,6 +12,14 @@ namespace Data_Loading_Tool.Controllers
 {
     public class StagingController : Controller
     {
+        /// <summary>
+        /// Main index showing the list of staging tables
+        /// in the system and providing links to the various 
+        /// actions available. No parameter is needed
+        /// 
+        /// Accessed via /Staging/index
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             StagingDataAccess dataAccess = new StagingDataAccess();
@@ -19,11 +27,27 @@ namespace Data_Loading_Tool.Controllers
             return View(dataAccess.getStagingTables());
         }
 
+        /// <summary>
+        /// Controller method that takes the user to the page to
+        /// create a staging table. No parameters are needed and
+        /// the controller needs no data access. 
+        /// 
+        /// Accessed via /Staging/CreateStaging
+        /// </summary>
+        /// <returns></returns>
         public ActionResult CreateStaging()
         {            
             return View();
         }
 
+        /// <summary>
+        /// The postback controller method from the Create Staging
+        /// page. This takes a populated GeneralStagingModel and
+        /// creates a new table as a result. The page then 
+        /// redirects back to the /Staging/Index
+        /// </summary>
+        /// <param name="model"> A populated GeneralStagingModel ready to be persisted</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CreateStaging(GeneralStagingModel model)
         {
@@ -34,6 +58,15 @@ namespace Data_Loading_Tool.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// A controller method to navigate to the page to upload
+        /// data into the Staging Table. Take the ID of the staging table as 
+        /// a parameter.
+        /// 
+        /// Accessed via /Staging/UploadToStaging        
+        /// </summary>
+        /// <param name="tableID">The database ID of the staging table to be uploaded to. </param>
+        /// <returns></returns>
         public ActionResult UploadToStaging(int tableID)
         {
             UploadStagingModel model = new UploadStagingModel();
@@ -42,6 +75,17 @@ namespace Data_Loading_Tool.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// The postback method for the UploadToStaging page. This 
+        /// takes the completed model and a reference to the file
+        /// that contains the data to be uploaded. The method checks 
+        /// that there is a file specified then calls the data access 
+        /// methods to upload the data.Once completed it
+        /// redirects back to the main index page at /Staging/Index
+        /// </summary>
+        /// <param name="model">A completed UploadStagingModel with the necessary data to write to the database</param>
+        /// <param name="FileUpload">A file that contains the raw staging data.</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult UploadToStaging(UploadStagingModel model, HttpPostedFileBase FileUpload)
         {
@@ -64,6 +108,15 @@ namespace Data_Loading_Tool.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// A controller method to redirect to a page showing the details relating to 
+        /// a staging dataset. This takes the dataset database ID as a parameter and
+        /// utilises the data access classes to get the data back
+        /// 
+        /// This is accessed via /Staging/DatasetDetail
+        /// </summary>
+        /// <param name="datasetID"></param>
+        /// <returns></returns>
         public ActionResult DatasetDetails(int datasetID)
         {
             StagingDataAccess dataAccess = new StagingDataAccess();

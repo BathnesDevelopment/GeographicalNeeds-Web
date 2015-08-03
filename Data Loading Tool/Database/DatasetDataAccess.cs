@@ -223,30 +223,28 @@ namespace Data_Loading_Tool.Database
             else
             {
                 foreach (MeasureValueDetailModel maxItem in model.MeasureValueDetails)
-                {
-                   
-                        MeasureLoadingModel xxx = new MeasureLoadingModel();
+                {                   
+                    MeasureLoadingModel xxx = new MeasureLoadingModel();
 
-                        xxx.Dimensions = new List<DimensionModel>();
-                        xxx.StagingDimensions = new List<StagingDimensionModel>();
+                    xxx.Dimensions = new List<DimensionModel>();
+                    xxx.StagingDimensions = new List<StagingDimensionModel>();
 
-                        xxx.Dimensions.Add(new DimensionModel() { DimensionID = maxItem.DimensionID, DimensionValue = maxItem.DimValue });
+                    xxx.Dimensions.Add(new DimensionModel() { DimensionID = maxItem.DimensionID, DimensionValue = maxItem.DimValue });
 
-                        xxx.StagingDimensions.Add(new StagingDimensionModel() { StagingColumnName = maxItem.DimColumnInStaging, StagingColumnValue = maxItem.DimValueInStaging });
+                    xxx.StagingDimensions.Add(new StagingDimensionModel() { StagingColumnName = maxItem.DimColumnInStaging, StagingColumnValue = maxItem.DimValueInStaging });
 
-                        InsertMeasureValuesTemplate template = new InsertMeasureValuesTemplate();
+                    InsertMeasureValuesTemplate template = new InsertMeasureValuesTemplate();
 
-                        template.UseMeasureColumn = model.UseMeasureColumn;
-                        template.StagingTableName = model.StagingTableName;
-                        template.StagingGeographyColumn = model.StagingGeographyColumn;
-                        template.MeasureName = model.MeasureName;
-                        template.MeasureColumnName = model.MeasureStagingColumnName;
-                        template.Details = xxx;
+                    template.UseMeasureColumn = model.UseMeasureColumn;
+                    template.StagingTableName = model.StagingTableName;
+                    template.StagingGeographyColumn = model.StagingGeographyColumn;
+                    template.MeasureName = model.MeasureName;
+                    template.MeasureColumnName = model.MeasureStagingColumnName;
+                    template.Details = xxx;
 
-                        String output = template.TransformText();
+                    String output = template.TransformText();
 
-                        context.Database.ExecuteSqlCommand(output);
-                    
+                    context.Database.ExecuteSqlCommand(output);                    
                 }
             }
 

@@ -115,7 +115,7 @@ namespace Data_Loading_Tool.Controllers
 
             foreach (CreateViewMeasureDimensionModel item in fullModel.Measures)
             {                
-                item.DimValues = dataAccess.convertDimensionViewModelsToDBModels(models, item.MeasureID);
+                item.Dimensions = dataAccess.convertDimensionViewModelsToDBModels(models, item.MeasureID);
             }
 
             dataAccess.createBespokeView(fullModel);

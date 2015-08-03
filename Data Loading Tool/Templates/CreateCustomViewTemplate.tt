@@ -18,14 +18,41 @@ select
 		{
 #>	
 	[<#= measure.MeasureName #>].LsoaName
-	,[<#= measure.MeasureName #>].FactCount as [<#= measure.MeasureName #> Count]
+<# 
+			if(measure.Dimensions.Count() == 0)
+			{
+#>
+				,[<#= measure.MeasureName #>].FactCount as [<#= measure.MeasureName #> - All]
 <#
+			}
+			else
+			{
+				foreach(String dimValue in measure.DimensionValues)
+				{		
+#>
+	,[<#= measure.MeasureName #>].[<#= dimValue #>] as [<#= measure.MeasureName #> - <#= dimValue #> Count]
+<#
+				}
+			}
+
 		}
 		else
 		{
+			if(measure.Dimensions.Count() == 0)
+			{
 #>
-	,[<#= measure.MeasureName #>].FactCount as [<#= measure.MeasureName #> Count]
+				,[<#= measure.MeasureName #>].FactCount as [<#= measure.MeasureName #> - All]
 <#
+			}
+			else
+			{
+				foreach(String dimValue in measure.DimensionValues)
+				{		
+#>
+	,[<#= measure.MeasureName #>].[<#= dimValue #>] as [<#= measure.MeasureName #> - <#= dimValue #> Count]
+<#
+				}
+			}
 		}
 	firstSelect = false;
 	}
@@ -44,31 +71,39 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 #>
 	inner join
 <#
-	}
+	}	
 #>
-(
-select 
+
 <#
-	if(measure.DimValues.Count() == 0)
+	if(measure.Dimensions.Count() == 0)
 	{
 
 #>
-				[<#= measure.MeasureName #>].LsoaID
-				, [<#= measure.MeasureName #>].LsoaName			
-				, sum([<#= measure.MeasureName #>].FactCount) as FactCount
+	(
+	select 
+				[inner<#= measure.MeasureName #>].LsoaID
+				, [inner<#= measure.MeasureName #>].LsoaName			
+				, sum([inner<#= measure.MeasureName #>].FactCount) as FactCount
 <#
 	}
 	else
 	{	
+#>
+	(
+	select [Pivot Table].LsoaID, [Pivot Table].LsoaName, <#= String.Join(",", measure.DimensionValues.Select(x => String.Format("[Pivot Table].[{0}]", x))) #> from
+		(
+		select 
+<#
 		Boolean firstDimension = true;
 
-		foreach(CreateViewDimValueModel dimension in measure.DimValues)
+		foreach(CreateViewDimValueModel dimension in measure.Dimensions)
 		{
 			if(firstDimension)
 			{
 #>
 				[<#= dimension.DimensionID #>].LsoaID
 				, [<#= dimension.DimensionID #>].LsoaName			
+				, [<#= dimension.DimensionID #>].DimensionValue			
 				, sum([<#= dimension.DimensionID #>].FactCount) as FactCount
 <#			
 			}
@@ -83,7 +118,7 @@ select
 from
 
 <#
-	if(measure.DimValues.Count() == 0)
+	if(measure.Dimensions.Count() == 0)
 	{
 
 #>
@@ -92,7 +127,6 @@ from
 					I.FactInstanceID,
 					L.LsoaID,
 					L.LsoaName, 
-					V.DimensionValue , 
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
@@ -122,8 +156,9 @@ from
 					D.DimensionID = V.DimensionID
 				WHERE        					
 					(F.FactID = <#= measure.MeasureID #>)
-			) [<#= measure.MeasureName #>]	
-group by [<#= measure.MeasureName #>].LsoaID, [<#= measure.MeasureName #>].LsoaName
+			) [inner<#= measure.MeasureName #>]	
+group by [inner<#= measure.MeasureName #>].LsoaID, [inner<#= measure.MeasureName #>].LsoaName
+) [<#= measure.MeasureName #>]	
 <#
 	}
 	else
@@ -131,7 +166,7 @@ group by [<#= measure.MeasureName #>].LsoaID, [<#= measure.MeasureName #>].LsoaN
 		Boolean firstPass = true;
 		int firstDimension = -1;
 
-		foreach(CreateViewDimValueModel dimension in measure.DimValues)
+		foreach(CreateViewDimValueModel dimension in measure.Dimensions)
 		{
 			if(firstPass)
 			{
@@ -232,17 +267,26 @@ group by [<#= measure.MeasureName #>].LsoaID, [<#= measure.MeasureName #>].LsoaN
 	[<#= firstDimension#>].LsoaID
 	,[<#= firstDimension#>].LsoaName
 <#
-		foreach(CreateViewDimValueModel dimension in measure.DimValues)
+		foreach(CreateViewDimValueModel dimension in measure.Dimensions)
 		{
 #>
 		
 		,[<#= dimension.DimensionID #>].DimensionValue
 <#
 		}	
-	}
+	
 #>
+)as [Inner<#= measure.MeasureName#>]
+PIVOT
+(
+	Sum(FactCount)
+	FOR
+	DimensionValue	IN (<#= String.Join(",", measure.DimensionValues.Select(x => String.Format("[{0}]", x))) #>)
+)
+[Pivot Table]
 ) as [<#= measure.MeasureName#>] 
 <#
+	}
 	if(!firstMeasure)
 	{
 #>

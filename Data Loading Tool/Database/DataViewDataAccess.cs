@@ -128,9 +128,12 @@ namespace Data_Loading_Tool.Database
                     model.DimensionID = context.Dimensions.Single(x => x.DimensionName.Equals(item.DimensionName)).DimensionID;
 
                     model.DimensionValueIDs = item.SelectedDimensionValueIDs;
+
+                    model.DimensionValues = context.DimensionValues.Where(x => model.DimensionValueIDs.Contains(x.DimensionValueID)).Select(x => x.DimensionValue1);
+
                     retVal.Add(model);
                 }
-            }
+            }            
 
             return retVal;
         }
@@ -162,9 +165,21 @@ namespace Data_Loading_Tool.Database
 
             foreach (CreateViewMeasureDimensionModel measure in model.Measures)
             {
-                DataViewColumn newColumn = context.DataViewColumns.Create();
-                newColumn.ColumnName = String.Format("{0} Count", measure.MeasureName);
-                newView.DataViewColumns.Add(newColumn);
+                if (measure.DimensionValues.Count() == 0)
+                {
+                    DataViewColumn newColumn = context.DataViewColumns.Create();
+                    newColumn.ColumnName = String.Format("{0} - All", measure.MeasureName);
+                    newView.DataViewColumns.Add(newColumn);
+                }
+                else
+                {
+                    foreach (String dimValue in measure.DimensionValues)
+                    {
+                        DataViewColumn newColumn = context.DataViewColumns.Create();
+                        newColumn.ColumnName = String.Format("{0} - {1} Count", measure.MeasureName, dimValue);
+                        newView.DataViewColumns.Add(newColumn);
+                    }
+                }
             }
 
             context.DataViews.Add(newView);
@@ -172,7 +187,7 @@ namespace Data_Loading_Tool.Database
             CreateCustomViewTemplate template = new CreateCustomViewTemplate();
             template.model = model;
 
-            String output = template.TransformText();
+            String output = template.TransformText();            
 
             context.Database.ExecuteSqlCommand(output);
 

@@ -11,12 +11,16 @@ namespace Data_Loading_Tool.Controllers
 {
     public class DatasetController : Controller
     {
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+        /// <summary>
+        /// Controller method to navigate to the page for
+        /// creating a Dimension. This takes the ID of a 
+        /// staging dataset which is used to find the values 
+        /// for the new dimension.
+        /// 
+        /// Accessed via /Dataset/CreateDimension
+        /// </summary>
+        /// <param name="stagingDatasetID"> The Database ID of the staging dataset</param>
+        /// <returns></returns>
         public ActionResult CreateDimension(int stagingDatasetID)
         {
             DatasetDataAccess dataAccess = new DatasetDataAccess();
@@ -24,6 +28,14 @@ namespace Data_Loading_Tool.Controllers
             return View(dataAccess.populateCreateDimensionModel(stagingDatasetID));
         }
 
+        /// <summary>
+        /// The postback method from the Create Dimension page 
+        /// which takes a completed model and passes the data to the 
+        /// data access classes to create the new Dimension and related
+        /// values. Redirects to /Staging/Index when completed.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CreateDimension(CreateDimensionModel model)
         {

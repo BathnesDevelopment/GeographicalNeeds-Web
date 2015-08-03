@@ -8,9 +8,13 @@ namespace Data_Loading_Tool.Controllers
 {
     public class HomeController : Controller
     {
-        //
-        // GET: /Home/
-
+        /// <summary>
+        /// Controller which returns the home index page. 
+        /// No data calls or parameters are needed for this
+        /// 
+        /// Accessed via /Home/index
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             return View();
