@@ -12,9 +12,14 @@ namespace Data_Loading_Tool.Controllers
 {
     public class DataViewController : Controller
     {
-        //
-        // GET: /DataView/
-
+        /// <summary>
+        /// The controller method to view a list of all 
+        /// the Data Views created within the system. 
+        /// This takes no parameters
+        /// 
+        /// Accessed via /DataView/Index
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             DataViewDataAccess dataAccess = new DataViewDataAccess();
@@ -22,6 +27,16 @@ namespace Data_Loading_Tool.Controllers
             return View(dataAccess.getViews());
         }
 
+        /// <summary>
+        /// A controller method to display a page which allows the user
+        /// to view the data returned from a call to a View in the 
+        /// Database. This takes the ID of the View as a parameter. 
+        /// There is no postback from this page.
+        /// 
+        /// Accessed via /DataView/ViewDetails
+        /// </summary>
+        /// <param name="viewID"></param>
+        /// <returns></returns>
         public ActionResult ViewDetails(int viewID)
         {
             DataViewDataAccess dataAccess = new DataViewDataAccess();
@@ -31,6 +46,13 @@ namespace Data_Loading_Tool.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// A controller method to access the first page of the Create 
+        /// Custom View process. This needs no parameters. 
+        /// 
+        /// This is accessed via /DataView/CreateViewFirstStep
+        /// </summary>
+        /// <returns></returns>
         public ActionResult CreateViewFirstStep()
         {
             DataViewDataAccess dataAccess = new DataViewDataAccess();
@@ -40,6 +62,13 @@ namespace Data_Loading_Tool.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// A controller method that handles the postback from the
+        /// first page of the Create View process. This stores values
+        /// in the TempData store and then redirects to the second phase.
+        /// </summary>
+        /// <param name="model"> The completed model passed back from the view</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CreateViewFirstStep(CreateViewModel model)
         {
@@ -53,6 +82,12 @@ namespace Data_Loading_Tool.Controllers
             return RedirectToAction("CreateViewSecondStep");
         }
 
+        /// <summary>
+        /// A controller method which displays the view for the 
+        /// second stage of the process to create a Custom View. 
+        /// The data needed to do this is held in the TempData store initially
+        /// </summary>
+        /// <returns></returns>
         public ActionResult CreateViewSecondStep()
         {
             DataViewDataAccess dataAccess = new DataViewDataAccess();
@@ -64,6 +99,13 @@ namespace Data_Loading_Tool.Controllers
             return View(models);
         }
 
+        /// <summary>
+        /// The postback method for the second stage in the process to create
+        /// a Custom View. This places the necessary data into the TempData
+        /// store for access in the third stage.
+        /// </summary>
+        /// <param name="models">The data entered at the second stage of the process</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CreateViewSecondStep(List<CreateViewMeasureModel> models)
         {
@@ -81,6 +123,12 @@ namespace Data_Loading_Tool.Controllers
 
         }
 
+        /// <summary>
+        /// A controller method which displays the view for the 
+        /// third and final stage of the process to create a Custom View. 
+        /// The data needed to do this is held in the TempData store initially
+        /// </summary>
+        /// <returns></returns>
         public ActionResult CreateViewThirdStep()
         {
             DataViewDataAccess dataAccess = new DataViewDataAccess();
@@ -106,6 +154,14 @@ namespace Data_Loading_Tool.Controllers
             return View(models);
         }
 
+        /// <summary>
+        /// A controller method to handle the postback from the final stage in the process
+        /// to create a custom view. This takes back the data from the view and 
+        /// passes it to the Data Access classes, before redirecting back to the 
+        /// main Data View index page.
+        /// </summary>
+        /// <param name="models">The data entered into the view</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CreateViewThirdStep(List<CreateViewDimensionModel> models)
         {

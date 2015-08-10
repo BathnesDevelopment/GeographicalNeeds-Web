@@ -5,6 +5,10 @@ using System.Web;
 using System.ComponentModel;
 namespace Data_Loading_Tool.Models
 {
+    /// <summary>
+    /// A model representing the details of a Staging Table. This includes
+    /// the name of the table and the columns in it.
+    /// </summary>
     public class StagingDetailModel
     {
         [DisplayName("Staging Dataset Name")]

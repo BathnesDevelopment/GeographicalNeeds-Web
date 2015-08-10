@@ -7,6 +7,12 @@ using System.ComponentModel;
 
 namespace Data_Loading_Tool.Models
 {
+    /// <summary>
+    /// A model for the first phase of the process to upload
+    /// the data into a Measure. This stores the various high level mappings
+    /// and is used for the basis of the template file which will create the 
+    /// entries.
+    /// </summary>
     public class MeasureValueModel
     {
         [DisplayName("Staging Table Name")]

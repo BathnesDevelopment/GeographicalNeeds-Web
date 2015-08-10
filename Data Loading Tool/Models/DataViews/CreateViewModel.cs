@@ -6,6 +6,10 @@ using System.Web.Mvc;
 
 namespace Data_Loading_Tool.Models
 {
+    /// <summary>
+    /// This model is for the View used to specify the details 
+    /// for the creation of custom views.
+    /// </summary>
     public class CreateViewModel
     {
         public String ViewName { get; set; }
@@ -42,6 +46,10 @@ namespace Data_Loading_Tool.Models
         public IEnumerable<int> SelectedDimensionValueIDs { get; set; }
     }
 
+    /// <summary>
+    /// Model used to create a template for a custom view. This is structured around the way in which
+    /// the template will be generated and features a hierarchy of 3 model classes.
+    /// </summary>
     public class CreateViewCompleteModel
     {
         public String ViewName { get; set; }
@@ -51,8 +59,6 @@ namespace Data_Loading_Tool.Models
 
     public class CreateViewMeasureDimensionModel
     {
-        private IEnumerable<String> _dimValues;
-
         public int MeasureID {get; set;}
         public String MeasureName { get; set; }
         public IEnumerable<String> DimensionValues { get{return Dimensions.SelectMany(x => x.DimensionValues);} }

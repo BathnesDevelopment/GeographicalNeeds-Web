@@ -6,6 +6,10 @@ using Data_Loading_Tool.Models;
 
 namespace Data_Loading_Tool.Templates
 {
+    /// <summary>
+    /// A class used to attach properties to the 
+    /// Insert Measure Values Template file
+    /// </summary>
     public partial class InsertMeasureValuesTemplate
     {
         public Boolean UseMeasureColumn { get; set; }

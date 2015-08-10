@@ -7,6 +7,11 @@ using System.ComponentModel;
 
 namespace Data_Loading_Tool.Models
 {
+    /// <summary>
+    /// A model that represents the data needed to create a Measure.
+    /// This contains a list of specific dimension to dimension mappings which
+    /// is contained in the subset of CreateMeasureDetailModels 
+    /// </summary>
     public class CreateMeasureModel
     {
         [DisplayName("Staging Table Name")]
@@ -28,6 +33,11 @@ namespace Data_Loading_Tool.Models
         public IList<CreateMeasureDetailModel> MeasureDetails { get; set; }
     }
 
+    /// <summary>
+    /// A model that represents the individual mappings 
+    /// between staging columns and the dimensions in the 
+    /// database
+    /// </summary>
     public class CreateMeasureDetailModel
     {
         [DisplayName("Staging Column")]

@@ -5,6 +5,10 @@ using System.Web;
 
 namespace Data_Loading_Tool.Templates
 {
+    /// <summary>
+    /// A class used to attach properties to the 
+    /// Create Default View Template file
+    /// </summary>
     public partial class CreateDefaultViewTemplate
     {
         public IEnumerable<String> DimensionNames { get; set; }

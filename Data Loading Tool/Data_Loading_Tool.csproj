@@ -169,7 +169,6 @@
     <Compile Include="Database\DimensionValue.cs">
       <DependentUpon>BANESDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="Database\ExtensionMethods.cs" />
     <Compile Include="Database\Fact.cs">
       <DependentUpon>BANESDatabase.tt</DependentUpon>
     </Compile>

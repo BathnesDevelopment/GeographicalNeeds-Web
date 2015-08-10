@@ -6,6 +6,10 @@ using System.ComponentModel;
 
 namespace Data_Loading_Tool.Models
 {
+    /// <summary>
+    /// A model representing the details captured when uploading data to 
+    /// a staging table
+    /// </summary>
     public class UploadStagingModel
     {
         public int StagingTableID { get; set; }

@@ -7,6 +7,9 @@ using System.ComponentModel;
 
 namespace Data_Loading_Tool.Models
 {
+    /// <summary>
+    /// A Model representing the data needed to create a Dimension
+    /// </summary>
     public class CreateDimensionModel
     {
         [DisplayName("Dimension Name")]

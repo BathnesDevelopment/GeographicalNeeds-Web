@@ -13,6 +13,10 @@ namespace Data_Loading_Tool.Database
 {
     public class DataViewDataAccess
     {
+        /// <summary>
+        /// Method which returns all the Data Views held in the Database
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<DataViewModel> getViews()
         {
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
@@ -22,6 +26,12 @@ namespace Data_Loading_Tool.Database
             return models;
         }
 
+        /// <summary>
+        /// A method to get back all the data held in a view and return a model which 
+        /// can be used to display the data
+        /// </summary>
+        /// <param name="viewID">The database ID of the View to be returned</param>
+        /// <returns></returns>
         public DataViewDetailModel getViewData(int viewID)
         {
             DataViewDetailModel model = new DataViewDetailModel();
@@ -34,7 +44,12 @@ namespace Data_Loading_Tool.Database
             return model;
         }
 
-
+        /// <summary>
+        /// Internal helper method to return the data in a View as a Data Table that can be added to 
+        /// a View Model in the public method. This dynamically generates SQL to query the table.
+        /// </summary>
+        /// <param name="viewID">The ID of the Staging Table to be queried</param>
+        /// <returns></returns>
         private DataTable getViewDataDetail(int viewID)
         {
             DataTable dt;
@@ -63,6 +78,10 @@ namespace Data_Loading_Tool.Database
             return dt;
         }
 
+        /// <summary>
+        /// Method used to get get back the intial model used in Creating a custom View
+        /// </summary>
+        /// <returns></returns>
         public CreateViewModel getCreateViewModel()
         {
             CreateViewModel model = new CreateViewModel();
@@ -73,6 +92,11 @@ namespace Data_Loading_Tool.Database
             return model;
         }
 
+        /// <summary>
+        /// Method which gets back the Models used to select Dimensions within the selected Measures when creating a custom View. 
+        /// </summary>
+        /// <param name="measureIDs">The Measures that have previously been selected within the create View process</param>
+        /// <returns></returns>
         public IEnumerable<CreateViewMeasureModel> getViewMeasureModels(IEnumerable<int> measureIDs)
         {
             List<CreateViewMeasureModel> models = new List<CreateViewMeasureModel>();
@@ -92,6 +116,11 @@ namespace Data_Loading_Tool.Database
             return models;
         }
 
+        /// <summary>
+        /// Method which converts a View model for the Create View process into a Database orientated model. 
+        /// </summary>
+        /// <param name="models">The view models being passed in to be converted</param>
+        /// <returns></returns>
         public IEnumerable<CreateViewMeasureDimensionModel> convertMeasureViewModelsToDBModels(List<CreateViewMeasureModel> models)
         {
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
@@ -111,6 +140,13 @@ namespace Data_Loading_Tool.Database
             return retVal;
         }
 
+        /// <summary>
+        /// Method to convert a set of models used in the secondary stages of the Create View process to 
+        /// models which are database orientated.
+        /// </summary>
+        /// <param name="models">The models to be converted</param>
+        /// <param name="measureID">The measure that these dimensions refer to</param>
+        /// <returns></returns>
         public IEnumerable<CreateViewDimValueModel> convertDimensionViewModelsToDBModels(List<CreateViewDimensionModel> models, int measureID)
         {
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
@@ -138,6 +174,12 @@ namespace Data_Loading_Tool.Database
             return retVal;
         }
 
+        /// <summary>
+        /// Method to get back a single model which allows for selection of Dimension Values as part 
+        /// of the process to create a custom View
+        /// </summary>
+        /// <param name="dimensionID">The ID of the Dimension to get the Values from</param>
+        /// <returns></returns>
         public CreateViewDimensionModel getViewDimensionModels(int dimensionID)
         {
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
@@ -152,6 +194,11 @@ namespace Data_Loading_Tool.Database
             return model;
         }
 
+        /// <summary>
+        /// The main method to create a Custom View based on the data in the model. 
+        /// This is created using a text Template to generate dynamic SQL
+        /// </summary>
+        /// <param name="model">Populated model containing the data necessary to create the view</param>
         public void createBespokeView(CreateViewCompleteModel model)
         {
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();

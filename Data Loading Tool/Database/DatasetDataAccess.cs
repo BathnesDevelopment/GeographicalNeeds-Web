@@ -10,8 +10,16 @@ using Data_Loading_Tool.Templates;
 
 namespace Data_Loading_Tool.Database
 {
+    /// <summary>
+    /// Class to control all data access to Measures and Dimensions. This includes creation, selection and modification methods.
+    /// </summary>
     public class DatasetDataAccess
     {
+        /// <summary>
+        /// Method to create and populate a CreateMeasureModel ready for the View to use
+        /// </summary>
+        /// <param name="datasetID">The ID of the Staging Table this Measure is based off</param>
+        /// <returns></returns>
         public CreateMeasureModel populateCreateMeasureModel(int datasetID)
         {
             CreateMeasureModel model = new CreateMeasureModel();
@@ -54,6 +62,11 @@ namespace Data_Loading_Tool.Database
             return model;
         }
 
+        /// <summary>
+        /// Method to create and populate a CreateDimensionModel ready for the View to use
+        /// </summary>
+        /// <param name="datasetID">The ID of the Staging Table this Dimension is based off</param>
+        /// <returns></returns>
         public CreateDimensionModel populateCreateDimensionModel(int datasetID)
         {
             CreateDimensionModel model = new CreateDimensionModel();
@@ -69,6 +82,11 @@ namespace Data_Loading_Tool.Database
             return model;
         }
 
+        /// <summary>
+        /// Method to create a Dimension based off the model returned from a View. This creates a Dimension
+        /// and then populates values with those found in the specified Staging Table column
+        /// </summary>
+        /// <param name="model">The populated model passed back from the View</param>
         public void createDimension(CreateDimensionModel model)
         {
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
@@ -100,6 +118,16 @@ namespace Data_Loading_Tool.Database
         }
 
 
+        /// <summary>
+        /// Method to return the model which is used to map the Staging Dimension Values to Dimension Values
+        /// in the database. This is used in the second stage in the Create Measure process. 
+        /// </summary>
+        /// <param name="mappings">The mappings between the Staging Dimension Column and a Dimension in the Database. This is passed in as a Tuple where the first item is a Staging Column ID and the second item a Dimension ID</param>
+        /// <param name="stagingTableName">The name of the staging table being used</param>
+        /// <param name="measureName">The name of the measure to be created</param>
+        /// <param name="measureColumnStagingID">The ID of the column used for the Measure values in Staging</param>
+        /// <param name="geographyColumnID">The ID of the colum used for the Geography value in Staging</param>
+        /// <returns></returns>
         public MeasureValueModel populateMeasureValueModel(IEnumerable<Tuple<int, int>> mappings, String stagingTableName, String measureName, int? measureColumnStagingID, int geographyColumnID)
         {
             List<MeasureValueModel> retVal = new List<MeasureValueModel>();
@@ -153,6 +181,12 @@ namespace Data_Loading_Tool.Database
             return model;
         }
 
+        /// <summary>
+        /// Method to create the measure in the database. This just creates the basic Measure information and 
+        /// does not add values under the Measure. This process is based off creating SQL dynamically based on
+        /// a template file.
+        /// </summary>
+        /// <param name="model">The populated model containing the data needed to create the Measure</param>
         public void createMeasure(CreateMeasureModel model)
         {
             InsertMeasureTemplate template = new InsertMeasureTemplate();
@@ -170,6 +204,13 @@ namespace Data_Loading_Tool.Database
             context.Dispose();
         }
 
+        /// <summary>
+        /// Method which populates the Measure Values into the database based off the populated model passed back
+        /// from the View. This Process differentiates based on the number of Dimensions present in the model
+        /// but in all cases a Template file is used to generate dynamic SQL. After the values are added a Default View is created
+        /// which can be used to query the data.
+        /// </summary>
+        /// <param name="model">The populated model returned from the view that contains all the data needed to add the Measure Values to the Measure</param>
         public void createMeasureValues(MeasureValueModel model)
         {
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
