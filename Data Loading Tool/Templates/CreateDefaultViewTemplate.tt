@@ -16,6 +16,7 @@ select
 		{
 #>
 			  [<#= dimensionName #>].LsoaName
+			 ,[<#= dimensionName #>].LoadReference
 			<#
 				if(AggregateQuery)
 				{
@@ -57,6 +58,7 @@ from
 					I.FactInstanceID,
 					L.LsoaName, 
 					V.DimensionValue , 
+					I.LoadReference,
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
@@ -100,6 +102,7 @@ from
 					I.FactInstanceID,
 					L.LsoaName, 
 					V.DimensionValue, 
+					I.LoadReference,
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
@@ -149,6 +152,7 @@ from
 #>
 		[<#= dimensionName #>].LsoaName
 		,[<#= dimensionName #>].DimensionValue
+		,[<#= dimensionName #>].LoadReference
 <#
 			firstAggregate = false;
 		}

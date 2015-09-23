@@ -25,6 +25,8 @@ namespace Data_Loading_Tool.Database
             CreateMeasureModel model = new CreateMeasureModel();
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
 
+            model.StagingDatasetID = datasetID;
+
             model.StagingTableName = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).DatasetName;
 
             model.StagingColumnsForMeasure = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns.Select(x => new SelectListItem()
@@ -73,6 +75,8 @@ namespace Data_Loading_Tool.Database
 
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
 
+            model.StagingDatasetID = datasetID;
+
             model.StagingColumnsForDimension = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns.Select(x => new SelectListItem()
             {
                 Text = x.ColumnName,
@@ -80,6 +84,21 @@ namespace Data_Loading_Tool.Database
             });
 
             return model;
+        }
+
+        /// <summary>
+        /// Validate that the CreateDimensionModel is valid prior to
+        /// submission to the database
+        /// </summary>
+        /// <param name="model">The model to be validated</param>
+        /// <returns>Boolean indicating valid or not</returns>
+        public Boolean isCreateDimensionModelValid(CreateDimensionModel model)
+        {
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+            int count = context.Dimensions.Where(x => x.DimensionName.Equals(model.DimensionName)).Count();
+
+            return count == 0; 
         }
 
         /// <summary>
@@ -179,6 +198,21 @@ namespace Data_Loading_Tool.Database
             model.MeasureValueDetails = detailModels;
            
             return model;
+        }
+
+        /// <summary>
+        /// Validate that the CreateMeasureModel is valid prior to
+        /// submission to the database
+        /// </summary>
+        /// <param name="model">The model to be validated</param>
+        /// <returns>Boolean indicating valid or not</returns>
+        public Boolean isCreateMeasureModelValid(CreateMeasureModel model)
+        {
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+            int count = context.Facts.Where(x => x.FactName.Equals(model.MeasureName)).Count();
+
+            return count == 0;
         }
 
         /// <summary>
@@ -303,6 +337,7 @@ namespace Data_Loading_Tool.Database
 
             newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "FactCount" });
             newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "LsoaName" });
+            newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "LoadReference" });            
 
             foreach (String column in dimensions)
             {

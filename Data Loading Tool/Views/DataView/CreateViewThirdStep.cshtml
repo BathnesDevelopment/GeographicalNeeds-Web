@@ -1,10 +1,10 @@
-﻿@model List<Data_Loading_Tool.Models.CreateViewDimensionModel>
+﻿@model Data_Loading_Tool.Models.CreateViewDimensionModelList
 
 @{
-    ViewBag.Title = "CreateViewThirdStep";
+    ViewBag.Title = "Create View - Third Step";
 }
 
-<h2>CreateViewThirdStep</h2>
+<h2>Create View Third Step</h2>
 
 @using (Html.BeginForm())
 {
@@ -14,25 +14,25 @@
     <fieldset>
         <legend>CreateViewModel</legend>
 
-        @for (int i = 0; i < Model.Count(); i++)
-        {
-            
+        @for (int i = 0; i < Model.Models.Count(); i++)
+        {            
             <div class="form-group">
-                @Html.DisplayFor(model => Model[i].MeasureName, new { @class = "control-label" })
-                @Html.HiddenFor(model => Model[i].MeasureName);
+                @Html.DisplayFor(model => Model.Models[i].MeasureName, new { @class = "control-label" })
+                @Html.HiddenFor(model => Model.Models[i].MeasureName);
             </div>
 
             <div class="form-group">
-                @Html.HiddenFor(model => Model[i].DimensionName);
-                @Html.DisplayFor(model => Model[i].DimensionName, new { @class = "control-label" })
+                @Html.HiddenFor(model => Model.Models[i].DimensionID);
+                @Html.HiddenFor(model => Model.Models[i].DimensionName);
+                @Html.DisplayFor(model => Model.Models[i].DimensionName, new { @class = "control-label" })
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => Model[i].SelectedDimensionValueIDs, new { @class = "control-label" })
+                @Html.RequiredLabelFor(model => Model.Models[i].SelectedDimensionValueIDs, new { @class = "control-label" })
             </div>
             <div class="form-group">
-                @Html.ListBoxFor(model => model[i].SelectedDimensionValueIDs, Model[i].DimensionValues, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => Model[i].SelectedDimensionValueIDs)
+                @Html.ListBoxFor(model => Model.Models[i].SelectedDimensionValueIDs, Model.Models[i].DimensionValues, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => Model.Models[i].SelectedDimensionValueIDs)
             </div>
         }
 
@@ -42,4 +42,8 @@
 
     </fieldset>
 
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

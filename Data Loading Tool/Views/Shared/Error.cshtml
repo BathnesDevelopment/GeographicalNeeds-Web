@@ -1,17 +1,25 @@
 ﻿@{
-    Layout = null;
+    ViewBag.Title = "Error";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Error</title>
-</head>
-<body>
-    <hgroup>
-        <h1>Error.</h1>
-        <h2>An error occurred while processing your request.</h2>
-    </hgroup>
-</body>
-</html>
+<h2>Error</h2>
+
+<div>An error has occurred that the application was not able to recover from.</div>
+<br/>
+<div>Please contact the IT Helpdesk by <a href="mailto:it_helpdesk@bathnes.gov.uk">Email</a> or by phone on extension x7252</div>
+<br/>
+<div>Any information that can be provided will help to diagnose the error. Examples include:</div>
+<div>
+    <ul>
+        <li>The date and time when the error occurred</li>
+        <li>The Page you were on when the error occurred</li>
+        <li>Which Dataset or View was being viewed or edited</li>        
+    </ul>
+</div>
+
+@Html.ActionLink("Return to Home Page", "Index", "Home", new { }, new { @class = "btn" })
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

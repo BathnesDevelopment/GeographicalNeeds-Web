@@ -7,7 +7,7 @@ using System.ComponentModel;
 namespace Data_Loading_Tool.Models
 {
     /// <summary>
-    /// A model used inthe creation of the instances of a Measure
+    /// A model used in the creation of the instances of a Measure
     /// and representing the way in which Dim Values are mapped
     /// to Staging Values
     /// </summary>

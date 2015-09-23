@@ -6,6 +6,11 @@ using System.ComponentModel;
 
 namespace Data_Loading_Tool.Models
 {
+    public class DataViewIndexModel : BaseModel
+    {
+        public IEnumerable<DataViewModel> DataViewModels { get; set; }
+    }
+
     /// <summary>
     /// A model representing a basic high level view of the 
     /// Data Views. 

@@ -1,10 +1,10 @@
 ﻿@model Data_Loading_Tool.Models.CreateViewModel
 
 @{
-    ViewBag.Title = "CreateViewFirstStep";
+    ViewBag.Title = "Create View - First Step";
 }
 
-<h2>CreateViewFirstStep</h2>
+<h2>Create View - First Step</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -13,7 +13,7 @@
     <fieldset>
         <legend>CreateViewModel</legend>
         <div class="form-group">
-            @Html.LabelFor(model => model.ViewName, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.ViewName, new { @class = "control-label" })
         </div>
         <div class="form-group">
             @Html.EditorFor(model => model.ViewName)
@@ -21,7 +21,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.SelectedMeasureIDs, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.SelectedMeasureIDs, new { @class = "control-label" })
         </div>
         <div class="form-group">
             @Html.ListBoxFor(x => Model.SelectedMeasureIDs, Model.Measures, new { @class = "form-control" })
@@ -32,4 +32,8 @@
             <input type="submit" class="btn btn-primary" value="Create" />
         </div>
     </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

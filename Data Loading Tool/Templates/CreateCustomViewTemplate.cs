@@ -50,7 +50,7 @@ namespace Data_Loading_Tool.Templates
             
             #line default
             #line hidden
-            this.Write("\t\r\n\t[");
+            this.Write("\t\r\n\t [");
             
             #line 20 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
@@ -200,6 +200,28 @@ namespace Data_Loading_Tool.Templates
 				}
 			}
 		}
+
+            
+            #line default
+            #line hidden
+            this.Write("\t,[");
+            
+            #line 58 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
+            
+            #line default
+            #line hidden
+            this.Write("].LoadReference as [");
+            
+            #line 58 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
+            
+            #line default
+            #line hidden
+            this.Write(" - Loading reference]\r\n");
+            
+            #line 59 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+
 	firstSelect = false;
 	}
 
@@ -208,7 +230,7 @@ namespace Data_Loading_Tool.Templates
             #line hidden
             this.Write("\r\nfrom\r\n");
             
-            #line 62 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 65 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 
 bool firstMeasure = true;
@@ -224,7 +246,7 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
             #line hidden
             this.Write("\tinner join\r\n");
             
-            #line 73 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 76 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 	}	
 
@@ -233,7 +255,7 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
             #line hidden
             this.Write("\r\n");
             
-            #line 77 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 80 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 	if(measure.Dimensions.Count() == 0)
 	{
@@ -244,28 +266,35 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
             #line hidden
             this.Write("\t(\r\n\tselect \r\n\t\t\t\t[inner");
             
-            #line 84 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 87 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
             
             #line default
             #line hidden
             this.Write("].LsoaID\r\n\t\t\t\t, [inner");
             
-            #line 85 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 88 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
             
             #line default
             #line hidden
-            this.Write("].LsoaName\t\t\t\r\n\t\t\t\t, sum([inner");
+            this.Write("].LsoaName\t\t\t\r\n\t\t\t\t, [inner");
             
-            #line 86 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 89 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
+            
+            #line default
+            #line hidden
+            this.Write("].LoadReference\t\t\r\n\t\t\t\t, sum([inner");
+            
+            #line 90 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
             
             #line default
             #line hidden
             this.Write("].FactCount) as FactCount\r\n");
             
-            #line 87 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 91 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 	}
 	else
@@ -274,16 +303,17 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
             
             #line default
             #line hidden
-            this.Write("\t(\r\n\tselect [Pivot Table].LsoaID, [Pivot Table].LsoaName, ");
+            this.Write("\t(\r\n\tselect [Pivot Table].LsoaID, [Pivot Table].LsoaName, [Pivot Table].LoadRefer" +
+                    "ence, ");
             
-            #line 93 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 97 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(",", measure.DimensionValues.Select(x => String.Format("[Pivot Table].[{0}]", x)))));
             
             #line default
             #line hidden
             this.Write(" from\r\n\t\t(\r\n\t\tselect \r\n");
             
-            #line 96 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 100 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 		Boolean firstDimension = true;
 
@@ -297,35 +327,42 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
             #line hidden
             this.Write("\t\t\t\t[");
             
-            #line 104 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 108 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
             
             #line default
             #line hidden
             this.Write("].LsoaID\r\n\t\t\t\t, [");
             
-            #line 105 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 109 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
             
             #line default
             #line hidden
-            this.Write("].LsoaName\t\t\t\r\n\t\t\t\t, [");
+            this.Write("].LsoaName\t\r\n\t\t\t\t, [");
             
-            #line 106 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 110 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
+            
+            #line default
+            #line hidden
+            this.Write("].LoadReference\t\t\r\n\t\t\t\t, [");
+            
+            #line 111 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
             
             #line default
             #line hidden
             this.Write("].DimensionValue\t\t\t\r\n\t\t\t\t, sum([");
             
-            #line 107 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 112 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
             
             #line default
             #line hidden
             this.Write("].FactCount) as FactCount\r\n");
             
-            #line 108 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 113 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 			
 			}
 			
@@ -339,7 +376,7 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
             #line hidden
             this.Write("\t\t\t\r\n\r\nfrom\r\n\r\n");
             
-            #line 120 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 125 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 	if(measure.Dimensions.Count() == 0)
 	{
@@ -353,6 +390,7 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 					I.FactInstanceID,
 					L.LsoaID,
 					L.LsoaName, 
+					I.LoadReference,
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
@@ -383,42 +421,49 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 				WHERE        					
 					(F.FactID = ");
             
-            #line 158 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 164 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureID));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\t\t) [inner");
             
-            #line 159 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 165 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
             
             #line default
             #line hidden
             this.Write("]\t\r\ngroup by [inner");
             
-            #line 160 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 166 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
             
             #line default
             #line hidden
             this.Write("].LsoaID, [inner");
             
-            #line 160 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 166 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
             
             #line default
             #line hidden
-            this.Write("].LsoaName\r\n) [");
+            this.Write("].LsoaName, [inner");
             
-            #line 161 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 166 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
+            
+            #line default
+            #line hidden
+            this.Write("].LoadReference\r\n) [");
+            
+            #line 167 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
             
             #line default
             #line hidden
             this.Write("]\t\r\n");
             
-            #line 162 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 168 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 	}
 	else
@@ -440,6 +485,7 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 					L.LsoaID,
 					L.LsoaName, 
 					V.DimensionValue , 
+					I.LoadReference,
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
@@ -470,35 +516,35 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 				WHERE        
 					(D.DimensionID = ");
             
-            #line 208 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 215 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
             
             #line default
             #line hidden
             this.Write(") \r\n\t\t\t\t\tAND (F.FactID = ");
             
-            #line 209 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 216 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureID));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\t\t\t\tAND (V.DimensionValueID in (");
             
-            #line 210 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 217 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(",", dimension.DimensionValueIDs.Select(x => String.Format("{0}", x)))));
             
             #line default
             #line hidden
             this.Write("))\r\n\r\n\t\t\t) [");
             
-            #line 212 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 219 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
             
             #line default
             #line hidden
             this.Write("]\t\r\n");
             
-            #line 213 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 220 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 			firstPass = false;
 			firstDimension = dimension.DimensionID;
@@ -515,7 +561,8 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 					I.FactInstanceID,
 					L.LsoaID,
 					L.LsoaName, 
-					V.DimensionValue, 
+					V.DimensionValue,
+					I.LoadReference, 
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
@@ -546,49 +593,49 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 				WHERE        
 					(D.DimensionID = ");
             
-            #line 255 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 263 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
             
             #line default
             #line hidden
             this.Write(") \r\n\t\t\t\tAND \r\n\t\t\t\t\t(F.FactID = ");
             
-            #line 257 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 265 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureID));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\t\t\tAND\r\n\t\t\t\t\t(V.DimensionValueID in (");
             
-            #line 259 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 267 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(",", dimension.DimensionValueIDs.Select(x => String.Format("{0}", x)))));
             
             #line default
             #line hidden
             this.Write("))\r\n\t\t\t) [");
             
-            #line 260 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 268 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
             
             #line default
             #line hidden
             this.Write("]\t\r\n\t\t\ton [");
             
-            #line 261 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 269 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(firstDimension));
             
             #line default
             #line hidden
             this.Write("].FactInstanceID = [");
             
-            #line 261 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 269 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
             
             #line default
             #line hidden
             this.Write("].FactInstanceID\r\n");
             
-            #line 262 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 270 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 			}
 		}
@@ -598,21 +645,28 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
             #line hidden
             this.Write("\tgroup by\r\n\t[");
             
-            #line 267 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 275 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(firstDimension));
             
             #line default
             #line hidden
             this.Write("].LsoaID\r\n\t,[");
             
-            #line 268 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 276 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(firstDimension));
             
             #line default
             #line hidden
-            this.Write("].LsoaName\r\n");
+            this.Write("].LsoaName\r\n\t,[");
             
-            #line 269 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 277 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(firstDimension));
+            
+            #line default
+            #line hidden
+            this.Write("].LoadReference\r\n");
+            
+            #line 278 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 		foreach(CreateViewDimValueModel dimension in measure.Dimensions)
 		{
@@ -622,14 +676,14 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
             #line hidden
             this.Write("\t\t\r\n\t\t,[");
             
-            #line 274 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 283 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimension.DimensionID));
             
             #line default
             #line hidden
             this.Write("].DimensionValue\r\n");
             
-            #line 275 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 284 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 		}	
 	
@@ -639,28 +693,28 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
             #line hidden
             this.Write(")as [Inner");
             
-            #line 279 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 288 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
             
             #line default
             #line hidden
             this.Write("]\r\nPIVOT\r\n(\r\n\tSum(FactCount)\r\n\tFOR\r\n\tDimensionValue\tIN (");
             
-            #line 284 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 293 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(",", measure.DimensionValues.Select(x => String.Format("[{0}]", x)))));
             
             #line default
             #line hidden
             this.Write(")\r\n)\r\n[Pivot Table]\r\n) as [");
             
-            #line 287 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 296 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
             
             #line default
             #line hidden
             this.Write("] \r\n");
             
-            #line 288 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 297 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 	}
 	if(!firstMeasure)
@@ -671,21 +725,21 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
             #line hidden
             this.Write("\ton [");
             
-            #line 293 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 302 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(firstMeasureName));
             
             #line default
             #line hidden
             this.Write("].LsoaID = [");
             
-            #line 293 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 302 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(measure.MeasureName));
             
             #line default
             #line hidden
             this.Write("].LsoaID\r\n");
             
-            #line 294 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
+            #line 303 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateCustomViewTemplate.tt"
 
 	}
 

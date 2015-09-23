@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -25,7 +26,18 @@ namespace Data_Loading_Tool.Controllers
         {
             DatasetDataAccess dataAccess = new DatasetDataAccess();
 
-            return View(dataAccess.populateCreateDimensionModel(stagingDatasetID));
+            CreateDimensionModel model = dataAccess.populateCreateDimensionModel(stagingDatasetID);
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Create Dimension", Action = "", Controller = "", isCurrent = true });
+
+
+            model.Breadcrumbs = trail;
+
+            return View(model);
         }
 
         /// <summary>
@@ -41,9 +53,30 @@ namespace Data_Loading_Tool.Controllers
         {
             DatasetDataAccess dataAccess = new DatasetDataAccess();
 
-            dataAccess.createDimension(model);
+            if (!dataAccess.isCreateDimensionModelValid(model))
+            {
+                ModelState.AddModelError("DimensionName", "The Dimension Name must be unique");
 
-            return RedirectToAction("Index", "Staging");
+                model = dataAccess.populateCreateDimensionModel(model.StagingDatasetID);                
+
+                return View(model);            
+            }
+
+            try
+            {
+                dataAccess.createDimension(model);
+            }
+            catch (SqlException)
+            {
+                ModelState.AddModelError("", "An error occured when creating the dimension. Please ensure that the Dimension Name is unique and that the values are unique within it.");
+
+                model = dataAccess.populateCreateDimensionModel(model.StagingDatasetID);
+
+                return View(model);    
+            }
+
+            TempData["SuccessMessage"] = String.Format("The Dimension - {0}, was successfully created", model.DimensionName);            
+            return RedirectToAction("Index", "Staging");               
         }
 
         /// <summary>
@@ -60,7 +93,18 @@ namespace Data_Loading_Tool.Controllers
         {
             DatasetDataAccess dataAccess = new DatasetDataAccess();
 
-            return View(dataAccess.populateCreateMeasureModel(stagingDatasetID));
+            CreateMeasureModel model = dataAccess.populateCreateMeasureModel(stagingDatasetID);
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Create Measure", Action = "", Controller = "", isCurrent = true });
+
+
+            model.Breadcrumbs = trail;
+
+            return View(model);
         }
 
 
@@ -74,22 +118,37 @@ namespace Data_Loading_Tool.Controllers
         /// <returns></returns>
         [HttpPost]
         public ActionResult CreateMeasure(CreateMeasureModel model)
-        {
+        {            
             DatasetDataAccess dataAccess = new DatasetDataAccess();
-
-            dataAccess.createMeasure(model);            
-
-            IEnumerable<Tuple<int, int>> dimensionMappings = model.MeasureDetails.Where(x => x.DimensionValueID.HasValue).Select(x => new Tuple<int, int>(x.StagingColumnID, x.DimensionValueID.Value));
-
-            TempData["DimensionMappings"] = dimensionMappings;
-
-            return RedirectToAction("AddMeasureValues", new
+            
+            if (ModelState.IsValid)
             {
-                stagingTableName = model.StagingTableName,
-                measureName = model.MeasureName,
-                measureColumnStagingID = model.MeasureColumnID,
-                geographyColumnID = model.GeographyColumnID
-            });
+                if (!dataAccess.isCreateMeasureModelValid(model))
+                {
+                    ModelState.AddModelError("", "An error occured when creating the Measure. Please ensure that the Measure name is unique and that Dimensions have been specified");
+
+                    model = dataAccess.populateCreateMeasureModel(model.StagingDatasetID);
+                                    
+                    return View(model);
+                }
+                dataAccess.createMeasure(model);
+
+                IEnumerable<Tuple<int, int>> dimensionMappings = model.MeasureDetails.Where(x => x.DimensionValueID.HasValue).Select(x => new Tuple<int, int>(x.StagingColumnID, x.DimensionValueID.Value));
+
+                TempData["DimensionMappings"] = dimensionMappings;
+
+                return RedirectToAction("AddMeasureValues", new
+                {
+                    stagingTableName = model.StagingTableName,
+                    measureName = model.MeasureName,
+                    measureColumnStagingID = model.MeasureColumnID,
+                    geographyColumnID = model.GeographyColumnID
+                });
+            }
+
+            model = dataAccess.populateCreateMeasureModel(model.StagingDatasetID);
+                                    
+            return View(model);
         }
 
         /// <summary>
@@ -113,7 +172,15 @@ namespace Data_Loading_Tool.Controllers
             IEnumerable<Tuple<int, int>> mappings = (IEnumerable<Tuple<int, int>>)TempData["DimensionMappings"];
 
             MeasureValueModel model = dataAccess.populateMeasureValueModel(mappings, stagingTableName, measureName, measureColumnStagingID, geographyColumnID);
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Create Measure", Action = "", Controller = "", isCurrent = true });
             
+            model.Breadcrumbs = trail;
+
             return View(model);
         }
 
@@ -126,12 +193,13 @@ namespace Data_Loading_Tool.Controllers
         /// <returns></returns>
         [HttpPost]
         public ActionResult AddMeasureValues(MeasureValueModel model)
-        {
+        {                                     
             DatasetDataAccess dataAccess = new DatasetDataAccess();
 
-            dataAccess.createMeasureValues(model);                           
+            dataAccess.createMeasureValues(model);
 
-            return RedirectToAction("Index", "Staging");
+            TempData["SuccessMessage"] = String.Format("The Measure - {0}, was successfully created", model.MeasureName);
+            return RedirectToAction("Index", "Staging");            
         }       
     }
 }

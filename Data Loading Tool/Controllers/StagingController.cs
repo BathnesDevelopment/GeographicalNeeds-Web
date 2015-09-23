@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -24,7 +25,18 @@ namespace Data_Loading_Tool.Controllers
         {
             StagingDataAccess dataAccess = new StagingDataAccess();
 
-            return View(dataAccess.getStagingTables());
+            StagingIndexModel model = new StagingIndexModel();
+
+            model.StagingModels = dataAccess.getStagingTables();
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Staging Index", isCurrent = true });
+
+            model.Breadcrumbs = trail;
+
+            return View(model);
         }
 
         /// <summary>
@@ -36,8 +48,18 @@ namespace Data_Loading_Tool.Controllers
         /// </summary>
         /// <returns></returns>
         public ActionResult CreateStaging()
-        {            
-            return View();
+        {
+            GeneralStagingModel model = new GeneralStagingModel();
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Create Staging", isCurrent = true });
+
+            model.Breadcrumbs = trail;
+
+            return View(model);
         }
 
         /// <summary>
@@ -53,8 +75,23 @@ namespace Data_Loading_Tool.Controllers
         {
             StagingDataAccess dataAccess = new StagingDataAccess();
 
-            dataAccess.createStagingTable(model);
+            if (!dataAccess.isCreateStagingModelValid(model))
+            {
+                ModelState.AddModelError("TableName", "The Staging Table Name must be unique");
+                return View(model);
+            }
 
+            try
+            {
+                dataAccess.createStagingTable(model);
+            }
+            catch (SqlException)
+            {
+                ModelState.AddModelError("", "An error occured when creating the Staging Table. Please ensure that the staging table name is unique and that all columns within it are uniquely named");
+                return View(model);                
+            }
+
+            TempData["SuccessMessage"] = String.Format("The Staging Table - {0}, was successfully created", model.TableName);
             return RedirectToAction("Index");
         }
 
@@ -72,6 +109,14 @@ namespace Data_Loading_Tool.Controllers
             UploadStagingModel model = new UploadStagingModel();
             model.StagingTableID = tableID;
 
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Upload to Staging", isCurrent = true });
+
+            model.Breadcrumbs = trail;
+
             return View(model);
         }
 
@@ -87,25 +132,29 @@ namespace Data_Loading_Tool.Controllers
         /// <param name="FileUpload">A file that contains the raw staging data.</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult UploadToStaging(UploadStagingModel model, HttpPostedFileBase FileUpload)
+        public ActionResult UploadToStaging(UploadStagingModel model)
         {
-            model.attachment = FileUpload;
-
-            if (model.attachment.ContentLength > 0)
+            if (ModelState.IsValid)
             {
-                string fileName = Path.GetFileName(model.attachment.FileName);
-                string path = Path.Combine(Server.MapPath("~/App_Data/CSVUploads"), fileName);
+                if (model.attachment.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(model.attachment.FileName);
+                    string path = Path.Combine(Server.MapPath("~/App_Data/CSVUploads"), fileName);
 
-                Data_Loading_Tool.Database.FileAccess fileAccess = new Data_Loading_Tool.Database.FileAccess();
+                    Data_Loading_Tool.Database.FileAccess fileAccess = new Data_Loading_Tool.Database.FileAccess();
 
-                fileAccess.writeCSVtoDisk(model, path);
+                    fileAccess.writeCSVtoDisk(model, path);
 
-                StagingDataAccess dataAccess = new StagingDataAccess();
+                    StagingDataAccess dataAccess = new StagingDataAccess();
 
-                dataAccess.updateTableFromCSV(path, model.StagingTableID, model.UniqueUploadRef, model.UnpivotData, model.FirstUpload, model.GeographyColumn);
+                    dataAccess.updateTableFromCSV(path, model.StagingTableID, model.UniqueUploadRef, model.UnpivotData, model.FirstUpload, model.GeographyColumn);
+                    
+                    TempData["SuccessMessage"] = "The Data was uploaded successfully";
+                    return RedirectToAction("Index"); 
+                }                           
             }
 
-            return RedirectToAction("Index");
+            return View(model);            
         }
 
         /// <summary>
@@ -122,6 +171,14 @@ namespace Data_Loading_Tool.Controllers
             StagingDataAccess dataAccess = new StagingDataAccess();
 
             StagingDetailModel model = dataAccess.getStagingDetails(datasetID);
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Staging Dataset Details", isCurrent = true });
+
+            model.Breadcrumbs = trail;
 
             return View(model);
         }

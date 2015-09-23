@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>External Libs\Elmah\Elmah.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -195,9 +199,11 @@
     <Compile Include="Database\StagingDataset.cs">
       <DependentUpon>BANESDatabase.tt</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\ViewHelpers\HtmlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Datasets\CreateDimensionModel.cs" />
     <Compile Include="Models\Datasets\CreateMeasureModel.cs" />
     <Compile Include="Models\Datasets\MeasureLoadingModel.cs" />
@@ -294,6 +300,14 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="External Libs\Elmah\Elmah.dll" />
+    <Content Include="External Libs\Elmah\Elmah.pdb" />
+    <Content Include="External Libs\Elmah\Elmah.xml" />
+    <Content Include="External Libs\Elmah\Mono.Security.dll" />
+    <Content Include="External Libs\Elmah\mysql.data.dll" />
+    <Content Include="External Libs\Elmah\Npgsql.dll" />
+    <Content Include="External Libs\Elmah\System.Data.SQLite.DLL" />
+    <Content Include="External Libs\Elmah\System.Data.SqlServerCe.dll" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <EntityDeploy Include="Database\BANESDatabase.edmx">
@@ -370,7 +384,6 @@
       <LastGenOutput>InsertMeasureValuesTemplate.cs</LastGenOutput>
     </Content>
     <Content Include="Views\Dataset\CreateDimension.cshtml" />
-    <Content Include="Views\Dataset\MapMeasureDimensions.cshtml" />
     <Content Include="Views\Dataset\CreateMeasure.cshtml" />
     <Content Include="Views\DataView\Index.cshtml" />
     <Content Include="Views\DataView\ViewDetails.cshtml" />

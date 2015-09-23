@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model Data_Loading_Tool.Models.BaseModel
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -37,6 +39,19 @@
     </div>
 
     <div class="container">
+        <ul class="breadcrumb">
+            @foreach (Data_Loading_Tool.Models.Breadcrumb link in Model.Breadcrumbs)
+            {
+                if (link.isCurrent)
+                {
+                    <li class="active">@link.LinkText</li>
+                }
+                else
+                {
+                    <li>@Html.ActionLink(@link.LinkText, @link.Action, @link.Controller)</li>
+                }
+            }
+        </ul>
         @RenderBody()
 
         <footer>
@@ -54,5 +69,42 @@
     @Scripts.Render("~/Scripts/jquery-migrate-1.2.1.min.js")
     @Scripts.Render("~/Scripts/bootstrap.min.js")
     @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+
+        jQuery.validator.setDefaults({
+            highlight: function (element, errorClass, validClass)
+            {
+                if (element.type === 'radio')
+                {
+                    this.findByName(element.name).addClass(errorClass).removeClass(validClass);
+                } else
+                {
+                    $(element).addClass(errorClass).removeClass(validClass);
+                    $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                }
+            },
+            unhighlight: function (element, errorClass, validClass)
+            {
+                if (element.type === 'radio')
+                {
+                    this.findByName(element.name).removeClass(errorClass).addClass(validClass);
+                } else
+                {
+                    $(element).removeClass(errorClass).addClass(validClass);
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+                }
+            }
+        });
+
+        $(function () {
+
+            $("span.field-validation-valid, span.field-validation-error").addClass('help-block');
+            $("div.form-group").has("span.field-validation-error").addClass('has-error');
+            $("div.validation-summary-errors").has("li:visible").addClass("alert alert-block alert-danger");
+
+        });
+    </script>
+
 </body>
 </html>

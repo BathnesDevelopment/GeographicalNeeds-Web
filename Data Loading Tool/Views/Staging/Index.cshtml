@@ -1,10 +1,18 @@
-﻿@model IEnumerable<Data_Loading_Tool.Models.GeneralStagingModel>
+﻿@model Data_Loading_Tool.Models.StagingIndexModel
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Staging Table Index";
 }
 
-<h2>Index</h2>
+<h2>Staging Table Index</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-dismissible alert-success">
+        <button class="close" type="button" data-dismiss="alert">×</button>
+        <strong>Success:</strong> @TempData["SuccessMessage"]
+    </div>
+}
 
 <p>
     @Html.ActionLink("Create New", "CreateStaging", new { }, new { @class = "btn" })
@@ -12,12 +20,13 @@
 <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.TableName)
+            @Html.DisplayNameFor(model => Model.StagingModels.First().TableName)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.StagingModels)
+{
     <tr>
         <td>
             @Html.ActionLink(item.TableName, "DatasetDetails", new { datasetID = item.TableID }, new { @class = "btn btn-link" })
@@ -35,3 +44,7 @@
 }
 
 </table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

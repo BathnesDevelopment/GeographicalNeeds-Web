@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Data_Loading_Tool.Models
 {
@@ -10,13 +12,23 @@ namespace Data_Loading_Tool.Models
     /// This model is for the View used to specify the details 
     /// for the creation of custom views.
     /// </summary>
-    public class CreateViewModel
+    public class CreateViewModel : BaseModel
     {
+        [Required]
+        [StringLength(100)]
+        [DisplayName("View Name")]
         public String ViewName { get; set; }
 
         public IEnumerable<SelectListItem> Measures { get; set; }
 
+        [Required]
+        [DisplayName("Selected Measures")]
         public IEnumerable<int> SelectedMeasureIDs { get; set; }
+    }
+
+    public class CreateViewMeasureModelList : BaseModel
+    {
+        public List<CreateViewMeasureModel> Models { get; set; }
     }
 
     public class CreateViewMeasureModel 
@@ -28,9 +40,16 @@ namespace Data_Loading_Tool.Models
         public IEnumerable<CreateViewDimensionModel> DimensionModels { get; set; }
 
         public IEnumerable<SelectListItem> Dimensions { get; set; }
-
+        
+        [Required]
+        [DisplayName("Selected Dimensions")]
         public IEnumerable<int> SelectedDimensionIDs { get; set; }
 
+    }
+
+    public class CreateViewDimensionModelList : BaseModel
+    {
+        public List<CreateViewDimensionModel> Models { get; set; }
     }
 
     public class CreateViewDimensionModel
@@ -40,9 +59,13 @@ namespace Data_Loading_Tool.Models
         public String MeasureName { get; set; }
 
         public String DimensionName { get; set; }
+
+        public int DimensionID { get; set; }
         
         public IEnumerable<SelectListItem> DimensionValues { get; set; }
 
+        [Required]
+        [DisplayName("Selected Dimension Values")]
         public IEnumerable<int> SelectedDimensionValueIDs { get; set; }
     }
 

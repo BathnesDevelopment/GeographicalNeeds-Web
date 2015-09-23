@@ -29,10 +29,11 @@ namespace Data_Loading_Tool.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n\r\nInsert into FactInstance\r\n(\r\n\tFactDimensionSetID,\r\n\tLsoaID,\r\n\tValue\r\n)\r\nselec" +
-                    "t \r\n\tBBB.FactDimensionSetID, \r\n\tAAA.LsoaID, \r\n\tAAA.Value \r\nfrom \r\n\t(select \r\n\t\t");
+            this.Write("\r\n\r\nInsert into FactInstance\r\n(\r\n\tFactDimensionSetID,\r\n\tLsoaID,\r\n\tValue,\r\n\tLoadRe" +
+                    "ference\r\n)\r\nselect \r\n\tBBB.FactDimensionSetID, \r\n\tAAA.LsoaID, \r\n\tAAA.Value,\r\n\tAAA" +
+                    ".Reference \r\nfrom \r\n\t(select \r\n\t\t");
             
-            #line 22 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 24 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
 			if(UseMeasureColumn)
 			{
@@ -42,14 +43,14 @@ namespace Data_Loading_Tool.Templates
             #line hidden
             this.Write("\t\t\tS.");
             
-            #line 26 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 28 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(MeasureColumnName));
             
             #line default
             #line hidden
             this.Write(" as Value,\r\n\t\t");
             
-            #line 27 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 29 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
 			}
 			else
@@ -60,30 +61,30 @@ namespace Data_Loading_Tool.Templates
             #line hidden
             this.Write("\t\t\t1 as Value,\r\n\t\t");
             
-            #line 33 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 35 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
 			}
 		
             
             #line default
             #line hidden
-            this.Write("\t\tL.LsoaId\r\n\tfrom \r\n\t\t");
+            this.Write("\t\tS.UploadRef as Reference,\r\n\t\tL.LsoaId\r\n\tfrom \r\n\t\t");
             
-            #line 38 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 41 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(StagingTableName));
             
             #line default
             #line hidden
             this.Write(" S\r\n\tinner join\r\n\t\tLSOA L\r\n\ton\r\n\t\tS.");
             
-            #line 42 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 45 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(StagingGeographyColumn));
             
             #line default
             #line hidden
             this.Write(" = L.LsoaCode\r\n\twhere \r\n\t");
             
-            #line 44 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 47 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
  
 			bool firstWhere = true;
 
@@ -97,21 +98,21 @@ namespace Data_Loading_Tool.Templates
             #line hidden
             this.Write("\t\t\tS.");
             
-            #line 52 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 55 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.StagingColumnName));
             
             #line default
             #line hidden
             this.Write(" = \'");
             
-            #line 52 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 55 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.StagingColumnValue));
             
             #line default
             #line hidden
             this.Write("\'\r\n\t");
             
-            #line 53 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 56 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
 					firstWhere = false;
 				}
@@ -123,21 +124,21 @@ namespace Data_Loading_Tool.Templates
             #line hidden
             this.Write("\t\tand \r\n\t\t\tS.");
             
-            #line 60 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 63 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.StagingColumnName));
             
             #line default
             #line hidden
             this.Write(" = \'");
             
-            #line 60 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 63 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.StagingColumnValue));
             
             #line default
             #line hidden
             this.Write("\'\r\n\t");
             
-            #line 61 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 64 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
 				}
 			}
@@ -148,7 +149,7 @@ namespace Data_Loading_Tool.Templates
             this.Write("\t) AAA\r\ncross join\r\n\t(select \r\n\t\tF.FactDimensionSetID, string\r\n\tfrom \r\n\t(\r\n\t\tsele" +
                     "ct \r\n\t\t");
             
-            #line 72 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 75 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
  
 			bool firstSelect = true;
 
@@ -162,14 +163,14 @@ namespace Data_Loading_Tool.Templates
             #line hidden
             this.Write("\t\t[");
             
-            #line 80 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 83 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
             
             #line default
             #line hidden
             this.Write("].DimensionValue\r\n\t\t");
             
-            #line 81 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 84 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
 				firstSelect = false;
 				}
@@ -181,14 +182,14 @@ namespace Data_Loading_Tool.Templates
             #line hidden
             this.Write("\t\t+ \'-\' + [");
             
-            #line 87 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 90 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
             
             #line default
             #line hidden
             this.Write("].DimensionValue\r\n\t\t");
             
-            #line 88 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 91 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
 				}
 			} 
@@ -198,7 +199,7 @@ namespace Data_Loading_Tool.Templates
             #line hidden
             this.Write("\t\tas string\r\n\t\t");
             
-            #line 93 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 96 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
 		bool first = true;
 		int firstID = 0;
@@ -215,28 +216,28 @@ namespace Data_Loading_Tool.Templates
                     "\tDimension D\r\n\t\t\tinner join \r\n\t\t\t\tDimensionValue V\r\n\t\t\ton D.DimensionID = v.Dime" +
                     "nsionID\r\n\t\t\twhere D.DimensionID = ");
             
-            #line 111 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 114 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\tand V.DimensionValue = \'");
             
-            #line 112 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 115 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionValue));
             
             #line default
             #line hidden
             this.Write("\') [");
             
-            #line 112 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 115 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
             
             #line default
             #line hidden
             this.Write("]\r\n\r\n\t\t");
             
-            #line 114 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 117 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
 			first = false;
 			firstID = dimModel.DimensionID; 
@@ -250,42 +251,42 @@ namespace Data_Loading_Tool.Templates
                     "rom\r\n\t\t\t\tDimension D\r\n\t\t\tinner join \r\n\t\t\t\tDimensionValue V\r\n\t\t\ton D.DimensionID " +
                     "= v.DimensionID\r\n\t\t\twhere D.DimensionID = ");
             
-            #line 129 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 132 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\tand V.DimensionValue = \'");
             
-            #line 130 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 133 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionValue));
             
             #line default
             #line hidden
             this.Write("\') [");
             
-            #line 130 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 133 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
             
             #line default
             #line hidden
             this.Write("]\r\n\t\t\ton [");
             
-            #line 131 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 134 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(firstID));
             
             #line default
             #line hidden
             this.Write("].ID <> [");
             
-            #line 131 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 134 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
             
             #line default
             #line hidden
             this.Write("].ID\r\n\t\t");
             
-            #line 132 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 135 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
 			}
 			}
@@ -296,7 +297,7 @@ namespace Data_Loading_Tool.Templates
             this.Write("\t) XXX\r\n\tinner join \r\n\t\tFactDimensionSet F\r\n\ton \r\n\t\tF.DimString = XXX.string\r\n\tin" +
                     "ner join \r\n\t\tFact FF\r\n\ton \r\n\t\tFF.FactID = F.FactID\r\n\twhere \r\n\t\tFF.FactName = \'");
             
-            #line 146 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 149 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(MeasureName));
             
             #line default

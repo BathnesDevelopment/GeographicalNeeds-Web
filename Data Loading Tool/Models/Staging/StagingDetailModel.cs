@@ -9,7 +9,7 @@ namespace Data_Loading_Tool.Models
     /// A model representing the details of a Staging Table. This includes
     /// the name of the table and the columns in it.
     /// </summary>
-    public class StagingDetailModel
+    public class StagingDetailModel : BaseModel
     {
         [DisplayName("Staging Dataset Name")]
         public String StagingDatasetName { get; set; }

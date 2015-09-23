@@ -1,10 +1,10 @@
 ﻿@model Data_Loading_Tool.Models.MeasureValueModel
 
 @{
-    ViewBag.Title = "AddMeasureValues";
+    ViewBag.Title = "Add Measure Values";
 }
 
-<h2>AddMeasureValues</h2>
+<h2>Add Measure Values</h2>
 
 @using (Html.BeginForm())
 {
@@ -29,7 +29,7 @@
 
                 @Html.HiddenFor(model => Model.MeasureValueDetails[i].DimValueID)
                 <div class="editor-label">
-                    @Html.LabelFor(model => Model.MeasureValueDetails[i].DimValue)
+                    @Html.RequiredLabelFor(model => Model.MeasureValueDetails[i].DimValue, new { @class = "control-label" })
                 </div>
                 <div class="editor-field">
                     @Html.ValueFor(model => Model.MeasureValueDetails[i].DimValue)
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="editor-label">
-                    @Html.LabelFor(model => Model.MeasureValueDetails[i].DimValueInStaging)
+                    @Html.RequiredLabelFor(model => Model.MeasureValueDetails[i].DimValueInStaging, new { @class = "control-label" })
                 </div>
                 <div class="editor-field">
                     @Html.DropDownListFor(model => Model.MeasureValueDetails[i].DimValueInStaging, Model.MeasureValueDetails[i].StagingDimensionValues)

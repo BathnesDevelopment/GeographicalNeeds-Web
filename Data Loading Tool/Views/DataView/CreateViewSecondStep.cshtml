@@ -1,30 +1,30 @@
-﻿@model List<Data_Loading_Tool.Models.CreateViewMeasureModel>
+﻿@model Data_Loading_Tool.Models.CreateViewMeasureModelList
 
 @{
-    ViewBag.Title = "CreateViewSecondStep";
+    ViewBag.Title = "Create View - Second Step";
 }
 
-<h2>CreateViewSecondStep</h2>
+<h2>Create View - Second Step</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
     <fieldset>
-        <legend>CreateViewModel</legend>
-        @for (int i = 0; i < Model.Count(); i++)
+        <legend>Create View</legend>
+        @for (int i = 0; i < Model.Models.Count(); i++)
         {
             <div class="form-group">
-                @Html.DisplayFor(model => Model[i].MeasureName, new { @class = "control-label" })
-                @Html.HiddenFor(model => Model[i].MeasureName)
+                @Html.DisplayFor(model => Model.Models[i].MeasureName, new { @class = "control-label" })
+                @Html.HiddenFor(model => Model.Models[i].MeasureName)
             </div>            
 
             <div class="form-group">
-                @Html.LabelFor(model => Model[i].SelectedDimensionIDs, new { @class = "control-label" })
+                @Html.RequiredLabelFor(model => Model.Models[i].SelectedDimensionIDs, new { @class = "control-label" })
             </div>
             <div class="form-group">
-                @Html.ListBoxFor(model => model[i].SelectedDimensionIDs, Model[i].Dimensions, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => Model[i].SelectedDimensionIDs)
+                @Html.ListBoxFor(model => model.Models[i].SelectedDimensionIDs, Model.Models[i].Dimensions, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => Model.Models[i].SelectedDimensionIDs)
             </div>           
         }
 
@@ -34,4 +34,8 @@
 
     </fieldset>
 
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

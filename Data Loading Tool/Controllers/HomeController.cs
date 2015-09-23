@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using Data_Loading_Tool.Models;
+
 namespace Data_Loading_Tool.Controllers
 {
     public class HomeController : Controller
@@ -17,7 +19,14 @@ namespace Data_Loading_Tool.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            return View();
+            BaseModel model = new BaseModel();
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = true });
+            
+            model.Breadcrumbs = trail;
+
+            return View(model);
         }
 
     }

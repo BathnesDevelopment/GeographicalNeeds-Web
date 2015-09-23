@@ -1,19 +1,28 @@
-﻿@model IEnumerable<Data_Loading_Tool.Models.DataViewModel>
+﻿@model Data_Loading_Tool.Models.DataViewIndexModel
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Data Views Index";
 }
 
-<h2>Index</h2>
+<h2>Data Views Index</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-dismissible alert-success">
+        <button class="close" type="button" data-dismiss="alert">×</button>
+        <strong>Success:</strong> @TempData["SuccessMessage"]
+    </div>
+}
 
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.DataViewName)
+            @Html.DisplayNameFor(model => model.DataViewModels.First().DataViewName)
         </th>       
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.DataViewModels)
+{
     <tr>        
         <td>
             @Html.ActionLink(item.DataViewName, "ViewDetails", new { viewID = item.DataViewID }, new { @class = "btn btn-link" })
@@ -24,3 +33,7 @@
     @Html.ActionLink("Create New View", "CreateViewFirstStep", null, new { @class = "btn btn-link" })
 
 </table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

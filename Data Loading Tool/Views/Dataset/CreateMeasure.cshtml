@@ -1,10 +1,10 @@
 ﻿@model Data_Loading_Tool.Models.CreateMeasureModel
 
 @{
-    ViewBag.Title = "CreateMeasure";
+    ViewBag.Title = "Create New Measure";
 }
 
-<h2>CreateMeasure</h2>
+<h2>Create New Measure</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -16,7 +16,7 @@
         @Html.HiddenFor(x => x.StagingTableName)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.MeasureName, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.MeasureName, new { @class = "control-label" })
         </div>
         <div class="form-group">
             @Html.EditorFor(model => model.MeasureName)
@@ -24,7 +24,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.MeasureColumnID, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.MeasureColumnID, new { @class = "control-label" })
         </div>
         <div class="form-group">
             @Html.DropDownListFor(model => model.MeasureColumnID, Model.StagingColumnsForMeasure, "Single Count per Row", new { @class = "form-control" })
@@ -32,23 +32,25 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.GeographyColumnID, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.GeographyColumnID, new { @class = "control-label" })
         </div>
         <div class="form-group">
             @Html.DropDownListFor(model => model.GeographyColumnID, Model.StagingColumnsForGeography, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.GeographyColumnID)
         </div>
 
+        @Html.HiddenFor(x => x.StagingDatasetID)
+
         @for (var i = 0; i < Model.MeasureDetails.Count(); i++ )
         {
             @Html.HiddenFor(model => Model.MeasureDetails[i].StagingColumnID)
             <div class="form-group">
-                @Html.LabelFor(model => Model.MeasureDetails[i].StagingColumnName, new { @class = "control-label" })
+                @Html.RequiredLabelFor(model => Model.MeasureDetails[i].StagingColumnName, new { @class = "control-label" })
                 @Html.ValueFor(model => Model.MeasureDetails[i].StagingColumnName)
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => Model.MeasureDetails[i].DimensionValueID, new { @class = "control-label" })
+                @Html.RequiredLabelFor(model => Model.MeasureDetails[i].DimensionValueID, new { @class = "control-label" })
                 @Html.DropDownListFor(model => Model.MeasureDetails[i].DimensionValueID, Model.MeasureDetails[i].AvailableDimensions, "--- Not Applicable ---", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => Model.MeasureDetails[i].DimensionValueID)
             </div>

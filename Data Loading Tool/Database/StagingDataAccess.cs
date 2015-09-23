@@ -30,6 +30,21 @@ namespace Data_Loading_Tool.Database
         }
 
         /// <summary>
+        /// Validate that the Create Staging Table Model is valid prior to
+        /// submission to the database
+        /// </summary>
+        /// <param name="model">The model to be validated</param>
+        /// <returns>Boolean indicating valid or not</returns>
+        public Boolean isCreateStagingModelValid(GeneralStagingModel model)
+        {
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+            int count = context.StagingDatasets.Where(x => x.DatasetName.Equals(model.TableName)).Count();
+
+            return count == 0;
+        }
+
+        /// <summary>
         /// Method to create a Staging Table initially. This intial creation creates
         /// a record of the table in the meta data tables and then a trigger creates the 
         /// actual table. Initially there are no columns associated with the table

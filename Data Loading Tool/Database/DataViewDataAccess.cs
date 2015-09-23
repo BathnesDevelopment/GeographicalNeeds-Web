@@ -93,6 +93,21 @@ namespace Data_Loading_Tool.Database
         }
 
         /// <summary>
+        /// Validate that the Create Data View Model is valid prior to
+        /// submission to the database
+        /// </summary>
+        /// <param name="model">The model to be validated</param>
+        /// <returns>Boolean indicating valid or not</retu
+        public Boolean isCreateViewModelValid(CreateViewModel model) 
+        {
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+            int count = context.DataViews.Where(x => x.ViewName.Equals(model.ViewName)).Count();
+
+            return count == 0;
+        }
+
+        /// <summary>
         /// Method which gets back the Models used to select Dimensions within the selected Measures when creating a custom View. 
         /// </summary>
         /// <param name="measureIDs">The Measures that have previously been selected within the create View process</param>
@@ -190,6 +205,7 @@ namespace Data_Loading_Tool.Database
 
             model.DimensionName = context.Dimensions.Single(x => x.DimensionID.Equals(dimensionID)).DimensionName;
 
+            model.DimensionID = dimensionID;
 
             return model;
         }
@@ -224,9 +240,13 @@ namespace Data_Loading_Tool.Database
                     {
                         DataViewColumn newColumn = context.DataViewColumns.Create();
                         newColumn.ColumnName = String.Format("{0} - {1} Count", measure.MeasureName, dimValue);
-                        newView.DataViewColumns.Add(newColumn);
+                        newView.DataViewColumns.Add(newColumn);                        
                     }
                 }
+
+                DataViewColumn referenceColumn = context.DataViewColumns.Create();
+                referenceColumn.ColumnName = String.Format("{0} - Loading reference", measure.MeasureName);
+                newView.DataViewColumns.Add(referenceColumn);
             }
 
             context.DataViews.Add(newView);

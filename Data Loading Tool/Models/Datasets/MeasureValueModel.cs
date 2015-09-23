@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Data_Loading_Tool.Models
 {
@@ -13,7 +14,7 @@ namespace Data_Loading_Tool.Models
     /// and is used for the basis of the template file which will create the 
     /// entries.
     /// </summary>
-    public class MeasureValueModel
+    public class MeasureValueModel: BaseModel
     {
         [DisplayName("Staging Table Name")]
         public String StagingTableName { get; set; }
@@ -44,6 +45,7 @@ namespace Data_Loading_Tool.Models
 
         public IEnumerable<SelectListItem> StagingDimensionValues { get; set; }
 
+        [Required]
         [DisplayName("Value of Dimension in Staging")]
         public String DimValueInStaging { get; set; }
 

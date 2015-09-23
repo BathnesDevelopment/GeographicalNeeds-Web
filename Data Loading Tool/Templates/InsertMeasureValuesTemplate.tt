@@ -11,12 +11,14 @@ Insert into FactInstance
 (
 	FactDimensionSetID,
 	LsoaID,
-	Value
+	Value,
+	LoadReference
 )
 select 
 	BBB.FactDimensionSetID, 
 	AAA.LsoaID, 
-	AAA.Value 
+	AAA.Value,
+	AAA.Reference 
 from 
 	(select 
 		<#
@@ -33,6 +35,7 @@ from
 		<#
 			}
 		#>
+		S.UploadRef as Reference,
 		L.LsoaId
 	from 
 		<#= StagingTableName #> S

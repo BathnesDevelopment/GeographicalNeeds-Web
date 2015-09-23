@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data;
+using System.Data.SqlClient;
 
 using Data_Loading_Tool.Models;
 using Data_Loading_Tool.Database;
@@ -23,8 +24,19 @@ namespace Data_Loading_Tool.Controllers
         public ActionResult Index()
         {
             DataViewDataAccess dataAccess = new DataViewDataAccess();
+
+            DataViewIndexModel model = new DataViewIndexModel();
+
+            model.DataViewModels = dataAccess.getViews();
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = true });
             
-            return View(dataAccess.getViews());
+            model.Breadcrumbs = trail;
+
+            return View(model);
         }
 
         /// <summary>
@@ -43,6 +55,14 @@ namespace Data_Loading_Tool.Controllers
 
             DataViewDetailModel model = dataAccess.getViewData(viewID);
 
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Data View Details", Action = "", Controller = "", isCurrent = true });
+
+            model.Breadcrumbs = trail;
+
             return View(model);
         }
 
@@ -58,6 +78,14 @@ namespace Data_Loading_Tool.Controllers
             DataViewDataAccess dataAccess = new DataViewDataAccess();
 
             CreateViewModel model = dataAccess.getCreateViewModel();
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Create Data View", Action = "", Controller = "", isCurrent = true });
+
+            model.Breadcrumbs = trail;
             
             return View(model);
         }
@@ -72,14 +100,25 @@ namespace Data_Loading_Tool.Controllers
         [HttpPost]
         public ActionResult CreateViewFirstStep(CreateViewModel model)
         {
-            CreateViewCompleteModel fullModel = new CreateViewCompleteModel();
+            DataViewDataAccess dataAccess = new DataViewDataAccess();
 
-            fullModel.ViewName = model.ViewName;
+            if (dataAccess.isCreateViewModelValid(model))
+            {
+                CreateViewCompleteModel fullModel = new CreateViewCompleteModel();
 
-            TempData["CreateViewModel"] = model;
-            TempData["CreateViewCompleteModel"] = fullModel;
+                fullModel.ViewName = model.ViewName;
 
-            return RedirectToAction("CreateViewSecondStep");
+                TempData["CreateViewModel"] = model;
+                TempData["CreateViewCompleteModel"] = fullModel;
+
+                return RedirectToAction("CreateViewSecondStep");
+            }
+
+            ModelState.AddModelError("ViewName", "The Data View Name must be unique");
+            model = dataAccess.getCreateViewModel();
+
+            return View(model);
+            
         }
 
         /// <summary>
@@ -94,9 +133,21 @@ namespace Data_Loading_Tool.Controllers
 
             CreateViewModel model = (CreateViewModel)TempData["CreateViewModel"];
 
+            CreateViewMeasureModelList listModel = new CreateViewMeasureModelList();
+
             List<CreateViewMeasureModel> models = dataAccess.getViewMeasureModels(model.SelectedMeasureIDs).ToList();
 
-            return View(models);
+            listModel.Models = models;
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Create Data View", Action = "", Controller = "", isCurrent = true });
+
+            listModel.Breadcrumbs = trail;
+
+            return View(listModel);
         }
 
         /// <summary>
@@ -149,9 +200,20 @@ namespace Data_Loading_Tool.Controllers
                 }
                 
             }
-            
 
-            return View(models);
+            CreateViewDimensionModelList listModel = new CreateViewDimensionModelList();
+
+            listModel.Models = models;
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Create Data View", Action = "", Controller = "", isCurrent = true });
+
+            listModel.Breadcrumbs = trail;
+
+            return View(listModel);
         }
 
         /// <summary>
@@ -174,8 +236,28 @@ namespace Data_Loading_Tool.Controllers
                 item.Dimensions = dataAccess.convertDimensionViewModelsToDBModels(models, item.MeasureID);
             }
 
-            dataAccess.createBespokeView(fullModel);
+            try
+            {
+                dataAccess.createBespokeView(fullModel);
+            }
+            catch (SqlException)
+            {
+                List<CreateViewDimensionModel> newModels = new List<CreateViewDimensionModel>();
 
+                foreach (CreateViewDimensionModel x in models)
+                {
+                    CreateViewDimensionModel model = dataAccess.getViewDimensionModels(x.DimensionID);
+                    model.MeasureName = x.MeasureName;
+                    newModels.Add(model);
+                }
+
+                ModelState.AddModelError("", "An error occured when creating the view");
+
+                TempData["CreateViewCompleteModel"] = fullModel;
+                return View(newModels);                    
+            }
+
+            TempData["SuccessMessage"] = String.Format("The Data View - {0}, was successfully created", fullModel.ViewName);
             return RedirectToAction("Index");
         }
     }

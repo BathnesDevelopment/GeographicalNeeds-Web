@@ -1,11 +1,13 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Homepage";
 }
 
-<h2>Index</h2>
+<h2>Geographical Needs - Homepage</h2>
 
 @Html.ActionLink("Staging Data", "Index", "Staging", new { }, new { @class = "btn" })
 @Html.ActionLink("Data Views", "Index", "DataView", new { }, new { @class = "btn" })
 
-
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 

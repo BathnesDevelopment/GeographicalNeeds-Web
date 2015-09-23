@@ -1,20 +1,21 @@
 ﻿@model Data_Loading_Tool.Models.CreateDimensionModel
 
 @{
-    ViewBag.Title = "CreateDimension";
+    ViewBag.Title = "Create New Dimension";
 }
 
-<h2>CreateDimension</h2>
+<h2>Create New Dimension</h2>
+
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
     <fieldset>
-        <legend>CreateDimensionModel</legend>
+        <legend>Create Dimension</legend>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.DimensionName, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.DimensionName, new { @class = "control-label" })
         </div>
         <div class="form-group">
             @Html.EditorFor(model => model.DimensionName)
@@ -22,7 +23,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.DimColumnInStaging, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.DimColumnInStaging, new { @class = "control-label" })
         </div>
         <div class="form-group">
             @Html.DropDownListFor(x => Model.DimColumnInStaging, Model.StagingColumnsForDimension, new { @class = "form-control" })
@@ -36,7 +37,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", "Staging")
 </div>
 
 @section Scripts {

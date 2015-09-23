@@ -1,10 +1,10 @@
 ﻿@model Data_Loading_Tool.Models.UploadStagingModel
 
 @{
-    ViewBag.Title = "UploadToStaging";
+    ViewBag.Title = "Upload To Staging";
 }
 
-<h2>UploadToStaging</h2>
+<h2>Upload Data To Staging</h2>
 
 
 
@@ -19,7 +19,7 @@
         @Html.HiddenFor(model => model.StagingTableID)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.UniqueUploadRef, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.UniqueUploadRef, new { @class = "control-label" })
         </div>
         <div class="form-group">
             @Html.EditorFor(model => model.UniqueUploadRef)
@@ -27,7 +27,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.FirstUpload, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.FirstUpload, new { @class = "control-label" })
         </div>
         <div class="form-group">
             @Html.EditorFor(model => model.FirstUpload)
@@ -35,7 +35,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.UnpivotData, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.UnpivotData, new { @class = "control-label" })
         </div>
         <div class="form-group">
             @Html.EditorFor(model => model.UnpivotData)
@@ -43,18 +43,29 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.GeographyColumn, new { @class = "control-label" })
+            @Html.RequiredLabelFor(model => model.GeographyColumn, new { @class = "control-label" })
             @Html.EditorFor(model => model.GeographyColumn)
             @Html.ValidationMessageFor(model => model.GeographyColumn)
         </div>
 
         <div class="form-group">
-            <input type="file" class="form-control" name="FileUpload" />
+            @Html.RequiredLabelFor(m => m.attachment, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.attachment, new { type = "file" })
+            @Html.ValidationMessageFor(model => model.attachment)
         </div>
+
+        @*<div class="form-group">
+            <input type="file" class="form-control" name="FileUpload" />
+            @Html.ValidationMessageFor(model => model.attachment)
+        </div>*@
         <div class="form-group">
             <input type="submit" class="btn btn-primary" name="Submit" id="Submit" value="Upload" />
         </div>
 
     </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }
 

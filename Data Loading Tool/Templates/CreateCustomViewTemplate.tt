@@ -17,7 +17,7 @@ select
 		if(firstSelect)
 		{
 #>	
-	[<#= measure.MeasureName #>].LsoaName
+	 [<#= measure.MeasureName #>].LsoaName
 <# 
 			if(measure.Dimensions.Count() == 0)
 			{
@@ -54,6 +54,9 @@ select
 				}
 			}
 		}
+#>
+	,[<#= measure.MeasureName #>].LoadReference as [<#= measure.MeasureName #> - Loading reference]
+<#
 	firstSelect = false;
 	}
 #>
@@ -83,6 +86,7 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 	select 
 				[inner<#= measure.MeasureName #>].LsoaID
 				, [inner<#= measure.MeasureName #>].LsoaName			
+				, [inner<#= measure.MeasureName #>].LoadReference		
 				, sum([inner<#= measure.MeasureName #>].FactCount) as FactCount
 <#
 	}
@@ -90,7 +94,7 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 	{	
 #>
 	(
-	select [Pivot Table].LsoaID, [Pivot Table].LsoaName, <#= String.Join(",", measure.DimensionValues.Select(x => String.Format("[Pivot Table].[{0}]", x))) #> from
+	select [Pivot Table].LsoaID, [Pivot Table].LsoaName, [Pivot Table].LoadReference, <#= String.Join(",", measure.DimensionValues.Select(x => String.Format("[Pivot Table].[{0}]", x))) #> from
 		(
 		select 
 <#
@@ -102,7 +106,8 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 			{
 #>
 				[<#= dimension.DimensionID #>].LsoaID
-				, [<#= dimension.DimensionID #>].LsoaName			
+				, [<#= dimension.DimensionID #>].LsoaName	
+				, [<#= dimension.DimensionID #>].LoadReference		
 				, [<#= dimension.DimensionID #>].DimensionValue			
 				, sum([<#= dimension.DimensionID #>].FactCount) as FactCount
 <#			
@@ -127,6 +132,7 @@ from
 					I.FactInstanceID,
 					L.LsoaID,
 					L.LsoaName, 
+					I.LoadReference,
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
@@ -157,7 +163,7 @@ from
 				WHERE        					
 					(F.FactID = <#= measure.MeasureID #>)
 			) [inner<#= measure.MeasureName #>]	
-group by [inner<#= measure.MeasureName #>].LsoaID, [inner<#= measure.MeasureName #>].LsoaName
+group by [inner<#= measure.MeasureName #>].LsoaID, [inner<#= measure.MeasureName #>].LsoaName, [inner<#= measure.MeasureName #>].LoadReference
 ) [<#= measure.MeasureName #>]	
 <#
 	}
@@ -177,6 +183,7 @@ group by [inner<#= measure.MeasureName #>].LsoaID, [inner<#= measure.MeasureName
 					L.LsoaID,
 					L.LsoaName, 
 					V.DimensionValue , 
+					I.LoadReference,
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
@@ -223,7 +230,8 @@ group by [inner<#= measure.MeasureName #>].LsoaID, [inner<#= measure.MeasureName
 					I.FactInstanceID,
 					L.LsoaID,
 					L.LsoaName, 
-					V.DimensionValue, 
+					V.DimensionValue,
+					I.LoadReference, 
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
@@ -266,6 +274,7 @@ group by [inner<#= measure.MeasureName #>].LsoaID, [inner<#= measure.MeasureName
 	group by
 	[<#= firstDimension#>].LsoaID
 	,[<#= firstDimension#>].LsoaName
+	,[<#= firstDimension#>].LoadReference
 <#
 		foreach(CreateViewDimValueModel dimension in measure.Dimensions)
 		{
