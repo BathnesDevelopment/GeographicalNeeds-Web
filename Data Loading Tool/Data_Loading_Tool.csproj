@@ -186,10 +186,10 @@
       <DependentUpon>BANESDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\FileAccess.cs" />
-    <Compile Include="Database\LSOA.cs">
+    <Compile Include="Database\Geography.cs">
       <DependentUpon>BANESDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="Database\Property.cs">
+    <Compile Include="Database\GeographyType.cs">
       <DependentUpon>BANESDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\StagingColumn.cs">

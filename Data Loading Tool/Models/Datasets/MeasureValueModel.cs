@@ -30,6 +30,8 @@ namespace Data_Loading_Tool.Models
 
         [DisplayName("Measure Column Name")]
         public String MeasureStagingColumnName { get; set; }
+
+        public int GeographyTypeID { get; set; }
         
         public IList<MeasureValueDetailModel> MeasureValueDetails { get; set; }
     }

@@ -49,6 +49,7 @@
           </Key>
           <Property Name="FactID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FactName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="GeographyTypeID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="FactDimensionMapping">
           <Key>
@@ -72,43 +73,42 @@
           </Key>
           <Property Name="FactInstanceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FactDimensionSetID" Type="int" Nullable="false" />
-          <Property Name="LsoaID" Type="int" />
-          <Property Name="PropertyID" Type="int" />
+          <Property Name="GeographyID" Type="int" />
           <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="LoadReference" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
-        <EntityType Name="LSOA">
+        <EntityType Name="Geography">
           <Key>
-            <PropertyRef Name="LsoaID" />
+            <PropertyRef Name="GeographyID" />
           </Key>
-          <Property Name="LsoaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="LsoaCode" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="LsoaName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="WardCode" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="WardName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="GeographyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GeographyTypeID" Type="int" />
           <Property Name="MsoaCode" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="MsoaName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="CommunityArea" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="PlanningPolicyArea" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="LACode" Type="varchar" MaxLength="20" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Properties">
-          <Key>
-            <PropertyRef Name="PropertyID" />
-          </Key>
-          <Property Name="PropertyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="LsoaID" Type="int" />
-          <Property Name="NAMENUMBER" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="WardCode" Type="varchar" MaxLength="20" />
+          <Property Name="WardName" Type="varchar" MaxLength="50" />
+          <Property Name="LsoaCode" Type="varchar" MaxLength="20" />
+          <Property Name="LsoaName" Type="varchar" MaxLength="50" />
+          <Property Name="Postcode" Type="varchar" MaxLength="20" />
+          <Property Name="UPRN" Type="float" />
+          <Property Name="USRN" Type="float" />
+          <Property Name="NAMENUMBER" Type="nvarchar" MaxLength="300" />
           <Property Name="STREET" Type="nvarchar" MaxLength="100" />
           <Property Name="LOCATION" Type="nvarchar" MaxLength="50" />
           <Property Name="TOWN" Type="nvarchar" MaxLength="50" />
-          <Property Name="UPRN" Type="float" Nullable="false" />
-          <Property Name="USRN" Type="numeric" Precision="10" Scale="0" Nullable="false" />
-          <Property Name="POSTCODE" Type="nvarchar" MaxLength="8" />
-          <Property Name="EASTING" Type="numeric" Precision="22" Scale="4" Nullable="false" />
-          <Property Name="NORTHING" Type="numeric" Precision="22" Scale="4" Nullable="false" />
-          <Property Name="LATITUDE" Type="float" Nullable="false" />
-          <Property Name="LONGITUDE" Type="float" Nullable="false" />
+          <Property Name="EASTING" Type="numeric" Precision="22" Scale="4" />
+          <Property Name="NORTHING" Type="numeric" Precision="22" Scale="4" />
+          <Property Name="LATITUDE" Type="float" />
+          <Property Name="LONGITUDE" Type="float" />
           <Property Name="SP_GEOMETRY" Type="geometry" />
+        </EntityType>
+        <EntityType Name="GeographyType">
+          <Key>
+            <PropertyRef Name="GeographyTypeID" />
+          </Key>
+          <Property Name="GeographyTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GeographyType" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="OrderInHierarchy" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="StagingColumns">
           <Key>
@@ -125,7 +125,7 @@
           <Property Name="StagingDatasetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DatasetName" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
-        <Association Name="FK__DataViewC__DataV__60C757A0">
+        <Association Name="FK__DataViewC__DataV__345EC57D">
           <End Role="DataViews" Type="Self.DataViews" Multiplicity="1" />
           <End Role="DataViewColumn" Type="Self.DataViewColumn" Multiplicity="*" />
           <ReferentialConstraint>
@@ -137,7 +137,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Dimension__Dimen__46136164">
+        <Association Name="FK__Dimension__Dimen__14E61A24">
           <End Role="Dimension" Type="Self.Dimension" Multiplicity="1" />
           <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="*" />
           <ReferentialConstraint>
@@ -149,7 +149,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Dimension__Dimen__4BCC3ABA">
+        <Association Name="FK__Dimension__Dimen__1C873BEC">
           <End Role="Dimension" Type="Self.Dimension" Multiplicity="1" />
           <End Role="DimensionToFact" Type="Self.DimensionToFact" Multiplicity="*" />
           <ReferentialConstraint>
@@ -161,7 +161,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Dimension__FactI__4AD81681">
+        <Association Name="FK__Dimension__FactI__1B9317B3">
           <End Role="Fact" Type="Self.Fact" Multiplicity="1" />
           <End Role="DimensionToFact" Type="Self.DimensionToFact" Multiplicity="*" />
           <ReferentialConstraint>
@@ -173,7 +173,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactDimen__Dimen__52793849">
+        <Association Name="FK__Fact__GeographyT__18B6AB08">
+          <End Role="GeographyType" Type="Self.GeographyType" Multiplicity="1" />
+          <End Role="Fact" Type="Self.Fact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeographyType">
+              <PropertyRef Name="GeographyTypeID" />
+            </Principal>
+            <Dependent Role="Fact">
+              <PropertyRef Name="GeographyTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactDimen__Dimen__2334397B">
           <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="1" />
           <End Role="FactDimensionMapping" Type="Self.FactDimensionMapping" Multiplicity="*" />
           <ReferentialConstraint>
@@ -185,7 +197,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactDimen__FactD__51851410">
+        <Association Name="FK__FactDimen__FactD__22401542">
           <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="1" />
           <End Role="FactDimensionMapping" Type="Self.FactDimensionMapping" Multiplicity="*" />
           <ReferentialConstraint>
@@ -197,7 +209,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactDimen__FactI__4EA8A765">
+        <Association Name="FK__FactDimen__FactI__1F63A897">
           <End Role="Fact" Type="Self.Fact" Multiplicity="1" />
           <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="*" />
           <ReferentialConstraint>
@@ -209,7 +221,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactInsta__FactD__5555A4F4">
+        <Association Name="FK__FactInsta__FactD__2610A626">
           <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="1" />
           <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
           <ReferentialConstraint>
@@ -221,43 +233,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactInsta__LsoaI__5649C92D">
-          <End Role="LSOA" Type="Self.LSOA" Multiplicity="0..1" />
+        <Association Name="FK__FactInsta__Geogr__2704CA5F">
+          <End Role="Geography" Type="Self.Geography" Multiplicity="0..1" />
           <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="LSOA">
-              <PropertyRef Name="LsoaID" />
+            <Principal Role="Geography">
+              <PropertyRef Name="GeographyID" />
             </Principal>
             <Dependent Role="FactInstance">
-              <PropertyRef Name="LsoaID" />
+              <PropertyRef Name="GeographyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactInsta__Prope__573DED66">
-          <End Role="Properties" Type="Self.Properties" Multiplicity="0..1" />
-          <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
+        <Association Name="FK__Geography__Geogr__0880433F">
+          <End Role="GeographyType" Type="Self.GeographyType" Multiplicity="0..1" />
+          <End Role="Geography" Type="Self.Geography" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Properties">
-              <PropertyRef Name="PropertyID" />
+            <Principal Role="GeographyType">
+              <PropertyRef Name="GeographyTypeID" />
             </Principal>
-            <Dependent Role="FactInstance">
-              <PropertyRef Name="PropertyID" />
+            <Dependent Role="Geography">
+              <PropertyRef Name="GeographyTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Propertie__LsoaI__414EAC47">
-          <End Role="LSOA" Type="Self.LSOA" Multiplicity="0..1" />
-          <End Role="Properties" Type="Self.Properties" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LSOA">
-              <PropertyRef Name="LsoaID" />
-            </Principal>
-            <Dependent Role="Properties">
-              <PropertyRef Name="LsoaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__StagingCo__Stagi__5C02A283">
+        <Association Name="FK__StagingCo__Stagi__2DB1C7EE">
           <End Role="StagingDatasets" Type="Self.StagingDatasets" Multiplicity="1" />
           <End Role="StagingColumns" Type="Self.StagingColumns" Multiplicity="*" />
           <ReferentialConstraint>
@@ -286,55 +286,55 @@
           <EntitySet Name="FactDimensionMapping" EntityType="Self.FactDimensionMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FactDimensionSet" EntityType="Self.FactDimensionSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FactInstance" EntityType="Self.FactInstance" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="LSOA" EntityType="Self.LSOA" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Properties" EntityType="Self.Properties" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Geography" EntityType="Self.Geography" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GeographyType" EntityType="Self.GeographyType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StagingColumns" EntityType="Self.StagingColumns" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StagingDatasets" EntityType="Self.StagingDatasets" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__DataViewC__DataV__60C757A0" Association="Self.FK__DataViewC__DataV__60C757A0">
+          <AssociationSet Name="FK__DataViewC__DataV__345EC57D" Association="Self.FK__DataViewC__DataV__345EC57D">
             <End Role="DataViews" EntitySet="DataViews" />
             <End Role="DataViewColumn" EntitySet="DataViewColumn" />
           </AssociationSet>
-          <AssociationSet Name="FK__Dimension__Dimen__46136164" Association="Self.FK__Dimension__Dimen__46136164">
+          <AssociationSet Name="FK__Dimension__Dimen__14E61A24" Association="Self.FK__Dimension__Dimen__14E61A24">
             <End Role="Dimension" EntitySet="Dimension" />
             <End Role="DimensionValue" EntitySet="DimensionValue" />
           </AssociationSet>
-          <AssociationSet Name="FK__Dimension__Dimen__4BCC3ABA" Association="Self.FK__Dimension__Dimen__4BCC3ABA">
+          <AssociationSet Name="FK__Dimension__Dimen__1C873BEC" Association="Self.FK__Dimension__Dimen__1C873BEC">
             <End Role="Dimension" EntitySet="Dimension" />
             <End Role="DimensionToFact" EntitySet="DimensionToFact" />
           </AssociationSet>
-          <AssociationSet Name="FK__Dimension__FactI__4AD81681" Association="Self.FK__Dimension__FactI__4AD81681">
+          <AssociationSet Name="FK__Dimension__FactI__1B9317B3" Association="Self.FK__Dimension__FactI__1B9317B3">
             <End Role="Fact" EntitySet="Fact" />
             <End Role="DimensionToFact" EntitySet="DimensionToFact" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactDimen__Dimen__52793849" Association="Self.FK__FactDimen__Dimen__52793849">
+          <AssociationSet Name="FK__Fact__GeographyT__18B6AB08" Association="Self.FK__Fact__GeographyT__18B6AB08">
+            <End Role="GeographyType" EntitySet="GeographyType" />
+            <End Role="Fact" EntitySet="Fact" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactDimen__Dimen__2334397B" Association="Self.FK__FactDimen__Dimen__2334397B">
             <End Role="DimensionValue" EntitySet="DimensionValue" />
             <End Role="FactDimensionMapping" EntitySet="FactDimensionMapping" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactDimen__FactD__51851410" Association="Self.FK__FactDimen__FactD__51851410">
+          <AssociationSet Name="FK__FactDimen__FactD__22401542" Association="Self.FK__FactDimen__FactD__22401542">
             <End Role="FactDimensionSet" EntitySet="FactDimensionSet" />
             <End Role="FactDimensionMapping" EntitySet="FactDimensionMapping" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactDimen__FactI__4EA8A765" Association="Self.FK__FactDimen__FactI__4EA8A765">
+          <AssociationSet Name="FK__FactDimen__FactI__1F63A897" Association="Self.FK__FactDimen__FactI__1F63A897">
             <End Role="Fact" EntitySet="Fact" />
             <End Role="FactDimensionSet" EntitySet="FactDimensionSet" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactInsta__FactD__5555A4F4" Association="Self.FK__FactInsta__FactD__5555A4F4">
+          <AssociationSet Name="FK__FactInsta__FactD__2610A626" Association="Self.FK__FactInsta__FactD__2610A626">
             <End Role="FactDimensionSet" EntitySet="FactDimensionSet" />
             <End Role="FactInstance" EntitySet="FactInstance" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactInsta__LsoaI__5649C92D" Association="Self.FK__FactInsta__LsoaI__5649C92D">
-            <End Role="LSOA" EntitySet="LSOA" />
+          <AssociationSet Name="FK__FactInsta__Geogr__2704CA5F" Association="Self.FK__FactInsta__Geogr__2704CA5F">
+            <End Role="Geography" EntitySet="Geography" />
             <End Role="FactInstance" EntitySet="FactInstance" />
           </AssociationSet>
-          <AssociationSet Name="FK__FactInsta__Prope__573DED66" Association="Self.FK__FactInsta__Prope__573DED66">
-            <End Role="Properties" EntitySet="Properties" />
-            <End Role="FactInstance" EntitySet="FactInstance" />
+          <AssociationSet Name="FK__Geography__Geogr__0880433F" Association="Self.FK__Geography__Geogr__0880433F">
+            <End Role="GeographyType" EntitySet="GeographyType" />
+            <End Role="Geography" EntitySet="Geography" />
           </AssociationSet>
-          <AssociationSet Name="FK__Propertie__LsoaI__414EAC47" Association="Self.FK__Propertie__LsoaI__414EAC47">
-            <End Role="LSOA" EntitySet="LSOA" />
-            <End Role="Properties" EntitySet="Properties" />
-          </AssociationSet>
-          <AssociationSet Name="FK__StagingCo__Stagi__5C02A283" Association="Self.FK__StagingCo__Stagi__5C02A283">
+          <AssociationSet Name="FK__StagingCo__Stagi__2DB1C7EE" Association="Self.FK__StagingCo__Stagi__2DB1C7EE">
             <End Role="StagingDatasets" EntitySet="StagingDatasets" />
             <End Role="StagingColumns" EntitySet="StagingColumns" />
           </AssociationSet>
@@ -370,6 +370,8 @@
           <Property Name="FactName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="FactDimensionSets" Relationship="Self.FK__FactDimen__FactI__1CF15040" FromRole="Fact" ToRole="FactDimensionSet" />
           <NavigationProperty Name="DimensionToFacts" Relationship="Model.FK__Dimension__FactI__4AD81681" FromRole="Fact" ToRole="DimensionToFact" />
+          <Property Name="GeographyTypeID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GeographyType" Relationship="Model.FK__Fact__GeographyT__6442E2C9" FromRole="Fact" ToRole="GeographyType" />
         </EntityType>
         <EntityType Name="FactDimensionMapping">
           <Key>
@@ -390,58 +392,7 @@
           <Property Name="DimString" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Fact" Relationship="Self.FK__FactDimen__FactI__1CF15040" FromRole="FactDimensionSet" ToRole="Fact" />
           <NavigationProperty Name="FactDimensionMappings" Relationship="Self.FK__FactDimen__FactD__1FCDBCEB" FromRole="FactDimensionSet" ToRole="FactDimensionMapping" />
-          <NavigationProperty Name="FactInstances" Relationship="Self.FK__FactInsta__FactD__239E4DCF" FromRole="FactDimensionSet" ToRole="FactInstance" />
-        </EntityType>
-        <EntityType Name="FactInstance">
-          <Key>
-            <PropertyRef Name="FactInstanceID" />
-          </Key>
-          <Property Name="FactInstanceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FactDimensionSetID" Type="Int32" Nullable="false" />
-          <Property Name="LsoaID" Type="Int32" />
-          <Property Name="PropertyID" Type="Int32" />
-          <Property Name="Value" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="FactDimensionSet" Relationship="Self.FK__FactInsta__FactD__239E4DCF" FromRole="FactInstance" ToRole="FactDimensionSet" />
-          <NavigationProperty Name="LSOA" Relationship="Self.FK__FactInsta__LsoaI__24927208" FromRole="FactInstance" ToRole="LSOA" />
-          <NavigationProperty Name="Property" Relationship="Self.FK__FactInsta__Prope__25869641" FromRole="FactInstance" ToRole="Properties" />
-        </EntityType>
-        <EntityType Name="LSOA">
-          <Key>
-            <PropertyRef Name="LsoaID" />
-          </Key>
-          <Property Name="LsoaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LsoaCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LsoaName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="WardCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="WardName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MsoaCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MsoaName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CommunityArea" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PlanningPolicyArea" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LACode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="FactInstances" Relationship="Self.FK__FactInsta__LsoaI__24927208" FromRole="LSOA" ToRole="FactInstance" />
-          <NavigationProperty Name="Properties" Relationship="Self.FK__Propertie__LsoaI__1367E606" FromRole="LSOA" ToRole="Properties" />
-        </EntityType>
-        <EntityType Name="Property">
-          <Key>
-            <PropertyRef Name="PropertyID" />
-          </Key>
-          <Property Name="PropertyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LsoaID" Type="Int32" />
-          <Property Name="NAMENUMBER" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="STREET" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="LOCATION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TOWN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UPRN" Type="Double" Nullable="false" />
-          <Property Name="USRN" Type="Decimal" Precision="10" Scale="0" Nullable="false" />
-          <Property Name="POSTCODE" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="EASTING" Type="Decimal" Precision="22" Scale="4" Nullable="false" />
-          <Property Name="NORTHING" Type="Decimal" Precision="22" Scale="4" Nullable="false" />
-          <Property Name="LATITUDE" Type="Double" Nullable="false" />
-          <Property Name="LONGITUDE" Type="Double" Nullable="false" />
-          <Property Name="SP_GEOMETRY" Type="Geometry" />
-          <NavigationProperty Name="FactInstances" Relationship="Self.FK__FactInsta__Prope__25869641" FromRole="Properties" ToRole="FactInstance" />
-          <NavigationProperty Name="LSOA" Relationship="Self.FK__Propertie__LsoaI__1367E606" FromRole="Properties" ToRole="LSOA" />
+          <NavigationProperty Name="FactInstances" Relationship="Model.FK__FactInsta__FactD__2610A626" FromRole="FactDimensionSet" ToRole="FactInstance" />
         </EntityType>
         <EntityType Name="StagingDataset">
           <Key>
@@ -499,63 +450,12 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FactInsta__FactD__239E4DCF">
-          <End Role="FactDimensionSet" Type="Self.FactDimensionSet" Multiplicity="1" />
-          <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FactDimensionSet">
-              <PropertyRef Name="FactDimensionSetID" />
-            </Principal>
-            <Dependent Role="FactInstance">
-              <PropertyRef Name="FactDimensionSetID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__FactInsta__LsoaI__24927208">
-          <End Role="LSOA" Type="Self.LSOA" Multiplicity="0..1" />
-          <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LSOA">
-              <PropertyRef Name="LsoaID" />
-            </Principal>
-            <Dependent Role="FactInstance">
-              <PropertyRef Name="LsoaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__FactInsta__Prope__25869641">
-          <End Role="Properties" Type="Self.Property" Multiplicity="0..1" />
-          <End Role="FactInstance" Type="Self.FactInstance" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Properties">
-              <PropertyRef Name="PropertyID" />
-            </Principal>
-            <Dependent Role="FactInstance">
-              <PropertyRef Name="PropertyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Propertie__LsoaI__1367E606">
-          <End Role="LSOA" Type="Self.LSOA" Multiplicity="0..1" />
-          <End Role="Properties" Type="Self.Property" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LSOA">
-              <PropertyRef Name="LsoaID" />
-            </Principal>
-            <Dependent Role="Properties">
-              <PropertyRef Name="LsoaID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="Geographical_NeedsEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Dimensions" EntityType="Self.Dimension" />
           <EntitySet Name="DimensionValues" EntityType="Self.DimensionValue" />
           <EntitySet Name="Facts" EntityType="Self.Fact" />
           <EntitySet Name="FactDimensionMappings" EntityType="Self.FactDimensionMapping" />
           <EntitySet Name="FactDimensionSets" EntityType="Self.FactDimensionSet" />
-          <EntitySet Name="FactInstances" EntityType="Self.FactInstance" />
-          <EntitySet Name="LSOAs" EntityType="Self.LSOA" />
-          <EntitySet Name="Properties" EntityType="Self.Property" />
           <EntitySet Name="StagingDatasets" EntityType="Self.StagingDataset" />
           <AssociationSet Name="FK__Dimension__Dimen__182C9B23" Association="Self.FK__Dimension__Dimen__182C9B23">
             <End Role="Dimension" EntitySet="Dimensions" />
@@ -572,22 +472,6 @@
           <AssociationSet Name="FK__FactDimen__FactD__1FCDBCEB" Association="Self.FK__FactDimen__FactD__1FCDBCEB">
             <End Role="FactDimensionSet" EntitySet="FactDimensionSets" />
             <End Role="FactDimensionMapping" EntitySet="FactDimensionMappings" />
-          </AssociationSet>
-          <AssociationSet Name="FK__FactInsta__FactD__239E4DCF" Association="Self.FK__FactInsta__FactD__239E4DCF">
-            <End Role="FactDimensionSet" EntitySet="FactDimensionSets" />
-            <End Role="FactInstance" EntitySet="FactInstances" />
-          </AssociationSet>
-          <AssociationSet Name="FK__FactInsta__LsoaI__24927208" Association="Self.FK__FactInsta__LsoaI__24927208">
-            <End Role="LSOA" EntitySet="LSOAs" />
-            <End Role="FactInstance" EntitySet="FactInstances" />
-          </AssociationSet>
-          <AssociationSet Name="FK__FactInsta__Prope__25869641" Association="Self.FK__FactInsta__Prope__25869641">
-            <End Role="Properties" EntitySet="Properties" />
-            <End Role="FactInstance" EntitySet="FactInstances" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Propertie__LsoaI__1367E606" Association="Self.FK__Propertie__LsoaI__1367E606">
-            <End Role="LSOA" EntitySet="LSOAs" />
-            <End Role="Properties" EntitySet="Properties" />
           </AssociationSet>
           <FunctionImport Name="CreateStagingTable">
           <Parameter Name="tableName" Mode="In" Type="String" />
@@ -615,6 +499,25 @@
           <AssociationSet Name="FK__Dimension__FactI__4AD81681" Association="Model.FK__Dimension__FactI__4AD81681">
             <End Role="Fact" EntitySet="Facts" />
             <End Role="DimensionToFact" EntitySet="DimensionToFacts" />
+          </AssociationSet>
+          <EntitySet Name="Geographies" EntityType="Model.Geography" />
+          <EntitySet Name="GeographyTypes" EntityType="Model.GeographyType" />
+          <AssociationSet Name="FK__Fact__GeographyT__6442E2C9" Association="Model.FK__Fact__GeographyT__6442E2C9">
+            <End Role="GeographyType" EntitySet="GeographyTypes" />
+            <End Role="Fact" EntitySet="Facts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Geography__Geogr__540C7B00" Association="Model.FK__Geography__Geogr__540C7B00">
+            <End Role="GeographyType" EntitySet="GeographyTypes" />
+            <End Role="Geography" EntitySet="Geographies" />
+          </AssociationSet>
+          <EntitySet Name="FactInstances" EntityType="Model.FactInstance" />
+          <AssociationSet Name="FK__FactInsta__FactD__2610A626" Association="Model.FK__FactInsta__FactD__2610A626">
+            <End Role="FactDimensionSet" EntitySet="FactDimensionSets" />
+            <End Role="FactInstance" EntitySet="FactInstances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FactInsta__Geogr__2704CA5F" Association="Model.FK__FactInsta__Geogr__2704CA5F">
+            <End Role="Geography" EntitySet="Geographies" />
+            <End Role="FactInstance" EntitySet="FactInstances" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="StagingColumn">
@@ -701,6 +604,103 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Geography">
+          <Key>
+            <PropertyRef Name="GeographyID" />
+          </Key>
+          <Property Name="GeographyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GeographyTypeID" Type="Int32" />
+          <Property Name="MsoaCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MsoaName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WardCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="WardName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LsoaCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LsoaName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Postcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="UPRN" Type="Double" />
+          <Property Name="USRN" Type="Double" />
+          <Property Name="NAMENUMBER" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="STREET" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LOCATION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TOWN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EASTING" Type="Decimal" Precision="22" Scale="4" />
+          <Property Name="NORTHING" Type="Decimal" Precision="22" Scale="4" />
+          <Property Name="LATITUDE" Type="Double" />
+          <Property Name="LONGITUDE" Type="Double" />
+          <Property Name="SP_GEOMETRY" Type="Geometry" />
+          <NavigationProperty Name="GeographyType" Relationship="Model.FK__Geography__Geogr__540C7B00" FromRole="Geography" ToRole="GeographyType" />
+          <NavigationProperty Name="FactInstances" Relationship="Model.FK__FactInsta__Geogr__2704CA5F" FromRole="Geography" ToRole="FactInstance" />
+        </EntityType>
+        <EntityType Name="GeographyType">
+          <Key>
+            <PropertyRef Name="GeographyTypeID" />
+          </Key>
+          <Property Name="GeographyTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GeographyType1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="OrderInHierarchy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Facts" Relationship="Model.FK__Fact__GeographyT__6442E2C9" FromRole="GeographyType" ToRole="Fact" />
+          <NavigationProperty Name="Geographies" Relationship="Model.FK__Geography__Geogr__540C7B00" FromRole="GeographyType" ToRole="Geography" />
+        </EntityType>
+        <Association Name="FK__Fact__GeographyT__6442E2C9">
+          <End Type="Model.GeographyType" Role="GeographyType" Multiplicity="1" />
+          <End Type="Model.Fact" Role="Fact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeographyType">
+              <PropertyRef Name="GeographyTypeID" />
+            </Principal>
+            <Dependent Role="Fact">
+              <PropertyRef Name="GeographyTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Geography__Geogr__540C7B00">
+          <End Type="Model.GeographyType" Role="GeographyType" Multiplicity="0..1" />
+          <End Type="Model.Geography" Role="Geography" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeographyType">
+              <PropertyRef Name="GeographyTypeID" />
+            </Principal>
+            <Dependent Role="Geography">
+              <PropertyRef Name="GeographyTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FactInstance">
+          <Key>
+            <PropertyRef Name="FactInstanceID" />
+          </Key>
+          <Property Name="FactInstanceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FactDimensionSetID" Type="Int32" Nullable="false" />
+          <Property Name="GeographyID" Type="Int32" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="LoadReference" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="FactDimensionSet" Relationship="Model.FK__FactInsta__FactD__2610A626" FromRole="FactInstance" ToRole="FactDimensionSet" />
+          <NavigationProperty Name="Geography" Relationship="Model.FK__FactInsta__Geogr__2704CA5F" FromRole="FactInstance" ToRole="Geography" />
+        </EntityType>
+        <Association Name="FK__FactInsta__FactD__2610A626">
+          <End Type="Model.FactDimensionSet" Role="FactDimensionSet" Multiplicity="1" />
+          <End Type="Model.FactInstance" Role="FactInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FactDimensionSet">
+              <PropertyRef Name="FactDimensionSetID" />
+            </Principal>
+            <Dependent Role="FactInstance">
+              <PropertyRef Name="FactDimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FactInsta__Geogr__2704CA5F">
+          <End Type="Model.Geography" Role="Geography" Multiplicity="0..1" />
+          <End Type="Model.FactInstance" Role="FactInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Geography">
+              <PropertyRef Name="GeographyID" />
+            </Principal>
+            <Dependent Role="FactInstance">
+              <PropertyRef Name="GeographyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -727,6 +727,7 @@
           <EntitySetMapping Name="Facts">
             <EntityTypeMapping TypeName="Model.Fact">
               <MappingFragment StoreEntitySet="Fact">
+                <ScalarProperty Name="GeographyTypeID" ColumnName="GeographyTypeID" />
                 <ScalarProperty Name="FactID" ColumnName="FactID" />
                 <ScalarProperty Name="FactName" ColumnName="FactName" />
               </MappingFragment>
@@ -747,53 +748,6 @@
                 <ScalarProperty Name="FactDimensionSetID" ColumnName="FactDimensionSetID" />
                 <ScalarProperty Name="FactID" ColumnName="FactID" />
                 <ScalarProperty Name="DimString" ColumnName="DimString" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FactInstances">
-            <EntityTypeMapping TypeName="Model.FactInstance">
-              <MappingFragment StoreEntitySet="FactInstance">
-                <ScalarProperty Name="FactInstanceID" ColumnName="FactInstanceID" />
-                <ScalarProperty Name="FactDimensionSetID" ColumnName="FactDimensionSetID" />
-                <ScalarProperty Name="LsoaID" ColumnName="LsoaID" />
-                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LSOAs">
-            <EntityTypeMapping TypeName="Model.LSOA">
-              <MappingFragment StoreEntitySet="LSOA">
-                <ScalarProperty Name="LsoaID" ColumnName="LsoaID" />
-                <ScalarProperty Name="LsoaCode" ColumnName="LsoaCode" />
-                <ScalarProperty Name="LsoaName" ColumnName="LsoaName" />
-                <ScalarProperty Name="WardCode" ColumnName="WardCode" />
-                <ScalarProperty Name="WardName" ColumnName="WardName" />
-                <ScalarProperty Name="MsoaCode" ColumnName="MsoaCode" />
-                <ScalarProperty Name="MsoaName" ColumnName="MsoaName" />
-                <ScalarProperty Name="CommunityArea" ColumnName="CommunityArea" />
-                <ScalarProperty Name="PlanningPolicyArea" ColumnName="PlanningPolicyArea" />
-                <ScalarProperty Name="LACode" ColumnName="LACode" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Properties">
-            <EntityTypeMapping TypeName="Model.Property">
-              <MappingFragment StoreEntitySet="Properties">
-                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
-                <ScalarProperty Name="LsoaID" ColumnName="LsoaID" />
-                <ScalarProperty Name="NAMENUMBER" ColumnName="NAMENUMBER" />
-                <ScalarProperty Name="STREET" ColumnName="STREET" />
-                <ScalarProperty Name="LOCATION" ColumnName="LOCATION" />
-                <ScalarProperty Name="TOWN" ColumnName="TOWN" />
-                <ScalarProperty Name="UPRN" ColumnName="UPRN" />
-                <ScalarProperty Name="USRN" ColumnName="USRN" />
-                <ScalarProperty Name="POSTCODE" ColumnName="POSTCODE" />
-                <ScalarProperty Name="EASTING" ColumnName="EASTING" />
-                <ScalarProperty Name="NORTHING" ColumnName="NORTHING" />
-                <ScalarProperty Name="LATITUDE" ColumnName="LATITUDE" />
-                <ScalarProperty Name="LONGITUDE" ColumnName="LONGITUDE" />
-                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -839,6 +793,52 @@
                 <ScalarProperty Name="DimensionID" ColumnName="DimensionID" />
                 <ScalarProperty Name="FactID" ColumnName="FactID" />
                 <ScalarProperty Name="DimensionToFactID" ColumnName="DimensionToFactID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Geographies">
+            <EntityTypeMapping TypeName="Model.Geography">
+              <MappingFragment StoreEntitySet="Geography">
+                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
+                <ScalarProperty Name="LONGITUDE" ColumnName="LONGITUDE" />
+                <ScalarProperty Name="LATITUDE" ColumnName="LATITUDE" />
+                <ScalarProperty Name="NORTHING" ColumnName="NORTHING" />
+                <ScalarProperty Name="EASTING" ColumnName="EASTING" />
+                <ScalarProperty Name="TOWN" ColumnName="TOWN" />
+                <ScalarProperty Name="LOCATION" ColumnName="LOCATION" />
+                <ScalarProperty Name="STREET" ColumnName="STREET" />
+                <ScalarProperty Name="NAMENUMBER" ColumnName="NAMENUMBER" />
+                <ScalarProperty Name="USRN" ColumnName="USRN" />
+                <ScalarProperty Name="UPRN" ColumnName="UPRN" />
+                <ScalarProperty Name="Postcode" ColumnName="Postcode" />
+                <ScalarProperty Name="LsoaName" ColumnName="LsoaName" />
+                <ScalarProperty Name="LsoaCode" ColumnName="LsoaCode" />
+                <ScalarProperty Name="WardName" ColumnName="WardName" />
+                <ScalarProperty Name="WardCode" ColumnName="WardCode" />
+                <ScalarProperty Name="MsoaName" ColumnName="MsoaName" />
+                <ScalarProperty Name="MsoaCode" ColumnName="MsoaCode" />
+                <ScalarProperty Name="GeographyTypeID" ColumnName="GeographyTypeID" />
+                <ScalarProperty Name="GeographyID" ColumnName="GeographyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GeographyTypes">
+            <EntityTypeMapping TypeName="Model.GeographyType">
+              <MappingFragment StoreEntitySet="GeographyType">
+                <ScalarProperty Name="OrderInHierarchy" ColumnName="OrderInHierarchy" />
+                <ScalarProperty Name="GeographyType1" ColumnName="GeographyType" />
+                <ScalarProperty Name="GeographyTypeID" ColumnName="GeographyTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactInstances">
+            <EntityTypeMapping TypeName="Model.FactInstance">
+              <MappingFragment StoreEntitySet="FactInstance">
+                <ScalarProperty Name="LoadReference" ColumnName="LoadReference" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="GeographyID" ColumnName="GeographyID" />
+                <ScalarProperty Name="FactDimensionSetID" ColumnName="FactDimensionSetID" />
+                <ScalarProperty Name="FactInstanceID" ColumnName="FactInstanceID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

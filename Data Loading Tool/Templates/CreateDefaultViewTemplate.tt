@@ -15,7 +15,8 @@ select
 		if(firstSelect)
 		{
 #>
-			  [<#= dimensionName #>].LsoaName
+			  [<#= dimensionName #>].GeographyName
+			 ,[<#= dimensionName #>].GeographyType
 			 ,[<#= dimensionName #>].LoadReference
 			<#
 				if(AggregateQuery)
@@ -56,16 +57,27 @@ from
 			(
 				SELECT        
 					I.FactInstanceID,
-					L.LsoaName, 
+					case L.GeographyTypeID
+						when 1 then CONVERT (VARCHAR(50), L.UPRN,128)
+						when 2 then L.Postcode
+						when 3 then L.LsoaName
+						when 4 then L.WardName
+						when 5 then L.MsoaName
+					end as GeographyName,
+					G.GeographyType,	 
 					V.DimensionValue , 
 					I.LoadReference,
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
 				INNER JOIN
-					dbo.LSOA AS L 
+					dbo.Geography AS L 
 				ON 
-					L.LsoaID = I.LsoaID 
+					L.GeographyID = I.GeographyID 
+				INNER JOIN 
+					dbo.GeographyType G
+				on 
+					L.GeographyTypeID = G.GeographyTypeID
 				INNER JOIN
 					dbo.FactDimensionSet AS S 
 				ON 
@@ -100,16 +112,27 @@ from
 			(
 				SELECT        
 					I.FactInstanceID,
-					L.LsoaName, 
+					case L.GeographyTypeID
+						when 1 then CONVERT (VARCHAR(50), L.UPRN,128)
+						when 2 then L.Postcode
+						when 3 then L.LsoaName
+						when 4 then L.WardName
+						when 5 then L.MsoaName
+					end as GeographyName,
+					G.GeographyType,
 					V.DimensionValue, 
 					I.LoadReference,
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
 				INNER JOIN
-					dbo.LSOA AS L 
+					dbo.Geography AS L 
 				ON 
-					L.LsoaID = I.LsoaID 
+					L.GeographyID = I.GeographyID
+				INNER JOIN 
+					dbo.GeographyType G
+				on 
+					L.GeographyTypeID = G.GeographyTypeID
 				INNER JOIN
 					dbo.FactDimensionSet AS S 
 				ON 
@@ -150,7 +173,8 @@ from
 		if(firstAggregate)
 		{
 #>
-		[<#= dimensionName #>].LsoaName
+		[<#= dimensionName #>].GeographyName
+		,[<#= dimensionName #>].GeographyType
 		,[<#= dimensionName #>].DimensionValue
 		,[<#= dimensionName #>].LoadReference
 <#

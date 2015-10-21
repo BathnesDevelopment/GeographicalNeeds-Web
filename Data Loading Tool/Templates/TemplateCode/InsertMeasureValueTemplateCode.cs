@@ -23,5 +23,7 @@ namespace Data_Loading_Tool.Templates
         public String StagingGeographyColumn { get; set; }
 
         public String StagingTableName { get; set; }
+
+        public int GeographicalTypeID { get; set; }
     }
 }

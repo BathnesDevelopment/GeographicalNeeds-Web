@@ -222,9 +222,10 @@ namespace Data_Loading_Tool.Database
             DataView newView = context.DataViews.Create();
             newView.ViewName = model.ViewName;
 
-            DataViewColumn lsoaColumn = context.DataViewColumns.Create();
-            lsoaColumn.ColumnName = "LsoaName";
-            newView.DataViewColumns.Add(lsoaColumn);
+            DataViewColumn geographyColumn = context.DataViewColumns.Create();
+            geographyColumn.ColumnName = "GeographyName";
+            newView.DataViewColumns.Add(geographyColumn);
+
 
             foreach (CreateViewMeasureDimensionModel measure in model.Measures)
             {
@@ -251,8 +252,14 @@ namespace Data_Loading_Tool.Database
 
             context.DataViews.Add(newView);
 
+            IEnumerable<int> measureIDs = model.Measures.Select(x => x.MeasureID);
+
+            int geographyAggregationLevel = context.Facts.Where(x => measureIDs.Contains(x.FactID)).Max(x => x.GeographyTypeID);
+
+
             CreateCustomViewTemplate template = new CreateCustomViewTemplate();
             template.model = model;
+            template.GeographyAggregationlevel = geographyAggregationLevel;
 
             String output = template.TransformText();            
 

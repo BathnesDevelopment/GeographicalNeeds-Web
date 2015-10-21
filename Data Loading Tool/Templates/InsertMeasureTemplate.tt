@@ -7,11 +7,13 @@
 
 INSERT INTO Fact
 (
-	FactName
+	FactName,
+	GeographyTypeID
 )
 VALUES
 (
-	'<#= FactName #>'
+	'<#= FactName #>',
+	<#= GeographyTypeID #>
 )
 
 Declare @FactID int
@@ -197,6 +199,9 @@ on [<#= firstID #>].ID <> [<#= id #>].ID
 	) XXX
 	inner join FactDimensionSet F
 	on F.DimString = XXX.string
+	inner join Fact F2
+	on F.FactID = F2.FactID
+	where F.FactID = @FactID
 <#
 
 	}

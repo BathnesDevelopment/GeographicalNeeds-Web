@@ -32,14 +32,14 @@ namespace Data_Loading_Tool.Database
         public virtual DbSet<Fact> Facts { get; set; }
         public virtual DbSet<FactDimensionMapping> FactDimensionMappings { get; set; }
         public virtual DbSet<FactDimensionSet> FactDimensionSets { get; set; }
-        public virtual DbSet<FactInstance> FactInstances { get; set; }
-        public virtual DbSet<LSOA> LSOAs { get; set; }
-        public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<StagingDataset> StagingDatasets { get; set; }
         public virtual DbSet<StagingColumn> StagingColumns { get; set; }
         public virtual DbSet<DataViewColumn> DataViewColumns { get; set; }
         public virtual DbSet<DataView> DataViews { get; set; }
         public virtual DbSet<DimensionToFact> DimensionToFacts { get; set; }
+        public virtual DbSet<Geography> Geographies { get; set; }
+        public virtual DbSet<GeographyType> GeographyTypes { get; set; }
+        public virtual DbSet<FactInstance> FactInstances { get; set; }
     
         public virtual int CreateStagingTable(string tableName)
         {

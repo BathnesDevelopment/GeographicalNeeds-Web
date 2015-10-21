@@ -12,15 +12,19 @@ namespace Data_Loading_Tool.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class FactInstance
+    public partial class GeographyType
     {
-        public int FactInstanceID { get; set; }
-        public int FactDimensionSetID { get; set; }
-        public Nullable<int> GeographyID { get; set; }
-        public int Value { get; set; }
-        public string LoadReference { get; set; }
+        public GeographyType()
+        {
+            this.Facts = new HashSet<Fact>();
+            this.Geographies = new HashSet<Geography>();
+        }
     
-        public virtual FactDimensionSet FactDimensionSet { get; set; }
-        public virtual Geography Geography { get; set; }
+        public int GeographyTypeID { get; set; }
+        public string GeographyType1 { get; set; }
+        public int OrderInHierarchy { get; set; }
+    
+        public virtual ICollection<Fact> Facts { get; set; }
+        public virtual ICollection<Geography> Geographies { get; set; }
     }
 }

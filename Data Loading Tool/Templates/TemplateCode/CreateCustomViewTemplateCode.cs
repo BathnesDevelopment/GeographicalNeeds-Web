@@ -13,5 +13,7 @@ namespace Data_Loading_Tool.Templates
     partial class CreateCustomViewTemplate
     {
         public CreateViewCompleteModel model { get; set; }
+
+        public int GeographyAggregationlevel { get; set; }
     }
 }

@@ -10,13 +10,13 @@
 Insert into FactInstance
 (
 	FactDimensionSetID,
-	LsoaID,
+	GeographyID,
 	Value,
 	LoadReference
 )
 select 
 	BBB.FactDimensionSetID, 
-	AAA.LsoaID, 
+	AAA.GeographyID, 
 	AAA.Value,
 	AAA.Reference 
 from 
@@ -36,13 +36,42 @@ from
 			}
 		#>
 		S.UploadRef as Reference,
-		L.LsoaId
+		L.GeographyID
 	from 
 		<#= StagingTableName #> S
 	inner join
-		LSOA L
+		Geography L
 	on
-		S.<#= StagingGeographyColumn #> = L.LsoaCode
+	<#
+		switch (GeographicalTypeID)
+		{
+			case 1:
+	#>
+				S.<#= StagingGeographyColumn #> = L.UPRN
+	<#
+				break;
+			case 2:
+	#>
+				S.<#= StagingGeographyColumn #> = L.PostCode
+	<#
+				break;
+			case 3:
+	#>
+				S.<#= StagingGeographyColumn #> = L.LsoaCode
+	<#
+				break;
+			case 4:
+	#>
+				S.<#= StagingGeographyColumn #> = L.WardCode
+	<#
+				break;
+			case 5:
+	#>
+			S.<#= StagingGeographyColumn #> = L.MsoaCode
+	<#
+				break;			
+		}
+	#>
 	where 
 	<# 
 			bool firstWhere = true;
@@ -65,6 +94,7 @@ from
 				}
 			}
 	#>
+		and L.GeographyTypeID = <#= GeographicalTypeID#>
 	) AAA
 cross join
 	(select 

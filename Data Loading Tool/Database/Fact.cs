@@ -22,8 +22,10 @@ namespace Data_Loading_Tool.Database
     
         public int FactID { get; set; }
         public string FactName { get; set; }
+        public int GeographyTypeID { get; set; }
     
         public virtual ICollection<FactDimensionSet> FactDimensionSets { get; set; }
         public virtual ICollection<DimensionToFact> DimensionToFacts { get; set; }
+        public virtual GeographyType GeographyType { get; set; }
     }
 }

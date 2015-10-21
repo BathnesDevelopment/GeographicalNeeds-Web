@@ -34,7 +34,6 @@ namespace Data_Loading_Tool.Controllers
             trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
             trail.Add(new Breadcrumb() { LinkText = "Create Dimension", Action = "", Controller = "", isCurrent = true });
 
-
             model.Breadcrumbs = trail;
 
             return View(model);
@@ -57,7 +56,15 @@ namespace Data_Loading_Tool.Controllers
             {
                 ModelState.AddModelError("DimensionName", "The Dimension Name must be unique");
 
-                model = dataAccess.populateCreateDimensionModel(model.StagingDatasetID);                
+                model = dataAccess.populateCreateDimensionModel(model.StagingDatasetID);
+
+                List<Breadcrumb> trail = new List<Breadcrumb>();
+
+                trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Create Dimension", Action = "", Controller = "", isCurrent = true });
+
+                model.Breadcrumbs = trail;
 
                 return View(model);            
             }
@@ -71,6 +78,14 @@ namespace Data_Loading_Tool.Controllers
                 ModelState.AddModelError("", "An error occured when creating the dimension. Please ensure that the Dimension Name is unique and that the values are unique within it.");
 
                 model = dataAccess.populateCreateDimensionModel(model.StagingDatasetID);
+
+                List<Breadcrumb> trail = new List<Breadcrumb>();
+
+                trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Create Dimension", Action = "", Controller = "", isCurrent = true });
+
+                model.Breadcrumbs = trail;
 
                 return View(model);    
             }
@@ -128,6 +143,15 @@ namespace Data_Loading_Tool.Controllers
                     ModelState.AddModelError("", "An error occured when creating the Measure. Please ensure that the Measure name is unique and that Dimensions have been specified");
 
                     model = dataAccess.populateCreateMeasureModel(model.StagingDatasetID);
+
+                    List<Breadcrumb> trail = new List<Breadcrumb>();
+
+                    trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+                    trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+                    trail.Add(new Breadcrumb() { LinkText = "Create Measure", Action = "", Controller = "", isCurrent = true });
+
+
+                    model.Breadcrumbs = trail;
                                     
                     return View(model);
                 }
@@ -142,7 +166,8 @@ namespace Data_Loading_Tool.Controllers
                     stagingTableName = model.StagingTableName,
                     measureName = model.MeasureName,
                     measureColumnStagingID = model.MeasureColumnID,
-                    geographyColumnID = model.GeographyColumnID
+                    geographyColumnID = model.GeographyColumnID,
+                    geographyTypeID = model.GeographyTypeID
                 });
             }
 
@@ -165,13 +190,13 @@ namespace Data_Loading_Tool.Controllers
         /// <param name="measureColumnStagingID">The Column in the Staging table that contains the measure values</param>
         /// <param name="geographyColumnID">The Column in the Staging table that contains the Geography</param>
         /// <returns></returns>
-        public ActionResult AddMeasureValues(String stagingTableName, String measureName, int? measureColumnStagingID, int geographyColumnID)
+        public ActionResult AddMeasureValues(String stagingTableName, String measureName, int? measureColumnStagingID, int geographyColumnID, int geographyTypeID)
         {
             DatasetDataAccess dataAccess = new DatasetDataAccess();
 
             IEnumerable<Tuple<int, int>> mappings = (IEnumerable<Tuple<int, int>>)TempData["DimensionMappings"];
 
-            MeasureValueModel model = dataAccess.populateMeasureValueModel(mappings, stagingTableName, measureName, measureColumnStagingID, geographyColumnID);
+            MeasureValueModel model = dataAccess.populateMeasureValueModel(mappings, stagingTableName, measureName, measureColumnStagingID, geographyColumnID, geographyTypeID);
 
             List<Breadcrumb> trail = new List<Breadcrumb>();
 

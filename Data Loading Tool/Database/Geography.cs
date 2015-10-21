@@ -12,29 +12,35 @@ namespace Data_Loading_Tool.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class Property
+    public partial class Geography
     {
-        public Property()
+        public Geography()
         {
             this.FactInstances = new HashSet<FactInstance>();
         }
     
-        public int PropertyID { get; set; }
-        public Nullable<int> LsoaID { get; set; }
+        public int GeographyID { get; set; }
+        public Nullable<int> GeographyTypeID { get; set; }
+        public string MsoaCode { get; set; }
+        public string MsoaName { get; set; }
+        public string WardCode { get; set; }
+        public string WardName { get; set; }
+        public string LsoaCode { get; set; }
+        public string LsoaName { get; set; }
+        public string Postcode { get; set; }
+        public Nullable<double> UPRN { get; set; }
+        public Nullable<double> USRN { get; set; }
         public string NAMENUMBER { get; set; }
         public string STREET { get; set; }
         public string LOCATION { get; set; }
         public string TOWN { get; set; }
-        public double UPRN { get; set; }
-        public decimal USRN { get; set; }
-        public string POSTCODE { get; set; }
-        public decimal EASTING { get; set; }
-        public decimal NORTHING { get; set; }
-        public double LATITUDE { get; set; }
-        public double LONGITUDE { get; set; }
+        public Nullable<decimal> EASTING { get; set; }
+        public Nullable<decimal> NORTHING { get; set; }
+        public Nullable<double> LATITUDE { get; set; }
+        public Nullable<double> LONGITUDE { get; set; }
         public System.Data.Entity.Spatial.DbGeometry SP_GEOMETRY { get; set; }
     
+        public virtual GeographyType GeographyType { get; set; }
         public virtual ICollection<FactInstance> FactInstances { get; set; }
-        public virtual LSOA LSOA { get; set; }
     }
 }

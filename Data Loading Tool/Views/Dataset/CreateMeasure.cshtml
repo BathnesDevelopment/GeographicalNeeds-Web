@@ -39,6 +39,14 @@
             @Html.ValidationMessageFor(model => model.GeographyColumnID)
         </div>
 
+        <div class="form-group">
+            @Html.RequiredLabelFor(model => model.GeographyTypeID, new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.DropDownListFor(model => model.GeographyTypeID, Model.GeographyTypes, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.GeographyTypeID)
+        </div>
+
         @Html.HiddenFor(x => x.StagingDatasetID)
 
         @for (var i = 0; i < Model.MeasureDetails.Count(); i++ )

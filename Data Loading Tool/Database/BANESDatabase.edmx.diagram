@@ -4,24 +4,17 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9f35367cf64b44b7b84914bcf6618a26" Name="Diagram1">
+      <Diagram DiagramId="9f35367cf64b44b7b84914bcf6618a26" Name="Diagram1" ZoomLevel="64">
         <EntityTypeShape EntityType="Model.Dimension" Width="1.5" PointX="9.625" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.DimensionValue" Width="1.5" PointX="9.625" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Fact" Width="1.5" PointX="5" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.FactDimensionMapping" Width="1.5" PointX="7.25" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.FactDimensionSet" Width="1.5" PointX="5" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.FactInstance" Width="1.5" PointX="5.125" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.LSOA" Width="1.5" PointX="1.625" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Property" Width="1.5" PointX="1.625" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.StagingDataset" Width="1.5" PointX="12.875" PointY="1.125" IsExpanded="true" />
         <AssociationConnector Association="Model.FK__Dimension__Dimen__182C9B23" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK__FactDimen__Dimen__20C1E124" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK__FactDimen__FactI__1CF15040" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK__FactDimen__FactD__1FCDBCEB" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK__FactInsta__FactD__239E4DCF" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK__FactInsta__LsoaI__24927208" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK__FactInsta__Prope__25869641" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.FK__Propertie__LsoaI__1367E606" ManuallyRouted="false" />
         <EntityTypeShape EntityType="Model.StagingColumn" Width="1.5" PointX="12.875" PointY="3.25" />
         <AssociationConnector Association="Model.FK__StagingCo__Stagi__45F365D3" />
         <EntityTypeShape EntityType="Model.DataViewColumn" Width="1.5" PointX="12.875" PointY="8.125" />
@@ -30,6 +23,13 @@
         <EntityTypeShape EntityType="Model.DimensionToFact" Width="1.5" PointX="7.25" PointY="0.5" />
         <AssociationConnector Association="Model.FK__Dimension__Dimen__4BCC3ABA" />
         <AssociationConnector Association="Model.FK__Dimension__FactI__4AD81681" />
+        <EntityTypeShape EntityType="Model.Geography" Width="1.5" PointX="5" PointY="10.625" />
+        <EntityTypeShape EntityType="Model.GeographyType" Width="1.5" PointX="2.75" PointY="0.75" />
+        <AssociationConnector Association="Model.FK__Fact__GeographyT__6442E2C9" />
+        <AssociationConnector Association="Model.FK__Geography__Geogr__540C7B00" />
+        <EntityTypeShape EntityType="Model.FactInstance" Width="1.5" PointX="7.25" PointY="8.5" />
+        <AssociationConnector Association="Model.FK__FactInsta__FactD__2610A626" />
+        <AssociationConnector Association="Model.FK__FactInsta__Geogr__2704CA5F" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

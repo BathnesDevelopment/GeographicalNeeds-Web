@@ -78,6 +78,15 @@ namespace Data_Loading_Tool.Controllers
             if (!dataAccess.isCreateStagingModelValid(model))
             {
                 ModelState.AddModelError("TableName", "The Staging Table Name must be unique");
+
+                List<Breadcrumb> trail = new List<Breadcrumb>();
+
+                trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Create Staging", isCurrent = true });
+
+                model.Breadcrumbs = trail;
+
                 return View(model);
             }
 
@@ -88,6 +97,15 @@ namespace Data_Loading_Tool.Controllers
             catch (SqlException)
             {
                 ModelState.AddModelError("", "An error occured when creating the Staging Table. Please ensure that the staging table name is unique and that all columns within it are uniquely named");
+                
+                List<Breadcrumb> trail = new List<Breadcrumb>();
+
+                trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Create Staging", isCurrent = true });
+
+                model.Breadcrumbs = trail;
+
                 return View(model);                
             }
 
@@ -153,6 +171,14 @@ namespace Data_Loading_Tool.Controllers
                     return RedirectToAction("Index"); 
                 }                           
             }
+
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Staging Index", Action = "Index", Controller = "Staging", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Upload to Staging", isCurrent = true });
+
+            model.Breadcrumbs = trail;
 
             return View(model);            
         }

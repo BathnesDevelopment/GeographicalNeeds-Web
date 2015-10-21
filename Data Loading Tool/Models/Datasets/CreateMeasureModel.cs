@@ -36,6 +36,12 @@ namespace Data_Loading_Tool.Models
         [DisplayName("Geography Column in Staging")]
         public int GeographyColumnID { get; set; }
 
+        public IEnumerable<SelectListItem> GeographyTypes { get; set; }
+        
+        [Required]
+        [DisplayName("Geography Type")]
+        public int GeographyTypeID { get; set; }
+
         public IList<CreateMeasureDetailModel> MeasureDetails { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

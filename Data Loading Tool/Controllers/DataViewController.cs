@@ -117,6 +117,14 @@ namespace Data_Loading_Tool.Controllers
             ModelState.AddModelError("ViewName", "The Data View Name must be unique");
             model = dataAccess.getCreateViewModel();
 
+            List<Breadcrumb> trail = new List<Breadcrumb>();
+
+            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = false });
+            trail.Add(new Breadcrumb() { LinkText = "Create Data View", Action = "", Controller = "", isCurrent = true });
+
+            model.Breadcrumbs = trail;
+
             return View(model);
             
         }
@@ -254,6 +262,8 @@ namespace Data_Loading_Tool.Controllers
                 ModelState.AddModelError("", "An error occured when creating the view");
 
                 TempData["CreateViewCompleteModel"] = fullModel;
+
+
                 return View(newModels);                    
             }
 

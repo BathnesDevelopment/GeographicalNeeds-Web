@@ -10,6 +10,27 @@ create view [<#= model.ViewName #>]
 as
 select 
 <#
+	String geogColumn = "";
+
+	switch(GeographyAggregationlevel) 
+	{
+		case 1:
+			geogColumn = "UPRN";
+			break;
+		case 2:
+			geogColumn = "Postcode";
+			break;
+		case 3:
+			geogColumn = "LsoaName";
+			break;
+		case 4:
+			geogColumn = "WardName";
+			break;
+		case 5:
+			geogColumn = "MsoaName";
+			break;
+	}
+	
 	Boolean firstSelect = true;
 
 	foreach(CreateViewMeasureDimensionModel measure in model.Measures)
@@ -17,7 +38,7 @@ select
 		if(firstSelect)
 		{
 #>	
-	 [<#= measure.MeasureName #>].LsoaName
+	 [<#= measure.MeasureName #>].<#=geogColumn#> as GeographyName
 <# 
 			if(measure.Dimensions.Count() == 0)
 			{
@@ -84,8 +105,7 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 #>
 	(
 	select 
-				[inner<#= measure.MeasureName #>].LsoaID
-				, [inner<#= measure.MeasureName #>].LsoaName			
+				 [inner<#= measure.MeasureName #>].<#=geogColumn#> 			
 				, [inner<#= measure.MeasureName #>].LoadReference		
 				, sum([inner<#= measure.MeasureName #>].FactCount) as FactCount
 <#
@@ -94,7 +114,7 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 	{	
 #>
 	(
-	select [Pivot Table].LsoaID, [Pivot Table].LsoaName, [Pivot Table].LoadReference, <#= String.Join(",", measure.DimensionValues.Select(x => String.Format("[Pivot Table].[{0}]", x))) #> from
+	select [Pivot Table].<#=geogColumn#> , [Pivot Table].LoadReference, <#= String.Join(",", measure.DimensionValues.Select(x => String.Format("[Pivot Table].[{0}]", x))) #> from
 		(
 		select 
 <#
@@ -105,8 +125,7 @@ foreach(CreateViewMeasureDimensionModel measure in model.Measures)
 			if(firstDimension)
 			{
 #>
-				[<#= dimension.DimensionID #>].LsoaID
-				, [<#= dimension.DimensionID #>].LsoaName	
+				[<#= dimension.DimensionID #>].<#=geogColumn#> 	
 				, [<#= dimension.DimensionID #>].LoadReference		
 				, [<#= dimension.DimensionID #>].DimensionValue			
 				, sum([<#= dimension.DimensionID #>].FactCount) as FactCount
@@ -130,16 +149,15 @@ from
 			(
 				SELECT        
 					I.FactInstanceID,
-					L.LsoaID,
-					L.LsoaName, 
+					L.<#=geogColumn#>, 
 					I.LoadReference,
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
 				INNER JOIN
-					dbo.LSOA AS L 
+					dbo.Geography AS L 
 				ON 
-					L.LsoaID = I.LsoaID 
+					L.GeographyID = I.GeographyID 
 				INNER JOIN
 					dbo.FactDimensionSet AS S 
 				ON 
@@ -163,7 +181,7 @@ from
 				WHERE        					
 					(F.FactID = <#= measure.MeasureID #>)
 			) [inner<#= measure.MeasureName #>]	
-group by [inner<#= measure.MeasureName #>].LsoaID, [inner<#= measure.MeasureName #>].LsoaName, [inner<#= measure.MeasureName #>].LoadReference
+group by [inner<#= measure.MeasureName #>].<#=geogColumn#> , [inner<#= measure.MeasureName #>].LoadReference
 ) [<#= measure.MeasureName #>]	
 <#
 	}
@@ -180,17 +198,16 @@ group by [inner<#= measure.MeasureName #>].LsoaID, [inner<#= measure.MeasureName
 			(
 				SELECT        
 					I.FactInstanceID,
-					L.LsoaID,
-					L.LsoaName, 
+					L.<#=geogColumn#>, 
 					V.DimensionValue , 
 					I.LoadReference,
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
 				INNER JOIN
-					dbo.LSOA AS L 
+					dbo.Geography AS L 
 				ON 
-					L.LsoaID = I.LsoaID 
+					L.GeographyID = I.GeographyID 
 				INNER JOIN
 					dbo.FactDimensionSet AS S 
 				ON 
@@ -228,17 +245,16 @@ group by [inner<#= measure.MeasureName #>].LsoaID, [inner<#= measure.MeasureName
 			(
 				SELECT        
 					I.FactInstanceID,
-					L.LsoaID,
-					L.LsoaName, 
+					L.<#=geogColumn#>, 
 					V.DimensionValue,
 					I.LoadReference, 
 					I.Value AS FactCount
 				FROM            
 					dbo.FactInstance AS I 
 				INNER JOIN
-					dbo.LSOA AS L 
+					dbo.Geography AS L 
 				ON 
-					L.LsoaID = I.LsoaID 
+					L.GeographyID = I.GeographyID 
 				INNER JOIN
 					dbo.FactDimensionSet AS S 
 				ON 
@@ -272,8 +288,7 @@ group by [inner<#= measure.MeasureName #>].LsoaID, [inner<#= measure.MeasureName
 		}
 #>
 	group by
-	[<#= firstDimension#>].LsoaID
-	,[<#= firstDimension#>].LsoaName
+	[<#= firstDimension#>].<#=geogColumn#> 
 	,[<#= firstDimension#>].LoadReference
 <#
 		foreach(CreateViewDimValueModel dimension in measure.Dimensions)
@@ -299,7 +314,7 @@ PIVOT
 	if(!firstMeasure)
 	{
 #>
-	on [<#= firstMeasureName #>].LsoaID = [<#= measure.MeasureName #>].LsoaID
+	on [<#= firstMeasureName #>].<#=geogColumn#>  = [<#= measure.MeasureName #>].<#=geogColumn#> 
 <#
 	}
 

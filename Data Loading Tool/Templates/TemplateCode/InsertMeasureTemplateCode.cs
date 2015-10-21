@@ -14,5 +14,7 @@ namespace Data_Loading_Tool.Templates
         public String FactName { get; set; }
 
         public IEnumerable<int> DimensionIDs { get; set; }
+
+        public int GeographyTypeID { get; set; }
     }
 }

@@ -41,6 +41,12 @@ namespace Data_Loading_Tool.Database
                                                                                                                                                                         Value = x.StagingColumnID.ToString()
                                                                                                                                                                     });
 
+            model.GeographyTypes = context.GeographyTypes.Select(x => new SelectListItem()
+                                                                                        {
+                                                                                            Text = x.GeographyType1,
+                                                                                            Value = x.GeographyTypeID.ToString()
+                                                                                        });
+
             List<CreateMeasureDetailModel> modelDetails = new List<CreateMeasureDetailModel>();
             
             foreach (StagingColumn column in context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns)
@@ -147,7 +153,7 @@ namespace Data_Loading_Tool.Database
         /// <param name="measureColumnStagingID">The ID of the column used for the Measure values in Staging</param>
         /// <param name="geographyColumnID">The ID of the colum used for the Geography value in Staging</param>
         /// <returns></returns>
-        public MeasureValueModel populateMeasureValueModel(IEnumerable<Tuple<int, int>> mappings, String stagingTableName, String measureName, int? measureColumnStagingID, int geographyColumnID)
+        public MeasureValueModel populateMeasureValueModel(IEnumerable<Tuple<int, int>> mappings, String stagingTableName, String measureName, int? measureColumnStagingID, int geographyColumnID, int geographyTypeID)
         {
             List<MeasureValueModel> retVal = new List<MeasureValueModel>();
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
@@ -163,6 +169,8 @@ namespace Data_Loading_Tool.Database
             {
                 model.UseMeasureColumn = false;
             }
+
+            model.GeographyTypeID = geographyTypeID;
             model.StagingGeographyColumn = context.StagingColumns.Single(x => x.StagingColumnID.Equals(geographyColumnID)).ColumnName;
             model.MeasureName = measureName;
             model.StagingTableName = stagingTableName;
@@ -226,6 +234,7 @@ namespace Data_Loading_Tool.Database
             InsertMeasureTemplate template = new InsertMeasureTemplate();
 
             template.FactName = model.MeasureName;
+            template.GeographyTypeID = model.GeographyTypeID;
 
             template.DimensionIDs = model.MeasureDetails.Where(x=> x.DimensionValueID.HasValue).Select(x => x.DimensionValueID.Value).OrderByDescending(x => x);
 
@@ -284,6 +293,7 @@ namespace Data_Loading_Tool.Database
                         template.UseMeasureColumn = model.UseMeasureColumn;
                         template.StagingTableName = model.StagingTableName;
                         template.StagingGeographyColumn = model.StagingGeographyColumn;
+                        template.GeographicalTypeID = model.GeographyTypeID;
                         template.MeasureName = model.MeasureName;
                         template.MeasureColumnName = model.MeasureStagingColumnName;
                         template.Details = xxx;
@@ -336,7 +346,8 @@ namespace Data_Loading_Tool.Database
             newView.ViewName = model.MeasureName;
 
             newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "FactCount" });
-            newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "LsoaName" });
+            newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "GeographyType" });
+            newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "GeographyName" });
             newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "LoadReference" });            
 
             foreach (String column in dimensions)
