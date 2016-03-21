@@ -12,15 +12,16 @@ namespace Data_Loading_Tool.Templates
     using System.Linq;
     using System.Text;
     using System.Collections.Generic;
+    using Data_Loading_Tool.Models;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+    #line 1 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public partial class CreateDefaultViewTemplate : CreateDefaultViewTemplateBase
+    public partial class CreateViewTemplate : CreateViewTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,405 +29,195 @@ namespace Data_Loading_Tool.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nCREATE VIEW [dbo].[");
+            this.Write("\r\n\r\ncreate view [");
             
-            #line 8 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FactName));
+            #line 9 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.ViewName));
             
             #line default
             #line hidden
-            this.Write("]\r\nAS\r\nselect \r\n");
+            this.Write("]\r\nas\r\n\r\nselect \r\n");
             
-            #line 11 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 13 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
 
-	Boolean firstSelect = true;
-	foreach(String dimensionName in DimensionNames)
+	foreach(ViewColumnModel column in Model.Columns)
 	{
-		if(firstSelect)
-		{
 
             
             #line default
             #line hidden
-            this.Write("\t\t\t  [");
+            this.Write("\tISNULL([");
             
-            #line 18 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("].GeographyName\r\n\t\t\t ,[");
-            
-            #line 19 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
+            #line 17 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(column.ColumnName));
             
             #line default
             #line hidden
-            this.Write("].GeographyType\r\n\t\t\t ,[");
+            this.Write("].[");
             
-            #line 20 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
+            #line 17 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(column.ColumnName));
             
             #line default
             #line hidden
-            this.Write("].LoadReference\r\n\t\t\t");
+            this.Write("], 0) as [");
             
-            #line 21 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 17 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(column.ColumnName));
+            
+            #line default
+            #line hidden
+            this.Write("], \r\n");
+            
+            #line 18 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
 
-				if(AggregateQuery)
-				{
-			
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t, sum([");
-            
-            #line 25 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("].FactCount) as FactCount\r\n\t\t\t\r\n\t\t\t");
-            
-            #line 27 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-
-				}
-				else
-				{
-			
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t, [");
-            
-            #line 32 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("].FactCount\r\n\t\t\t");
-            
-            #line 33 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-
-				}
-			
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t, [");
-            
-            #line 36 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("].DimensionValue as [");
-            
-            #line 36 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("]\r\n");
-            
-            #line 37 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-
-			firstSelect = false;
-		}
-		else
-		{
-
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t, [");
-            
-            #line 43 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("].DimensionValue as [");
-            
-            #line 43 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("]\r\n");
-            
-            #line 44 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-
-		}
 	}
+	String geogColumn = "";
+	String geogAlias = "";
 
-            
-            #line default
-            #line hidden
-            this.Write("from\r\n");
-            
-            #line 49 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-
-	Boolean firstPass = true;
-	String firstDimension = "";
-	foreach(String dimensionName in DimensionNames)
+	switch(Model.SelectedGeographyType) 
 	{
-		if(firstPass)
-		{
-
-            
-            #line default
-            #line hidden
-            this.Write(@"			(
-				SELECT        
-					I.FactInstanceID,
-					case L.GeographyTypeID
-						when 1 then CONVERT (VARCHAR(50), L.UPRN,128)
-						when 2 then L.Postcode
-						when 3 then L.LsoaName
-						when 4 then L.WardName
-						when 5 then L.MsoaName
-					end as GeographyName,
-					G.GeographyType,	 
-					V.DimensionValue , 
-					I.LoadReference,
-					I.Value AS FactCount
-				FROM            
-					dbo.FactInstance AS I 
-				INNER JOIN
-					dbo.Geography AS L 
-				ON 
-					L.GeographyID = I.GeographyID 
-				INNER JOIN 
-					dbo.GeographyType G
-				on 
-					L.GeographyTypeID = G.GeographyTypeID
-				INNER JOIN
-					dbo.FactDimensionSet AS S 
-				ON 
-					I.FactDimensionSetID = S.FactDimensionSetID 
-				INNER JOIN
-					dbo.Fact AS F 
-				ON 
-					F.FactID = S.FactID 
-				INNER JOIN
-					dbo.FactDimensionMapping AS M 
-				ON 
-					S.FactDimensionSetID = M.FactDimensionSetID 
-				INNER JOIN
-					dbo.DimensionValue AS V 
-				ON 
-					V.DimensionValueID = M.DimensionValueID 
-				INNER JOIN
-					dbo.Dimension AS D 
-				ON 
-					D.DimensionID = V.DimensionID
-				WHERE        
-					(D.DimensionName = '");
-            
-            #line 102 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("\') AND (F.FactName = \'");
-            
-            #line 102 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FactName));
-            
-            #line default
-            #line hidden
-            this.Write("\')\r\n\t\t\t) [");
-            
-            #line 103 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("]\t\r\n");
-            
-            #line 104 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-
-			firstPass = false;
-			firstDimension = dimensionName;
-		}
-		else
-		{
-
-            
-            #line default
-            #line hidden
-            this.Write(@"			inner join
-			(
-				SELECT        
-					I.FactInstanceID,
-					case L.GeographyTypeID
-						when 1 then CONVERT (VARCHAR(50), L.UPRN,128)
-						when 2 then L.Postcode
-						when 3 then L.LsoaName
-						when 4 then L.WardName
-						when 5 then L.MsoaName
-					end as GeographyName,
-					G.GeographyType,
-					V.DimensionValue, 
-					I.LoadReference,
-					I.Value AS FactCount
-				FROM            
-					dbo.FactInstance AS I 
-				INNER JOIN
-					dbo.Geography AS L 
-				ON 
-					L.GeographyID = I.GeographyID
-				INNER JOIN 
-					dbo.GeographyType G
-				on 
-					L.GeographyTypeID = G.GeographyTypeID
-				INNER JOIN
-					dbo.FactDimensionSet AS S 
-				ON 
-					I.FactDimensionSetID = S.FactDimensionSetID 
-				INNER JOIN
-					dbo.Fact AS F 
-				ON 
-					F.FactID = S.FactID 
-				INNER JOIN
-					dbo.FactDimensionMapping AS M 
-				ON 
-					S.FactDimensionSetID = M.FactDimensionSetID 
-				INNER JOIN
-					dbo.DimensionValue AS V 
-				ON 
-					V.DimensionValueID = M.DimensionValueID 
-				INNER JOIN
-					dbo.Dimension AS D 
-				ON 
-					D.DimensionID = V.DimensionID
-				WHERE        
-					(D.DimensionName = '");
-            
-            #line 157 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("\') AND (F.FactName = \'");
-            
-            #line 157 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FactName));
-            
-            #line default
-            #line hidden
-            this.Write("\')\r\n\t\t\t) [");
-            
-            #line 158 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("]\t\r\n\t\t\ton [");
-            
-            #line 159 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(firstDimension));
-            
-            #line default
-            #line hidden
-            this.Write("].FactInstanceID = [");
-            
-            #line 159 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("].FactInstanceID\r\n");
-            
-            #line 160 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-
-		}
+		case 1:
+			geogColumn = "UPRN";
+			geogAlias = "UPRN";
+			break;
+		case 2:
+			geogColumn = "Postcode";
+			geogAlias = "Postcode";
+			break;
+		case 3:
+			geogColumn = "LsoaName";
+			geogAlias = "LSOA";
+			break;
+		case 4:
+			geogColumn = "WardName";
+			geogAlias = "Ward";
+			break;
+		case 5:
+			geogColumn = "MsoaName";
+			geogAlias = "MSOA";
+			break;
+		case 6:
+			geogColumn = "CouncilArea";
+			geogAlias = "CouncilArea";
+			break;
 	}
 
             
             #line default
             #line hidden
+            this.Write("\t\r\n\tGeog.");
             
-            #line 164 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-
-	if(AggregateQuery)
-	{	
-	Boolean firstAggregate = true;
-
+            #line 51 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(geogColumn));
             
             #line default
             #line hidden
-            this.Write("\tgroup by\r\n");
+            this.Write(" as ");
             
-            #line 170 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 51 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(geogAlias));
+            
+            #line default
+            #line hidden
+            this.Write("\r\nfrom\r\n(\r\nselect \r\n\tG.");
+            
+            #line 55 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(geogColumn));
+            
+            #line default
+            #line hidden
+            this.Write("\r\nfrom \r\nGeography G\r\nwhere G.GeographyTypeID = ");
+            
+            #line 58 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.SelectedGeographyType));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n) Geog\r\n\r\n");
+            
+            #line 61 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
 
-	foreach(String dimensionName in DimensionNames)
+	foreach(ViewColumnModel column in Model.Columns)
 	{
-		if(firstAggregate)
-		{
 
             
             #line default
             #line hidden
-            this.Write("\t\t[");
+            this.Write("\tleft outer join \r\n\t(\r\n\t\tselect \r\n\t\t\tG.");
             
-            #line 176 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("].GeographyName\r\n\t\t,[");
-            
-            #line 177 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
+            #line 68 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(geogColumn));
             
             #line default
             #line hidden
-            this.Write("].GeographyType\r\n\t\t,[");
+            this.Write(", sum(I.Value) as [");
             
-            #line 178 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("].DimensionValue\r\n\t\t,[");
-            
-            #line 179 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
+            #line 68 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(column.ColumnName));
             
             #line default
             #line hidden
-            this.Write("].LoadReference\r\n");
+            this.Write("]\r\n\t\tfrom \r\n\t\t\tMeasureInstance I\r\n\t\tinner join \r\n\t\t\tGeography G\r\n\t\ton \r\n\t\t\tI.Geog" +
+                    "raphyID = G.GeographyID\r\n\t\twhere\r\n\t\t\tI.DimensionSetCombinationID = ");
             
-            #line 180 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
+            #line 76 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(column.SelectedDimensionValueID));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\tand \r\n\t\t\tI.MeasureBreakdownID = ");
+            
+            #line 78 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(column.SelectedMeasureBreakdownID));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\tgroup by \r\n\t\t\tG.");
+            
+            #line 80 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(geogColumn));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t) as [");
+            
+            #line 81 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(column.ColumnName));
+            
+            #line default
+            #line hidden
+            this.Write("]\r\n\ton [");
+            
+            #line 82 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(column.ColumnName));
+            
+            #line default
+            #line hidden
+            this.Write("].");
+            
+            #line 82 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(geogColumn));
+            
+            #line default
+            #line hidden
+            this.Write(" = Geog.");
+            
+            #line 82 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(geogColumn));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n");
+            
+            #line 83 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
 
-			firstAggregate = false;
-		}
-		else
-		{
-
-            
-            #line default
-            #line hidden
-            this.Write("\t\t,[");
-            
-            #line 186 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimensionName));
-            
-            #line default
-            #line hidden
-            this.Write("].DimensionValue\r\n");
-            
-            #line 187 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateDefaultViewTemplate.tt"
-
-		}
 	}
-	}
 
             
             #line default
             #line hidden
+            this.Write("\r\n\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -438,7 +229,7 @@ namespace Data_Loading_Tool.Templates
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
-    public class CreateDefaultViewTemplateBase
+    public class CreateViewTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

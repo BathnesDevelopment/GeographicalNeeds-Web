@@ -12,15 +12,17 @@ namespace Data_Loading_Tool.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class FactInstance
+    public partial class MeasureInstance
     {
-        public int FactInstanceID { get; set; }
-        public int FactDimensionSetID { get; set; }
+        public int MeasureInstanceID { get; set; }
+        public int MeasureBreakdownID { get; set; }
+        public int DimensionSetCombinationID { get; set; }
         public Nullable<int> GeographyID { get; set; }
         public int Value { get; set; }
         public string LoadReference { get; set; }
     
-        public virtual FactDimensionSet FactDimensionSet { get; set; }
+        public virtual DimensionSetCombination DimensionSetCombination { get; set; }
         public virtual Geography Geography { get; set; }
+        public virtual MeasureBreakdown MeasureBreakdown { get; set; }
     }
 }

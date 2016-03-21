@@ -15,6 +15,93 @@ namespace Data_Loading_Tool.Database
     /// </summary>
     public class DatasetDataAccess
     {
+        /// DIMENSIONS 
+        
+        /// <summary>
+        /// Method to create and populate a CreateDimensionModel ready for the View to use
+        /// </summary>
+        /// <param name="datasetID">The ID of the Staging Table this Dimension is based off</param>
+        /// <returns></returns>
+        public CreateDimensionModel PopulateCreateDimensionModel(int datasetID)
+        {
+            CreateDimensionModel model = new CreateDimensionModel();
+
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+            model.StagingDatasetID = datasetID;
+
+            model.StagingColumnsForDimension = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns.Select(x => new SelectListItem()
+            {
+                Text = x.ColumnName,
+                Value = x.StagingColumnID.ToString()
+            });
+
+            return model;
+        }
+
+        /// <summary>
+        /// Validate that the CreateDimensionModel is valid prior to
+        /// submission to the database
+        /// </summary>
+        /// <param name="model">The model to be validated</param>
+        /// <returns>Boolean indicating valid or not</returns>
+        public Boolean IsCreateDimensionModelValid(CreateDimensionModel model)
+        {
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+            int count = context.Dimensions.Where(x => x.DimensionName.Equals(model.DimensionName)).Count();
+
+            return count == 0;
+        }
+
+        /// <summary>
+        /// Method to create a Dimension based off the model returned from a View. This creates a Dimension
+        /// and then populates values with those found in the specified Staging Table column
+        /// </summary>
+        /// <param name="model">The populated model passed back from the View</param>
+        public void CreateDimension(CreateDimensionModel model)
+        {
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+
+            Dimension newDim = context.Dimensions.Create();
+
+            newDim.DimensionName = model.DimensionName;
+
+            DimensionSet newSet = context.DimensionSets.Create();
+            newSet.DimensionSetName = String.Format("By {0}", model.DimensionName);
+
+            DimensionSetMember newMember = context.DimensionSetMembers.Create();
+
+            newDim.DimensionSetMembers.Add(newMember);
+            newSet.DimensionSetMembers.Add(newMember);
+
+            String stagingColumnName = context.StagingColumns.Single(x => x.StagingColumnID.Equals(model.DimColumnInStaging)).ColumnName;
+            String stagingTableName = context.StagingColumns.Single(x => x.StagingColumnID.Equals(model.DimColumnInStaging)).StagingDataset.DatasetName;
+
+            String sqlQuery = String.Format("select distinct {0} from {1}", stagingColumnName, stagingTableName);
+            IEnumerable<String> stagingDimensionValues = context.Database.SqlQuery<String>(sqlQuery);
+
+            foreach (String dimValue in stagingDimensionValues)
+            {
+                DimensionValue value = context.DimensionValues.Create();
+
+                value.DimensionValue1 = dimValue;
+
+                newDim.DimensionValues.Add(value);
+            }
+
+            context.Dimensions.Add(newDim);
+            context.DimensionSets.Add(newSet);
+            context.DimensionSetMembers.Add(newMember);
+
+            context.SaveChanges();
+
+            context.Dispose();
+        }
+
+        ///MEASURES
+
         /// <summary>
         /// Method to create and populate a CreateMeasureModel ready for the View to use
         /// </summary>
@@ -47,6 +134,12 @@ namespace Data_Loading_Tool.Database
                                                                                             Value = x.GeographyTypeID.ToString()
                                                                                         });
 
+            model.DimensionsForMeasureBreakdown = context.Dimensions.Select(x => new SelectListItem
+            {
+                Text = x.DimensionName,
+                Value = x.DimensionID.ToString()
+            });
+
             List<CreateMeasureDetailModel> modelDetails = new List<CreateMeasureDetailModel>();
             
             foreach (StagingColumn column in context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns)
@@ -68,78 +161,6 @@ namespace Data_Loading_Tool.Database
             model.MeasureDetails = modelDetails;
 
             return model;
-        }
-
-        /// <summary>
-        /// Method to create and populate a CreateDimensionModel ready for the View to use
-        /// </summary>
-        /// <param name="datasetID">The ID of the Staging Table this Dimension is based off</param>
-        /// <returns></returns>
-        public CreateDimensionModel populateCreateDimensionModel(int datasetID)
-        {
-            CreateDimensionModel model = new CreateDimensionModel();
-
-            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
-
-            model.StagingDatasetID = datasetID;
-
-            model.StagingColumnsForDimension = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns.Select(x => new SelectListItem()
-            {
-                Text = x.ColumnName,
-                Value = x.StagingColumnID.ToString()
-            });
-
-            return model;
-        }
-
-        /// <summary>
-        /// Validate that the CreateDimensionModel is valid prior to
-        /// submission to the database
-        /// </summary>
-        /// <param name="model">The model to be validated</param>
-        /// <returns>Boolean indicating valid or not</returns>
-        public Boolean isCreateDimensionModelValid(CreateDimensionModel model)
-        {
-            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
-
-            int count = context.Dimensions.Where(x => x.DimensionName.Equals(model.DimensionName)).Count();
-
-            return count == 0; 
-        }
-
-        /// <summary>
-        /// Method to create a Dimension based off the model returned from a View. This creates a Dimension
-        /// and then populates values with those found in the specified Staging Table column
-        /// </summary>
-        /// <param name="model">The populated model passed back from the View</param>
-        public void createDimension(CreateDimensionModel model)
-        {
-            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
-
-            Dimension newDim = context.Dimensions.Create();
-
-            newDim.DimensionName = model.DimensionName;
-
-            String stagingColumnName = context.StagingColumns.Single(x => x.StagingColumnID.Equals(model.DimColumnInStaging)).ColumnName;
-            String stagingTableName = context.StagingColumns.Single(x => x.StagingColumnID.Equals(model.DimColumnInStaging)).StagingDataset.DatasetName;
-
-            String sqlQuery = String.Format("select distinct {0} from {1}", stagingColumnName, stagingTableName);
-            IEnumerable<String> stagingDimensionValues = context.Database.SqlQuery<String>(sqlQuery);
-
-            foreach (String dimValue in stagingDimensionValues)
-            {
-                DimensionValue value = context.DimensionValues.Create();
-
-                value.DimensionValue1 = dimValue;
-
-                newDim.DimensionValues.Add(value);
-            }
-
-            context.Dimensions.Add(newDim);
-
-            context.SaveChanges();
-
-            context.Dispose();
         }
 
 
@@ -218,10 +239,12 @@ namespace Data_Loading_Tool.Database
         {
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
 
-            int count = context.Facts.Where(x => x.FactName.Equals(model.MeasureName)).Count();
+            int count = context.Measures.Where(x => x.MeasureName.Equals(model.MeasureName)).Count();
 
             return count == 0;
         }
+
+       
 
         /// <summary>
         /// Method to create the measure in the database. This just creates the basic Measure information and 
@@ -231,138 +254,174 @@ namespace Data_Loading_Tool.Database
         /// <param name="model">The populated model containing the data needed to create the Measure</param>
         public void createMeasure(CreateMeasureModel model)
         {
-            InsertMeasureTemplate template = new InsertMeasureTemplate();
-
-            template.FactName = model.MeasureName;
-            template.GeographyTypeID = model.GeographyTypeID;
-
-            template.DimensionIDs = model.MeasureDetails.Where(x=> x.DimensionValueID.HasValue).Select(x => x.DimensionValueID.Value).OrderByDescending(x => x);
-
-            String output = template.TransformText();
-
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
 
-            context.Database.ExecuteSqlCommand(output);
+            Measure newMeasure = context.Measures.Create();
+            newMeasure.MeasureName = model.MeasureName;
+
+            createDimSets(model.selectedDimensions);
+
+            IEnumerable<DimensionSet> dimSets = context.Dimensions.Where(x => model.selectedDimensions.Contains(x.DimensionID)).SelectMany(x => x.DimensionSetMembers).Select(x => x.DimensionSet).ToList();
+            IEnumerable<DimensionSet> dimSetsForExclusion = context.Dimensions.Where(x => !model.selectedDimensions.Contains(x.DimensionID)).SelectMany(x => x.DimensionSetMembers).Select(x => x.DimensionSet).ToList();
+
+            IEnumerable<DimensionSet> dimSetsFinal = dimSets.Where(x => !dimSetsForExclusion.Select(y => y.DimensionSetID).Contains(x.DimensionSetID)).Distinct();
+
+            foreach (DimensionSet set in dimSetsFinal)
+            {
+                MeasureBreakdown newBreakdown = context.MeasureBreakdowns.Create();
+                newBreakdown.MeasureBreakdownName = String.Format("{0} {1}", model.MeasureName, set.DimensionSetName);
+                newBreakdown.DimensionSetID = set.DimensionSetID;
+                newMeasure.MeasureBreakdowns.Add(newBreakdown);
+            }
+
+            context.Measures.Add(newMeasure);
+
+            context.SaveChanges();
 
             context.Dispose();
         }
 
-        /// <summary>
-        /// Method which populates the Measure Values into the database based off the populated model passed back
-        /// from the View. This Process differentiates based on the number of Dimensions present in the model
-        /// but in all cases a Template file is used to generate dynamic SQL. After the values are added a Default View is created
-        /// which can be used to query the data.
-        /// </summary>
-        /// <param name="model">The populated model returned from the view that contains all the data needed to add the Measure Values to the Measure</param>
+        private void createDimSets(IEnumerable<int> dimIDs)
+        {
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+            List<DimensionSet> allNewSets = new List<DimensionSet>();
+
+            foreach (int dimID in dimIDs)
+            {
+                Dimension dim = context.Dimensions.Single(x => x.DimensionID.Equals(dimID));
+
+
+
+                foreach (DimensionSet set in allNewSets)
+                {
+                    DimensionSet derivedSet = context.DimensionSets.Create();
+                    derivedSet.DimensionSetName = String.Format("{0} and {1}", set.DimensionSetName, dim.DimensionName);
+                    context.DimensionSets.Add(derivedSet);
+
+                    DimensionSetMember newDimMember = context.DimensionSetMembers.Create();
+                    newDimMember.DimensionSet = derivedSet;
+                    newDimMember.Dimension = dim;
+                    context.DimensionSetMembers.Add(newDimMember);
+
+                    foreach (DimensionSetMember dimSetMember in set.DimensionSetMembers)
+                    {
+                        DimensionSetMember derivedMember = context.DimensionSetMembers.Create();
+
+                        derivedMember.Dimension = dimSetMember.Dimension;
+
+                        derivedSet.DimensionSetMembers.Add(derivedMember);
+
+                        context.DimensionSetMembers.Add(derivedMember);
+                    }
+
+                    foreach (DimensionSetCombination combination in set.DimensionSetCombinations)
+                    {
+                        foreach (DimensionValue dimValue in dim.DimensionValues)
+                        {
+                            DimensionSetCombination derivedCombination = context.DimensionSetCombinations.Create();
+                            derivedCombination.DimensionSetCombinationName = String.Format("{0} | {1}: {2}", combination.DimensionSetCombinationName, dim.DimensionName, dimValue.DimensionValue1);
+                            derivedCombination.DimensionSet = derivedSet;
+
+                            context.DimensionSetCombinations.Add(derivedCombination);
+
+                            DimensionSetCombinationMember newCombinationMember = context.DimensionSetCombinationMembers.Create();
+                            newCombinationMember.DimensionSetCombination = derivedCombination;
+                            newCombinationMember.DimensionValue = dimValue;
+
+                            context.DimensionSetCombinationMembers.Add(newCombinationMember);
+                            
+                            foreach (DimensionSetCombinationMember dimSetCombinationMember in combination.DimensionSetCombinationMembers)
+                            {
+                                DimensionSetCombinationMember derivedCombinationMember = context.DimensionSetCombinationMembers.Create();
+                                derivedCombinationMember.DimensionSetCombination = derivedCombination;
+                                derivedCombinationMember.DimensionValue = dimSetCombinationMember.DimensionValue;
+
+                                context.DimensionSetCombinationMembers.Add(derivedCombinationMember);    
+
+                            }
+                        }
+                    }
+                }
+
+                String newDimSetName = String.Format("By {0}", dim.DimensionName);
+
+                if (context.DimensionSets.Count(x => x.DimensionSetName.Equals(newDimSetName)) == 0)
+                {
+                    DimensionSet newSet = context.DimensionSets.Create();
+                    newSet.DimensionSetName = String.Format("By {0}", dim.DimensionName);
+
+                    DimensionSetMember newMember = context.DimensionSetMembers.Create();
+
+                    dim.DimensionSetMembers.Add(newMember);
+                    newSet.DimensionSetMembers.Add(newMember);
+
+                    foreach (DimensionValue dimValue in dim.DimensionValues)
+                    {
+                        DimensionSetCombination newCombination = context.DimensionSetCombinations.Create();
+                        newCombination.DimensionSet = newSet;
+                        newCombination.DimensionSetCombinationName = String.Format("{0}: {1}", dim.DimensionName, dimValue.DimensionValue1);
+
+                        DimensionSetCombinationMember newCombinationMember = context.DimensionSetCombinationMembers.Create();
+                        newCombinationMember.DimensionValue = dimValue;
+                        newCombinationMember.DimensionSetCombination = newCombination;
+                        
+                        context.DimensionSetCombinations.Add(newCombination);
+                        context.DimensionSetCombinationMembers.Add(newCombinationMember);
+                    }
+                        
+                    allNewSets.Add(newSet);
+                    
+                }
+
+            }
+
+            context.SaveChanges();
+            context.Dispose();
+        }
+
         public void createMeasureValues(MeasureValueModel model)
         {
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
 
-            IEnumerable<int> dimIDs = model.MeasureValueDetails.Select(x => x.DimensionID).Distinct();
+            var breakdowns = context.Measures.Single(x => x.MeasureName.Equals(model.MeasureName)).MeasureBreakdowns;
 
-            if (dimIDs.Count() > 2)
+            foreach (var breakdown in breakdowns)
             {
-                //recurse
-            }
-            else if (dimIDs.Count() == 2)
-            {
-                //cross product
+                var combinations = breakdown.DimensionSet.DimensionSetCombinations;
 
-
-                int maxID = dimIDs.Max();
-                int minID = dimIDs.Min();
-
-                foreach (MeasureValueDetailModel maxItem in model.MeasureValueDetails.Where(x => x.DimensionID.Equals(maxID)))
+                foreach (var combination in combinations)
                 {
-                    foreach (MeasureValueDetailModel minItem in model.MeasureValueDetails.Where(y => y.DimensionID.Equals(minID)))
-                    {
-                        MeasureLoadingModel xxx = new MeasureLoadingModel();
+                    var values = combination.DimensionSetCombinationMembers.Select(x => x.DimensionValue);
 
-                        xxx.Dimensions = new List<DimensionModel>();
-                        xxx.StagingDimensions = new List<StagingDimensionModel>();
+                    List<String> whereClauses = new List<string>();
 
-                        xxx.Dimensions.Add(new DimensionModel() { DimensionID = maxItem.DimensionID, DimensionValue = maxItem.DimValue });
-                        xxx.Dimensions.Add(new DimensionModel() { DimensionID = minItem.DimensionID, DimensionValue = minItem.DimValue });
-
-
-                        xxx.StagingDimensions.Add(new StagingDimensionModel() { StagingColumnName = maxItem.DimColumnInStaging, StagingColumnValue = maxItem.DimValueInStaging });
-                        xxx.StagingDimensions.Add(new StagingDimensionModel() { StagingColumnName = minItem.DimColumnInStaging, StagingColumnValue = minItem.DimValueInStaging });
-
-                        InsertMeasureValuesTemplate template = new InsertMeasureValuesTemplate();
-
-                        template.UseMeasureColumn = model.UseMeasureColumn;
-                        template.StagingTableName = model.StagingTableName;
-                        template.StagingGeographyColumn = model.StagingGeographyColumn;
-                        template.GeographicalTypeID = model.GeographyTypeID;
-                        template.MeasureName = model.MeasureName;
-                        template.MeasureColumnName = model.MeasureStagingColumnName;
-                        template.Details = xxx;
-                        
-                        String output = template.TransformText();                        
-
-                        context.Database.ExecuteSqlCommand(output);
-                    }
-                }
-
-            }
-            else
-            {
-                foreach (MeasureValueDetailModel maxItem in model.MeasureValueDetails)
-                {                   
-                    MeasureLoadingModel xxx = new MeasureLoadingModel();
-
-                    xxx.Dimensions = new List<DimensionModel>();
-                    xxx.StagingDimensions = new List<StagingDimensionModel>();
-
-                    xxx.Dimensions.Add(new DimensionModel() { DimensionID = maxItem.DimensionID, DimensionValue = maxItem.DimValue });
-
-                    xxx.StagingDimensions.Add(new StagingDimensionModel() { StagingColumnName = maxItem.DimColumnInStaging, StagingColumnValue = maxItem.DimValueInStaging });
+                    foreach (var value in values)
+	                {
+                        var detail = model.MeasureValueDetails.Single(x => x.DimValueID.Equals(value.DimensionValueID));
+                        whereClauses.Add(String.Format("[{0}] = '{1}'", detail.DimColumnInStaging, detail.DimValueInStaging));
+	                }
+                    String whereClause = String.Format("Where {0}", String.Join(" AND ", whereClauses));
 
                     InsertMeasureValuesTemplate template = new InsertMeasureValuesTemplate();
 
-                    template.UseMeasureColumn = model.UseMeasureColumn;
-                    template.StagingTableName = model.StagingTableName;
-                    template.StagingGeographyColumn = model.StagingGeographyColumn;
-                    template.MeasureName = model.MeasureName;
+                    template.DimensionSetCombinationID = combination.DimensionSetCombinationID;
+                    template.GeographyTypeID = model.GeographyTypeID;
+                    template.MeasureBreakdownID = breakdown.MeasureBreakdownID;
                     template.MeasureColumnName = model.MeasureStagingColumnName;
-                    template.Details = xxx;
+                    template.StagingGeographyColumn = model.StagingGeographyColumn;
+                    template.StagingTableName = model.StagingTableName;
+                    template.UseMeasureColumn = model.UseMeasureColumn;
+                    template.WhereClause = whereClause;
 
                     String output = template.TransformText();
 
-                    context.Database.ExecuteSqlCommand(output);                    
+                    context.Database.ExecuteSqlCommand(output);
                 }
             }
 
-            IEnumerable<String> dimensions = context.Dimensions.Where(y => dimIDs.Contains(y.DimensionID)).Select(x => x.DimensionName);
-
-            CreateDefaultViewTemplate viewTemplate = new CreateDefaultViewTemplate();
-            viewTemplate.DimensionNames = dimensions;
-            viewTemplate.FactName = model.MeasureName;
-            viewTemplate.AggregateQuery = !model.UseMeasureColumn;
-
-            String viewOutput = viewTemplate.TransformText();
-
-            DataView newView = context.DataViews.Create();
-            newView.ViewName = model.MeasureName;
-
-            newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "FactCount" });
-            newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "GeographyType" });
-            newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "GeographyName" });
-            newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = "LoadReference" });            
-
-            foreach (String column in dimensions)
-            {
-                newView.DataViewColumns.Add(new DataViewColumn() { ColumnName = column });
-            }
-
-            context.DataViews.Add(newView);
-
-            context.SaveChanges();
-
-            context.Database.ExecuteSqlCommand(viewOutput);
-
             context.Dispose();
+        }
 
-        }                     
+       
     }
 }

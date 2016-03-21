@@ -12,20 +12,20 @@ namespace Data_Loading_Tool.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class Fact
+    public partial class MeasureBreakdown
     {
-        public Fact()
+        public MeasureBreakdown()
         {
-            this.FactDimensionSets = new HashSet<FactDimensionSet>();
-            this.DimensionToFacts = new HashSet<DimensionToFact>();
+            this.MeasureInstances = new HashSet<MeasureInstance>();
         }
     
-        public int FactID { get; set; }
-        public string FactName { get; set; }
-        public int GeographyTypeID { get; set; }
+        public int MeasureBreakdownID { get; set; }
+        public string MeasureBreakdownName { get; set; }
+        public int MeasureID { get; set; }
+        public int DimensionSetID { get; set; }
     
-        public virtual ICollection<FactDimensionSet> FactDimensionSets { get; set; }
-        public virtual ICollection<DimensionToFact> DimensionToFacts { get; set; }
-        public virtual GeographyType GeographyType { get; set; }
+        public virtual DimensionSet DimensionSet { get; set; }
+        public virtual Measure Measure { get; set; }
+        public virtual ICollection<MeasureInstance> MeasureInstances { get; set; }
     }
 }

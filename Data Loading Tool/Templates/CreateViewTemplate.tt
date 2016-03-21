@@ -1,0 +1,87 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Data_Loading_Tool.Models" #>
+
+
+create view [<#= Model.ViewName #>]
+as
+
+select 
+<#
+	foreach(ViewColumnModel column in Model.Columns)
+	{
+#>
+	ISNULL([<#= column.ColumnName #>].[<#= column.ColumnName #>], 0) as [<#= column.ColumnName #>], 
+<#
+	}
+	String geogColumn = "";
+	String geogAlias = "";
+
+	switch(Model.SelectedGeographyType) 
+	{
+		case 1:
+			geogColumn = "UPRN";
+			geogAlias = "UPRN";
+			break;
+		case 2:
+			geogColumn = "Postcode";
+			geogAlias = "Postcode";
+			break;
+		case 3:
+			geogColumn = "LsoaName";
+			geogAlias = "LSOA";
+			break;
+		case 4:
+			geogColumn = "WardName";
+			geogAlias = "Ward";
+			break;
+		case 5:
+			geogColumn = "MsoaName";
+			geogAlias = "MSOA";
+			break;
+		case 6:
+			geogColumn = "CouncilArea";
+			geogAlias = "CouncilArea";
+			break;
+	}
+#>	
+	Geog.<#=geogColumn#> as <#=geogAlias#>
+from
+(
+select 
+	G.<#=geogColumn#>
+from 
+Geography G
+where G.GeographyTypeID = <#= Model.SelectedGeographyType #>
+) Geog
+
+<#
+	foreach(ViewColumnModel column in Model.Columns)
+	{
+#>
+	left outer join 
+	(
+		select 
+			G.<#=geogColumn#>, sum(I.Value) as [<#= column.ColumnName #>]
+		from 
+			MeasureInstance I
+		inner join 
+			Geography G
+		on 
+			I.GeographyID = G.GeographyID
+		where
+			I.DimensionSetCombinationID = <#= column.SelectedDimensionValueID #>
+		and 
+			I.MeasureBreakdownID = <#= column.SelectedMeasureBreakdownID #>
+		group by 
+			G.<#=geogColumn#>
+	) as [<#= column.ColumnName #>]
+	on [<#= column.ColumnName #>].<#=geogColumn#> = Geog.<#=geogColumn#>
+<#
+	}
+#>
+
+

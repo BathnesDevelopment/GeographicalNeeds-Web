@@ -9,10 +9,6 @@
 // ------------------------------------------------------------------------------
 namespace Data_Loading_Tool.Templates
 {
-    using System.Linq;
-    using System.Text;
-    using System.Collections.Generic;
-    using Data_Loading_Tool.Models;
     using System;
     
     /// <summary>
@@ -29,376 +25,97 @@ namespace Data_Loading_Tool.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n\r\nInsert into FactInstance\r\n(\r\n\tFactDimensionSetID,\r\n\tGeographyID,\r\n\tValue,\r\n\tL" +
-                    "oadReference\r\n)\r\nselect \r\n\tBBB.FactDimensionSetID, \r\n\tAAA.GeographyID, \r\n\tAAA.Va" +
-                    "lue,\r\n\tAAA.Reference \r\nfrom \r\n\t(select \r\n\t\t");
+            this.Write("INSERT INTO [dbo].[MeasureInstance]\r\n           ([MeasureBreakdownID]\r\n          " +
+                    " ,[DimensionSetCombinationID]\r\n           ,[GeographyID]\r\n           ,[Value]\r\n " +
+                    "          ,[LoadReference])\r\n     select \r\n\t");
             
-            #line 24 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-			if(UseMeasureColumn)
-			{
-		
+            #line 8 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(MeasureBreakdownID));
             
             #line default
             #line hidden
-            this.Write("\t\t\tS.");
+            this.Write(", \r\n\t");
             
-            #line 28 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 9 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(DimensionSetCombinationID));
+            
+            #line default
+            #line hidden
+            this.Write(", \r\n\tG.GeographyID, \r\n\t");
+            
+            #line 11 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+ 
+	if(UseMeasureColumn) 
+	{
+	
+            
+            #line default
+            #line hidden
+            this.Write("\tsum(convert(int,A.");
+            
+            #line 15 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(MeasureColumnName));
             
             #line default
             #line hidden
-            this.Write(" as Value,\r\n\t\t");
+            this.Write(")), \r\n\t");
             
-            #line 29 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 16 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
-			}
-			else
-			{
-		
+	}
+	else
+	{
+	
             
             #line default
             #line hidden
-            this.Write("\t\t\t1 as Value,\r\n\t\t");
+            this.Write("\tsum(1),\r\n\t");
             
-            #line 35 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 22 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
 
-			}
-		
+	}
+	
             
             #line default
             #line hidden
-            this.Write("\t\tS.UploadRef as Reference,\r\n\t\tL.GeographyID\r\n\tfrom \r\n\t\t");
+            this.Write("\tA.UploadRef\r\nfrom ");
             
-            #line 41 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 26 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(StagingTableName));
             
             #line default
             #line hidden
-            this.Write(" S\r\n\tinner join\r\n\t\tGeography L\r\n\ton\r\n\t");
+            this.Write(" A\r\ninner join \r\nGeography G\r\non \r\nA.");
             
-            #line 45 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-		switch (GeographicalTypeID)
-		{
-			case 1:
-	
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\tS.");
-            
-            #line 50 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            #line 30 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(StagingGeographyColumn));
             
             #line default
             #line hidden
-            this.Write(" = L.UPRN\r\n\t");
+            this.Write(" =\r\ncase ");
             
-            #line 51 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-				break;
-			case 2:
-	
+            #line 31 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GeographyTypeID));
             
             #line default
             #line hidden
-            this.Write("\t\t\t\tS.");
+            this.Write("\r\n\twhen  \r\n\t\t1\r\n\tthen\t\r\n\t\tCONVERT(varchar(20), G.UPRN)\r\n\twhen  \r\n\t\t2\r\n\tthen\t\r\n\t\tG" +
+                    ".Postcode\r\n\twhen  \r\n\t\t3\r\n\tthen\t\r\n\t\tG.LsoaCode\r\n\twhen  \r\n\t\t4\r\n\tthen\t\r\n\t\tG.WardCod" +
+                    "e\r\n\twhen  \r\n\t\t5\r\n\tthen\t\r\n\t\tG.MsoaCode\r\nend\r\n");
             
-            #line 55 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(StagingGeographyColumn));
-            
-            #line default
-            #line hidden
-            this.Write(" = L.PostCode\r\n\t");
-            
-            #line 56 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-				break;
-			case 3:
-	
+            #line 53 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(WhereClause));
             
             #line default
             #line hidden
-            this.Write("\t\t\t\tS.");
+            this.Write("\r\nand G.GeographyTypeID = ");
             
-            #line 60 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(StagingGeographyColumn));
-            
-            #line default
-            #line hidden
-            this.Write(" = L.LsoaCode\r\n\t");
-            
-            #line 61 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-				break;
-			case 4:
-	
+            #line 54 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(GeographyTypeID));
             
             #line default
             #line hidden
-            this.Write("\t\t\t\tS.");
-            
-            #line 65 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(StagingGeographyColumn));
-            
-            #line default
-            #line hidden
-            this.Write(" = L.WardCode\r\n\t");
-            
-            #line 66 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-				break;
-			case 5:
-	
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\tS.");
-            
-            #line 70 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(StagingGeographyColumn));
-            
-            #line default
-            #line hidden
-            this.Write(" = L.MsoaCode\r\n\t");
-            
-            #line 71 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-				break;			
-		}
-	
-            
-            #line default
-            #line hidden
-            this.Write("\twhere \r\n\t");
-            
-            #line 76 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
- 
-			bool firstWhere = true;
-
-			foreach(StagingDimensionModel dimModel in Details.StagingDimensions)
-			{
-				if(firstWhere)
-				{
-	
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\tS.");
-            
-            #line 84 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.StagingColumnName));
-            
-            #line default
-            #line hidden
-            this.Write(" = \'");
-            
-            #line 84 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.StagingColumnValue));
-            
-            #line default
-            #line hidden
-            this.Write("\'\r\n\t");
-            
-            #line 85 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-					firstWhere = false;
-				}
-				else
-				{
-	
-            
-            #line default
-            #line hidden
-            this.Write("\t\tand \r\n\t\t\tS.");
-            
-            #line 92 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.StagingColumnName));
-            
-            #line default
-            #line hidden
-            this.Write(" = \'");
-            
-            #line 92 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.StagingColumnValue));
-            
-            #line default
-            #line hidden
-            this.Write("\'\r\n\t");
-            
-            #line 93 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-				}
-			}
-	
-            
-            #line default
-            #line hidden
-            this.Write("\t\tand L.GeographyTypeID = ");
-            
-            #line 97 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(GeographicalTypeID));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t) AAA\r\ncross join\r\n\t(select \r\n\t\tF.FactDimensionSetID, string\r\n\tfrom \r\n\t(\r\n\t\tse" +
-                    "lect \r\n\t\t");
-            
-            #line 105 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
- 
-			bool firstSelect = true;
-
-			foreach(DimensionModel dimModel in Details.Dimensions)
-			{
-				if(firstSelect)
-				{
-		
-            
-            #line default
-            #line hidden
-            this.Write("\t\t[");
-            
-            #line 113 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
-            
-            #line default
-            #line hidden
-            this.Write("].DimensionValue\r\n\t\t");
-            
-            #line 114 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-				firstSelect = false;
-				}
-				else
-				{
-		
-            
-            #line default
-            #line hidden
-            this.Write("\t\t+ \'-\' + [");
-            
-            #line 120 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
-            
-            #line default
-            #line hidden
-            this.Write("].DimensionValue\r\n\t\t");
-            
-            #line 121 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-				}
-			} 
-		
-            
-            #line default
-            #line hidden
-            this.Write("\t\tas string\r\n\t\t");
-            
-            #line 126 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-		bool first = true;
-		int firstID = 0;
-
-		foreach(DimensionModel dimModel in Details.Dimensions)
-		{
-		if(first)
-		{
-		
-            
-            #line default
-            #line hidden
-            this.Write("\t\tfrom\r\n\t\t\t(select \r\n\t\t\t\tV.DimensionID as ID,\r\n\t\t\t\tV.DimensionValue\r\n\t\t\tfrom\r\n\t\t\t" +
-                    "\tDimension D\r\n\t\t\tinner join \r\n\t\t\t\tDimensionValue V\r\n\t\t\ton D.DimensionID = v.Dime" +
-                    "nsionID\r\n\t\t\twhere D.DimensionID = ");
-            
-            #line 144 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t\t\tand V.DimensionValue = \'");
-            
-            #line 145 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionValue));
-            
-            #line default
-            #line hidden
-            this.Write("\') [");
-            
-            #line 145 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
-            
-            #line default
-            #line hidden
-            this.Write("]\r\n\r\n\t\t");
-            
-            #line 147 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-			first = false;
-			firstID = dimModel.DimensionID; 
-			}
-			else{
-		
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\tinner join \r\n\t\t\t(select \r\n\t\t\t\tV.DimensionID as ID,\r\n\t\t\t\tV.DimensionValue\r\n\t\t\tf" +
-                    "rom\r\n\t\t\t\tDimension D\r\n\t\t\tinner join \r\n\t\t\t\tDimensionValue V\r\n\t\t\ton D.DimensionID " +
-                    "= v.DimensionID\r\n\t\t\twhere D.DimensionID = ");
-            
-            #line 162 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t\t\tand V.DimensionValue = \'");
-            
-            #line 163 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionValue));
-            
-            #line default
-            #line hidden
-            this.Write("\') [");
-            
-            #line 163 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
-            
-            #line default
-            #line hidden
-            this.Write("]\r\n\t\t\ton [");
-            
-            #line 164 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(firstID));
-            
-            #line default
-            #line hidden
-            this.Write("].ID <> [");
-            
-            #line 164 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dimModel.DimensionID));
-            
-            #line default
-            #line hidden
-            this.Write("].ID\r\n\t\t");
-            
-            #line 165 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-
-			}
-			}
-		
-            
-            #line default
-            #line hidden
-            this.Write("\t) XXX\r\n\tinner join \r\n\t\tFactDimensionSet F\r\n\ton \r\n\t\tF.DimString = XXX.string\r\n\tin" +
-                    "ner join \r\n\t\tFact FF\r\n\ton \r\n\t\tFF.FactID = F.FactID\r\n\twhere \r\n\t\tFF.FactName = \'");
-            
-            #line 179 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(MeasureName));
-            
-            #line default
-            #line hidden
-            this.Write("\'\r\n\t) BBB\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\t\r\n");
+            this.Write("\r\ngroup by G.GeographyID, A.UploadRef\r\n\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

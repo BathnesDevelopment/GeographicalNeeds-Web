@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6912c021-ea62-423e-ae99-efddf47824ab" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://datacube:281/GeographicalNeedsService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="GeographicalNeedsService.wsdl" MetadataType="Wsdl" ID="6bf6afab-8d50-442b-afb4-49030c1e2acc" SourceId="1" SourceUrl="http://datacube:281/GeographicalNeedsService.svc?wsdl" />
+    <MetadataFile FileName="GeographicalNeedsService.xsd" MetadataType="Schema" ID="47e98ce7-681f-4385-ae69-c0b1cc8c976d" SourceId="1" SourceUrl="http://datacube:281/GeographicalNeedsService.svc?xsd=xsd2" />
+    <MetadataFile FileName="GeographicalNeedsService1.xsd" MetadataType="Schema" ID="6bf690dd-2136-4b84-a565-7cb754f46cf6" SourceId="1" SourceUrl="http://datacube:281/GeographicalNeedsService.svc?xsd=xsd0" />
+    <MetadataFile FileName="GeographicalNeedsService.disco" MetadataType="Disco" ID="b93b7984-96b9-4f44-8414-da4c91c438b0" SourceId="1" SourceUrl="http://datacube:281/GeographicalNeedsService.svc?disco" />
+    <MetadataFile FileName="GeographicalNeedsService2.xsd" MetadataType="Schema" ID="9d12e1c6-cef6-4656-a60a-63faa6fbc468" SourceId="1" SourceUrl="http://datacube:281/GeographicalNeedsService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

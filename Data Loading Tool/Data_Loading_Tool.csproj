@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BeginCollectionItem">
+      <HintPath>..\packages\BeginCollectionItem.1.2.1.0\lib\net35\BeginCollectionItem.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>External Libs\Elmah\Elmah.dll</HintPath>
@@ -141,63 +144,69 @@
     <Compile Include="Controllers\DataViewController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StagingController.cs" />
-    <Compile Include="Database\BANESDatabase.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BANESDatabase.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\BANESDatabase.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\BANESDatabase.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BANESDatabase.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Database\DatasetDataAccess.cs" />
     <Compile Include="Database\DataView.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\DataViewColumn.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\DataViewDataAccess.cs" />
     <Compile Include="Database\Dimension.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="Database\DimensionToFact.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
+    <Compile Include="Database\DimensionSet.cs">
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\DimensionSetCombination.cs">
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\DimensionSetCombinationMember.cs">
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\DimensionSetMember.cs">
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\DimensionValue.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\Fact.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\FactDimensionMapping.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\FactDimensionSet.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\FactInstance.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\FileAccess.cs" />
+    <Compile Include="Database\GeographicalNeedsDatabase.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeographicalNeedsDatabase.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\GeographicalNeedsDatabase.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\GeographicalNeedsDatabase.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeographicalNeedsDatabase.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Database\Geography.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\GeographyType.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Measure.cs">
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\MeasureBreakdown.cs">
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\MeasureInstance.cs">
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\StagingColumn.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\StagingDataAccess.cs" />
     <Compile Include="Database\StagingDataset.cs">
-      <DependentUpon>BANESDatabase.tt</DependentUpon>
+      <DependentUpon>GeographicalNeedsDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Extensions\ViewHelpers\HtmlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -208,23 +217,28 @@
     <Compile Include="Models\Datasets\CreateMeasureModel.cs" />
     <Compile Include="Models\Datasets\MeasureLoadingModel.cs" />
     <Compile Include="Models\DataViews\CreateViewModel.cs" />
+    <Compile Include="Models\DataViews\CreateViewModel_old.cs" />
     <Compile Include="Models\DataViews\DataViewDetailModel.cs" />
     <Compile Include="Models\DataViews\DataViewModel.cs" />
-    <Compile Include="Templates\CreateCustomViewTemplate.cs">
+    <Compile Include="Models\MeasureAndDimension\CreateMeasureBreakdownModel.cs" />
+    <Compile Include="Models\MeasureAndDimension\CreateMeasureModel.cs" />
+    <Compile Include="Models\MeasureAndDimension\MeasureBreakdownModel.cs" />
+    <Compile Include="Models\MeasureAndDimension\MeasureModel.cs" />
+    <Compile Include="Service References\GeographicalNeedsService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CreateCustomViewTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\CreateDefaultViewTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CreateDefaultViewTemplate.tt</DependentUpon>
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Models\Datasets\MeasureValueModel.cs" />
     <Compile Include="Models\Staging\StagingDetailModel.cs" />
     <Compile Include="Models\Staging\GeneralStagingModel.cs" />
     <Compile Include="Models\Staging\UploadStagingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Templates\CreateViewTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateViewTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templates\InsertMeasureTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -235,8 +249,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InsertMeasureValuesTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Templates\TemplateCode\CreateCustomViewTemplateCode.cs" />
-    <Compile Include="Templates\TemplateCode\CreateDefaultViewTemplateCode.cs" />
+    <Compile Include="Templates\TemplateCode\CreateViewTemplateCode.cs" />
     <Compile Include="Templates\TemplateCode\InsertMeasureTemplateCode.cs" />
     <Compile Include="Templates\TemplateCode\InsertMeasureValueTemplateCode.cs" />
   </ItemGroup>
@@ -300,6 +313,10 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Database\Scripts\Create Database.sql" />
+    <Content Include="Database\Scripts\Create Schema.sql" />
+    <Content Include="Database\Scripts\Insert Core Dimensions.sql" />
+    <Content Include="Database\Scripts\Insert Geography Data.sql" />
     <Content Include="External Libs\Elmah\Elmah.dll" />
     <Content Include="External Libs\Elmah\Elmah.pdb" />
     <Content Include="External Libs\Elmah\Elmah.xml" />
@@ -310,13 +327,6 @@
     <Content Include="External Libs\Elmah\System.Data.SqlServerCe.dll" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <EntityDeploy Include="Database\BANESDatabase.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>BANESDatabase.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Database\BANESDatabase.edmx.diagram">
-      <DependentUpon>BANESDatabase.edmx</DependentUpon>
-    </Content>
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\dataTables.tableTools.min.js" />
     <Content Include="Scripts\html5shiv.min.js" />
@@ -325,20 +335,30 @@
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Properties\DataSources\System.Data.DataTable.datasource" />
-    <Content Include="Templates\CreateDefaultViewTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CreateDefaultViewTemplate.cs</LastGenOutput>
-    </Content>
-    <Content Include="Database\BANESDatabase.Context.tt">
+    <EntityDeploy Include="Database\GeographicalNeedsDatabase.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>GeographicalNeedsDatabase.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Database\GeographicalNeedsDatabase.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>BANESDatabase.Context.cs</LastGenOutput>
-      <DependentUpon>BANESDatabase.edmx</DependentUpon>
+      <DependentUpon>GeographicalNeedsDatabase.edmx</DependentUpon>
+      <LastGenOutput>GeographicalNeedsDatabase.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Database\BANESDatabase.tt">
+    <Content Include="Database\GeographicalNeedsDatabase.edmx.diagram">
+      <DependentUpon>GeographicalNeedsDatabase.edmx</DependentUpon>
+    </Content>
+    <Content Include="Database\GeographicalNeedsDatabase.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>BANESDatabase.cs</LastGenOutput>
-      <DependentUpon>BANESDatabase.edmx</DependentUpon>
+      <DependentUpon>GeographicalNeedsDatabase.edmx</DependentUpon>
+      <LastGenOutput>GeographicalNeedsDatabase.cs</LastGenOutput>
     </Content>
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService.disco" />
+    <None Include="Service References\GeographicalNeedsService\configuration91.svcinfo" />
+    <None Include="Service References\GeographicalNeedsService\configuration.svcinfo" />
+    <None Include="Service References\GeographicalNeedsService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <None Include="Properties\PublishProfiles\BANES MVC Publishing.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
@@ -390,9 +410,23 @@
     <Content Include="Views\DataView\CreateViewFirstStep.cshtml" />
     <Content Include="Views\DataView\CreateViewSecondStep.cshtml" />
     <Content Include="Views\DataView\CreateViewThirdStep.cshtml" />
-    <Content Include="Templates\CreateCustomViewTemplate.tt">
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService.wsdl" />
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\GeographicalNeedsService\GeographicalNeedsService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Views\DataView\CreateView.cshtml" />
+    <Content Include="Views\DataView\ViewColumnControl.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
+    <Content Include="Views\DataView\AddColumnControl.cshtml" />
+    <Content Include="Templates\CreateViewTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CreateCustomViewTemplate.cs</LastGenOutput>
+      <LastGenOutput>CreateViewTemplate.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -412,6 +446,9 @@
       <Project>{5fdb5670-4b7e-4284-b2c3-e1aab36eecf6}</Project>
       <Name>DataAccessServices</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\GeographicalNeedsService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

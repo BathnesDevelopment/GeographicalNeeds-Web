@@ -39,6 +39,7 @@ namespace Data_Loading_Tool.Database
 
             model.ViewName = context.DataViews.Single(x => x.DataViewID.Equals(viewID)).ViewName;
 
+//            model.ViewData = getViewDataDetailFromService(viewID);
             model.ViewData = getViewDataDetail(viewID);
 
             return model;
@@ -79,17 +80,20 @@ namespace Data_Loading_Tool.Database
         }
 
         /// <summary>
-        /// Method used to get get back the intial model used in Creating a custom View
+        /// Internal helper method to return the data in a View as a Data Table that can be added to 
+        /// a View Model in the public method. This dynamically generates SQL to query the table.
         /// </summary>
+        /// <param name="viewID">The ID of the Staging Table to be queried</param>
         /// <returns></returns>
-        public CreateViewModel getCreateViewModel()
+        private DataTable getViewDataDetailFromService(int viewID)
         {
-            CreateViewModel model = new CreateViewModel();
-            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+            DataTable dt;
 
-            model.Measures = context.Facts.ToList().Select(x => new SelectListItem() { Text = x.FactName, Value = x.FactID.ToString() });
+            GeographicalNeedsService.GeographicalNeedsServiceClient service = new GeographicalNeedsService.GeographicalNeedsServiceClient();
 
-            return model;
+            dt = service.GetViewData(viewID);
+
+            return dt;
         }
 
         /// <summary>
@@ -107,161 +111,132 @@ namespace Data_Loading_Tool.Database
             return count == 0;
         }
 
+        
         /// <summary>
-        /// Method which gets back the Models used to select Dimensions within the selected Measures when creating a custom View. 
+        /// A method to get the basic Create View model with drop down
+        /// data populated
         /// </summary>
-        /// <param name="measureIDs">The Measures that have previously been selected within the create View process</param>
-        /// <returns></returns>
-        public IEnumerable<CreateViewMeasureModel> getViewMeasureModels(IEnumerable<int> measureIDs)
+        /// <returns>The populated model</returns>
+        public CreateViewModel getDefaultCreateViewModel()
         {
-            List<CreateViewMeasureModel> models = new List<CreateViewMeasureModel>();
+            CreateViewModel model = new CreateViewModel();
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
 
-            foreach (int id in measureIDs)
-            {
-                CreateViewMeasureModel model = new CreateViewMeasureModel();
-
-                model.MeasureName = context.Facts.Single(x => x.FactID.Equals(id)).FactName;
-
-                model.Dimensions = context.Facts.Single(x => x.FactID.Equals(id)).DimensionToFacts.Select(x => x.Dimension).Select(x => new SelectListItem() {Text = x.DimensionName, Value = x.DimensionID.ToString()});
-
-                models.Add(model);
-            }
-
-            return models;
-        }
-
-        /// <summary>
-        /// Method which converts a View model for the Create View process into a Database orientated model. 
-        /// </summary>
-        /// <param name="models">The view models being passed in to be converted</param>
-        /// <returns></returns>
-        public IEnumerable<CreateViewMeasureDimensionModel> convertMeasureViewModelsToDBModels(List<CreateViewMeasureModel> models)
-        {
-            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
-            
-            List<CreateViewMeasureDimensionModel> retVal = new List<CreateViewMeasureDimensionModel>();
-
-            foreach (CreateViewMeasureModel item in models)
-            {
-                CreateViewMeasureDimensionModel model = new CreateViewMeasureDimensionModel();
-
-                model.MeasureID = context.Facts.Single(x => x.FactName.Equals(item.MeasureName)).FactID;
-                model.MeasureName = item.MeasureName;
-
-                retVal.Add(model);
-            }
-
-            return retVal;
-        }
-
-        /// <summary>
-        /// Method to convert a set of models used in the secondary stages of the Create View process to 
-        /// models which are database orientated.
-        /// </summary>
-        /// <param name="models">The models to be converted</param>
-        /// <param name="measureID">The measure that these dimensions refer to</param>
-        /// <returns></returns>
-        public IEnumerable<CreateViewDimValueModel> convertDimensionViewModelsToDBModels(List<CreateViewDimensionModel> models, int measureID)
-        {
-            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
-
-            List<CreateViewDimValueModel> retVal = new List<CreateViewDimValueModel>();
-
-            String measureName = context.Facts.Single(x => x.FactID.Equals(measureID)).FactName;            
-
-            foreach (CreateViewDimensionModel item in models)
-            {
-                if (item.MeasureName.Equals(measureName))
-                {                
-                    CreateViewDimValueModel model = new CreateViewDimValueModel();
-
-                    model.DimensionID = context.Dimensions.Single(x => x.DimensionName.Equals(item.DimensionName)).DimensionID;
-
-                    model.DimensionValueIDs = item.SelectedDimensionValueIDs;
-
-                    model.DimensionValues = context.DimensionValues.Where(x => model.DimensionValueIDs.Contains(x.DimensionValueID)).Select(x => x.DimensionValue1);
-
-                    retVal.Add(model);
-                }
-            }            
-
-            return retVal;
-        }
-
-        /// <summary>
-        /// Method to get back a single model which allows for selection of Dimension Values as part 
-        /// of the process to create a custom View
-        /// </summary>
-        /// <param name="dimensionID">The ID of the Dimension to get the Values from</param>
-        /// <returns></returns>
-        public CreateViewDimensionModel getViewDimensionModels(int dimensionID)
-        {
-            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
-
-            CreateViewDimensionModel model = new CreateViewDimensionModel();
-
-            model.DimensionValues = context.DimensionValues.Where(x => x.DimensionID.Equals(dimensionID)).ToList().Select(x => new SelectListItem() { Text = x.DimensionValue1, Value = x.DimensionValueID.ToString() });
-
-            model.DimensionName = context.Dimensions.Single(x => x.DimensionID.Equals(dimensionID)).DimensionName;
-
-            model.DimensionID = dimensionID;
+            model.GeographyTypes = context.GeographyTypes.Select(x => new SelectListItem() { Text = x.GeographyType1, Value = x.GeographyTypeID.ToString() });            
 
             return model;
         }
 
         /// <summary>
-        /// The main method to create a Custom View based on the data in the model. 
-        /// This is created using a text Template to generate dynamic SQL
+        /// A method to get the model which contains the 
+        /// data to add a column to a View
         /// </summary>
-        /// <param name="model">Populated model containing the data necessary to create the view</param>
-        public void createBespokeView(CreateViewCompleteModel model)
+        /// <returns>The populated model</returns>
+        public CreateViewColumnModel getDefaultColumnModel()
+        {
+            CreateViewColumnModel model = new CreateViewColumnModel();
+
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+            model.Measures = context.Measures.Select(x => new SelectListItem() { Text = x.MeasureName, Value = x.MeasureID.ToString() });
+
+            model.MeasureBreakdowns = new List<SelectListItem>();            
+
+            model.DimensionValues= new List<SelectListItem>();         
+
+            return model;
+        }
+
+        /// <summary>
+        /// Contains the data passed back from the view which can then be added into the model dynamically
+        /// </summary>
+        /// <param name="measureID"> The ID of the measure used</param>
+        /// <param name="measureBreakdownID"> The ID of the measure breakdown used</param>
+        /// <param name="dimValueID"> The ID of the Dim combinations to use</param>
+        /// <param name="newColumnName"> The name of the new column</param>
+        /// <returns>A model to be added into the View</returns>
+        public ViewColumnModel getColumnModel(int measureID, int measureBreakdownID, int dimValueID, String newColumnName)
+        {
+            ViewColumnModel model = new ViewColumnModel();
+            
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+            model.ColumnName = newColumnName;
+
+            model.SelectedMeasureID = measureID;
+            model.SelectedMeasure = context.Measures.Single(x => x.MeasureID.Equals(measureID)).MeasureName;
+
+            model.SelectedMeasureBreakdownID = measureBreakdownID;
+            model.SelectedMeasureBreakdown = context.MeasureBreakdowns.Single(x => x.MeasureBreakdownID.Equals(measureBreakdownID)).MeasureBreakdownName;
+
+            model.SelectedDimensionValueID = dimValueID;
+            model.SelectedDimensionValue = context.DimensionSetCombinations.Single(x => x.DimensionSetCombinationID.Equals(dimValueID)).DimensionSetCombinationName;
+
+            return model;
+        }
+
+        /// <summary>
+        /// Method to get a list of Measure Breakdowns that are under a Measure
+        /// </summary>
+        /// <param name="measureID">The ID of the measure</param>
+        /// <returns>A set of Select List Items containing the Measure Breakdowns</returns>
+        public IEnumerable<SelectListItem> getMeasureBreakdownsForMeasure(int measureID)
+        {
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+            return context.MeasureBreakdowns.Where(x => x.MeasureID.Equals(measureID)).Select(x => new SelectListItem() { Text = x.MeasureBreakdownName, Value = x.MeasureBreakdownID.ToString() });            
+        }
+
+        /// <summary>
+        /// Method to get a list of Dimension Set Combinations which are related
+        /// to all the Measures Instance values under a breakdown
+        /// </summary>
+        /// <param name="measureBreadownID">The ID of the Measure Breakdown</param>
+        /// <returns>A set of Select List Items containing the Dimension Set Combinations</returns>
+        public IEnumerable<SelectListItem> getDimensionSetCombinationsForMeasureBreakdowns(int measureBreadownID)
+        {
+            Geographical_NeedsEntities context = new Geographical_NeedsEntities();
+
+            return context.MeasureBreakdowns.Single(x => x.MeasureBreakdownID.Equals(measureBreadownID)).MeasureInstances.Select(x => x.DimensionSetCombination).Distinct().Select(x => new SelectListItem() { Text = x.DimensionSetCombinationName, Value = x.DimensionSetCombinationID.ToString() });
+        }
+
+        /// <summary>
+        /// A method to create the View from the user entered data that
+        /// has been specified through the web interface. It uses the template
+        /// for a new View to generate the necessary SQL.
+        /// </summary>
+        /// <param name="model">The fully created model</param>
+        public void CreateView(CreateViewModel model)
         {
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
 
             DataView newView = context.DataViews.Create();
             newView.ViewName = model.ViewName;
 
-            DataViewColumn geographyColumn = context.DataViewColumns.Create();
-            geographyColumn.ColumnName = "GeographyName";
-            newView.DataViewColumns.Add(geographyColumn);
+            DataViewColumn geogColumn = context.DataViewColumns.Create();
+            geogColumn.ColumnName = context.GeographyTypes.Single(x => x.GeographyTypeID.Equals(model.SelectedGeographyType)).GeographyType1;
+            geogColumn.DataView = newView;
 
+            context.DataViewColumns.Add(geogColumn);
 
-            foreach (CreateViewMeasureDimensionModel measure in model.Measures)
+            foreach (var column in model.Columns)
             {
-                if (measure.DimensionValues.Count() == 0)
-                {
-                    DataViewColumn newColumn = context.DataViewColumns.Create();
-                    newColumn.ColumnName = String.Format("{0} - All", measure.MeasureName);
-                    newView.DataViewColumns.Add(newColumn);
-                }
-                else
-                {
-                    foreach (String dimValue in measure.DimensionValues)
-                    {
-                        DataViewColumn newColumn = context.DataViewColumns.Create();
-                        newColumn.ColumnName = String.Format("{0} - {1} Count", measure.MeasureName, dimValue);
-                        newView.DataViewColumns.Add(newColumn);                        
-                    }
-                }
+                DataViewColumn newColumn = context.DataViewColumns.Create();
 
-                DataViewColumn referenceColumn = context.DataViewColumns.Create();
-                referenceColumn.ColumnName = String.Format("{0} - Loading reference", measure.MeasureName);
-                newView.DataViewColumns.Add(referenceColumn);
+                newColumn.ColumnName = column.ColumnName;
+
+                newColumn.DataView = newView;
+
+                context.DataViewColumns.Add(newColumn);
             }
 
             context.DataViews.Add(newView);
+            
+            CreateViewTemplate template = new CreateViewTemplate();
 
-            IEnumerable<int> measureIDs = model.Measures.Select(x => x.MeasureID);
+            template.Model = model;
 
-            int geographyAggregationLevel = context.Facts.Where(x => measureIDs.Contains(x.FactID)).Max(x => x.GeographyTypeID);
-
-
-            CreateCustomViewTemplate template = new CreateCustomViewTemplate();
-            template.model = model;
-            template.GeographyAggregationlevel = geographyAggregationLevel;
-
-            String output = template.TransformText();            
+            String output = template.TransformText();
 
             context.Database.ExecuteSqlCommand(output);
 

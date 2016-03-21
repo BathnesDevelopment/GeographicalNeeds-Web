@@ -8,10 +8,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Data_Loading_Tool.Models
 {
-    /// <summary>
-    /// This model is for the View used to specify the details 
-    /// for the creation of custom views.
-    /// </summary>
     public class CreateViewModel : BaseModel
     {
         [Required]
@@ -19,80 +15,63 @@ namespace Data_Loading_Tool.Models
         [DisplayName("View Name")]
         public String ViewName { get; set; }
 
+        public IEnumerable<SelectListItem> GeographyTypes { get; set; }
+
+        [Required]
+        [DisplayName("Geography Level of View")]
+        public int SelectedGeographyType { get; set; }
+
+        public IEnumerable<ViewColumnModel> Columns { get; set; }
+        public CreateViewColumnModel NewColumnModel { get; set; }
+    }
+
+    public class CreateViewColumnModel : BaseModel 
+    {
+        [Required]
+        [DisplayName("Column Name")]
+        public String ColummName { get; set; }
+
         public IEnumerable<SelectListItem> Measures { get; set; }
 
         [Required]
-        [DisplayName("Selected Measures")]
-        public IEnumerable<int> SelectedMeasureIDs { get; set; }
-    }
+        [DisplayName("Measure")]
+        public int SelectedMeasure { get; set; }
 
-    public class CreateViewMeasureModelList : BaseModel
-    {
-        public List<CreateViewMeasureModel> Models { get; set; }
-    }
+        public IEnumerable<SelectListItem> MeasureBreakdowns { get; set; }
 
-    public class CreateViewMeasureModel 
-    {
-        public String ViewName { get; set; }
-
-        public String MeasureName { get; set; }
-
-        public IEnumerable<CreateViewDimensionModel> DimensionModels { get; set; }
-
-        public IEnumerable<SelectListItem> Dimensions { get; set; }
-        
         [Required]
-        [DisplayName("Selected Dimensions")]
-        public IEnumerable<int> SelectedDimensionIDs { get; set; }
+        [DisplayName("Measure Breakdown")]
+        public int SelectedMeasureBreakdown { get; set; }
 
-    }
-
-    public class CreateViewDimensionModelList : BaseModel
-    {
-        public List<CreateViewDimensionModel> Models { get; set; }
-    }
-
-    public class CreateViewDimensionModel
-    {
-        public String ViewName { get; set; }
-
-        public String MeasureName { get; set; }
-
-        public String DimensionName { get; set; }
-
-        public int DimensionID { get; set; }
-        
         public IEnumerable<SelectListItem> DimensionValues { get; set; }
 
         [Required]
-        [DisplayName("Selected Dimension Values")]
-        public IEnumerable<int> SelectedDimensionValueIDs { get; set; }
+        [DisplayName("Dimension Value")]
+        public int SelectedDimensionValue { get; set; }
     }
 
-    /// <summary>
-    /// Model used to create a template for a custom view. This is structured around the way in which
-    /// the template will be generated and features a hierarchy of 3 model classes.
-    /// </summary>
-    public class CreateViewCompleteModel
+    public class ViewColumnModel : BaseModel
     {
-        public String ViewName { get; set; }
+        [Required]
+        [DisplayName("Column Name")]
+        public String ColumnName { get; set; }
 
-        public IEnumerable<CreateViewMeasureDimensionModel> Measures { get; set; }
-    }
+        [Required]
+        [DisplayName("Measure")]
+        public String SelectedMeasure { get; set; }
 
-    public class CreateViewMeasureDimensionModel
-    {
-        public int MeasureID {get; set;}
-        public String MeasureName { get; set; }
-        public IEnumerable<String> DimensionValues { get{return Dimensions.SelectMany(x => x.DimensionValues);} }
-        public IEnumerable<CreateViewDimValueModel> Dimensions {get; set;}
-    }
+        public int SelectedMeasureID { get; set; }
 
-    public class CreateViewDimValueModel
-    {
-        public int DimensionID {get; set;}
-        public IEnumerable<int>  DimensionValueIDs{ get; set;}
-        public IEnumerable<String> DimensionValues { get; set; }
+        [Required]
+        [DisplayName("Measure Breakdown")]
+        public String SelectedMeasureBreakdown { get; set; }
+
+        public int SelectedMeasureBreakdownID { get; set; }
+
+        [Required]
+        [DisplayName("Dimension Value")]
+        public String SelectedDimensionValue { get; set; }
+
+        public int SelectedDimensionValueID { get; set; }
     }
-   
 }

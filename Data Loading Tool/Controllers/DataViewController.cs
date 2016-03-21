@@ -65,57 +65,23 @@ namespace Data_Loading_Tool.Controllers
 
             return View(model);
         }
-
+      
         /// <summary>
-        /// A controller method to access the first page of the Create 
-        /// Custom View process. This needs no parameters. 
-        /// 
-        /// This is accessed via /DataView/CreateViewFirstStep
+        /// A controller method to navigate to the page where users can create
+        /// a bespoke View. This populates the initial models for the view
         /// </summary>
-        /// <returns></returns>
-        public ActionResult CreateViewFirstStep()
+        /// <returns>The View to be displayed</returns>
+        public ActionResult CreateView()
         {
             DataViewDataAccess dataAccess = new DataViewDataAccess();
 
-            CreateViewModel model = dataAccess.getCreateViewModel();
+            CreateViewModel model = dataAccess.getDefaultCreateViewModel();
 
-            List<Breadcrumb> trail = new List<Breadcrumb>();
+            List<ViewColumnModel> columns = new List<ViewColumnModel>();
 
-            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
-            trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = false });
-            trail.Add(new Breadcrumb() { LinkText = "Create Data View", Action = "", Controller = "", isCurrent = true });
+            model.Columns = columns;
 
-            model.Breadcrumbs = trail;
-            
-            return View(model);
-        }
-
-        /// <summary>
-        /// A controller method that handles the postback from the
-        /// first page of the Create View process. This stores values
-        /// in the TempData store and then redirects to the second phase.
-        /// </summary>
-        /// <param name="model"> The completed model passed back from the view</param>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult CreateViewFirstStep(CreateViewModel model)
-        {
-            DataViewDataAccess dataAccess = new DataViewDataAccess();
-
-            if (dataAccess.isCreateViewModelValid(model))
-            {
-                CreateViewCompleteModel fullModel = new CreateViewCompleteModel();
-
-                fullModel.ViewName = model.ViewName;
-
-                TempData["CreateViewModel"] = model;
-                TempData["CreateViewCompleteModel"] = fullModel;
-
-                return RedirectToAction("CreateViewSecondStep");
-            }
-
-            ModelState.AddModelError("ViewName", "The Data View Name must be unique");
-            model = dataAccess.getCreateViewModel();
+            model.NewColumnModel = dataAccess.getDefaultColumnModel();
 
             List<Breadcrumb> trail = new List<Breadcrumb>();
 
@@ -126,149 +92,113 @@ namespace Data_Loading_Tool.Controllers
             model.Breadcrumbs = trail;
 
             return View(model);
-            
         }
 
         /// <summary>
-        /// A controller method which displays the view for the 
-        /// second stage of the process to create a Custom View. 
-        /// The data needed to do this is held in the TempData store initially
+        ///     Postback method that handles the creation of the Data View. If the model is valid
+        ///     then it creates the view and redirects back to the Index page. If it is not then
+        ///     the Create View screen is displayed with an appropriate message to the user.
         /// </summary>
-        /// <returns></returns>
-        public ActionResult CreateViewSecondStep()
-        {
-            DataViewDataAccess dataAccess = new DataViewDataAccess();
-
-            CreateViewModel model = (CreateViewModel)TempData["CreateViewModel"];
-
-            CreateViewMeasureModelList listModel = new CreateViewMeasureModelList();
-
-            List<CreateViewMeasureModel> models = dataAccess.getViewMeasureModels(model.SelectedMeasureIDs).ToList();
-
-            listModel.Models = models;
-
-            List<Breadcrumb> trail = new List<Breadcrumb>();
-
-            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
-            trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = false });
-            trail.Add(new Breadcrumb() { LinkText = "Create Data View", Action = "", Controller = "", isCurrent = true });
-
-            listModel.Breadcrumbs = trail;
-
-            return View(listModel);
-        }
-
-        /// <summary>
-        /// The postback method for the second stage in the process to create
-        /// a Custom View. This places the necessary data into the TempData
-        /// store for access in the third stage.
-        /// </summary>
-        /// <param name="models">The data entered at the second stage of the process</param>
-        /// <returns></returns>
+        /// <param name="model">A completed model</param>
+        /// <returns>The view to display</returns>
         [HttpPost]
-        public ActionResult CreateViewSecondStep(List<CreateViewMeasureModel> models)
-        {
-            CreateViewCompleteModel fullModel = (CreateViewCompleteModel)TempData["CreateViewCompleteModel"];
-
-            DataViewDataAccess dataAccess = new DataViewDataAccess();
-
-            fullModel.Measures = dataAccess.convertMeasureViewModelsToDBModels(models);
-
-            TempData["CreateViewCompleteModel"] = fullModel;
-
-            TempData["SecondStepModels"] = models;
-
-            return RedirectToAction("CreateViewThirdStep");
-
-        }
-
-        /// <summary>
-        /// A controller method which displays the view for the 
-        /// third and final stage of the process to create a Custom View. 
-        /// The data needed to do this is held in the TempData store initially
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult CreateViewThirdStep()
+        public ActionResult CreateView(CreateViewModel model)
         {
             DataViewDataAccess dataAccess = new DataViewDataAccess();
 
-            IEnumerable<CreateViewMeasureModel> measureIDs = (IEnumerable<CreateViewMeasureModel>)TempData["SecondStepModels"];
-            List<CreateViewDimensionModel> models = new List<CreateViewDimensionModel>();
-
-            foreach (CreateViewMeasureModel measure in measureIDs)
+            if (!dataAccess.isCreateViewModelValid(model))
             {
-                if (measure.SelectedDimensionIDs != null)
-                {
-                    foreach (int dimID in measure.SelectedDimensionIDs)
-                    {
-                        CreateViewDimensionModel model = dataAccess.getViewDimensionModels(dimID);
-                        model.MeasureName = measure.MeasureName;
-                        models.Add(model);
-                    }
-                }
-                
-            }
+                ModelState.AddModelError("ViewName", "The View Name must be unique");
 
-            CreateViewDimensionModelList listModel = new CreateViewDimensionModelList();
+                CreateViewModel tempModel = dataAccess.getDefaultCreateViewModel();
 
-            listModel.Models = models;
+                model.GeographyTypes = tempModel.GeographyTypes;
 
-            List<Breadcrumb> trail = new List<Breadcrumb>();
+                model.NewColumnModel = dataAccess.getDefaultColumnModel();
 
-            trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
-            trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = false });
-            trail.Add(new Breadcrumb() { LinkText = "Create Data View", Action = "", Controller = "", isCurrent = true });
+                List<Breadcrumb> trail = new List<Breadcrumb>();
 
-            listModel.Breadcrumbs = trail;
+                trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Create Data View", Action = "", Controller = "", isCurrent = true });
 
-            return View(listModel);
-        }
-
-        /// <summary>
-        /// A controller method to handle the postback from the final stage in the process
-        /// to create a custom view. This takes back the data from the view and 
-        /// passes it to the Data Access classes, before redirecting back to the 
-        /// main Data View index page.
-        /// </summary>
-        /// <param name="models">The data entered into the view</param>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult CreateViewThirdStep(List<CreateViewDimensionModel> models)
-        {
-            CreateViewCompleteModel fullModel = (CreateViewCompleteModel)TempData["CreateViewCompleteModel"];
-
-            DataViewDataAccess dataAccess = new DataViewDataAccess();
-
-            foreach (CreateViewMeasureDimensionModel item in fullModel.Measures)
-            {                
-                item.Dimensions = dataAccess.convertDimensionViewModelsToDBModels(models, item.MeasureID);
+                model.Breadcrumbs = trail;
+                return View(model);
             }
 
             try
             {
-                dataAccess.createBespokeView(fullModel);
+                dataAccess.CreateView(model);
             }
             catch (SqlException)
             {
-                List<CreateViewDimensionModel> newModels = new List<CreateViewDimensionModel>();
+                ModelState.AddModelError("", "An error occured when creating the Data View. Please ensure that the Data View Name is unique and that the columns are uniquely named within it.");
 
-                foreach (CreateViewDimensionModel x in models)
-                {
-                    CreateViewDimensionModel model = dataAccess.getViewDimensionModels(x.DimensionID);
-                    model.MeasureName = x.MeasureName;
-                    newModels.Add(model);
-                }
+                CreateViewModel tempModel = dataAccess.getDefaultCreateViewModel();
 
-                ModelState.AddModelError("", "An error occured when creating the view");
+                model.GeographyTypes = tempModel.GeographyTypes;
 
-                TempData["CreateViewCompleteModel"] = fullModel;
+                model.NewColumnModel = dataAccess.getDefaultColumnModel();
 
+                List<Breadcrumb> trail = new List<Breadcrumb>();
 
-                return View(newModels);                    
+                trail.Add(new Breadcrumb() { LinkText = "Home", Action = "Index", Controller = "Home", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Data View Index", Action = "Index", Controller = "DataView", isCurrent = false });
+                trail.Add(new Breadcrumb() { LinkText = "Create Data View", Action = "", Controller = "", isCurrent = true });
+
+                model.Breadcrumbs = trail;
+
+                return View(model);
             }
 
-            TempData["SuccessMessage"] = String.Format("The Data View - {0}, was successfully created", fullModel.ViewName);
+            TempData["SuccessMessage"] = String.Format("The Data View - {0}, was successfully created", model.ViewName);            
+
             return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        ///     A helper method which returns the partial view of the recently created column data
+        /// </summary>
+        /// <param name="measureID">The ID of the measure to be used</param>
+        /// <param name="measureBreakdownID">The ID of the measure Breakdown to be used</param>
+        /// <param name="dimValueID">The ID of the Dim Combination to be used</param>
+        /// <param name="newColumnName">The name of the new column to be added</param>
+        /// <returns>The Partial View that can will be added to the main view</returns>
+        public PartialViewResult AddColumnRow(int measureID, int measureBreakdownID, int dimValueID, String newColumnName)
+        {
+            DataViewDataAccess dataAccess = new DataViewDataAccess();
+
+            ViewColumnModel model = dataAccess.getColumnModel(measureID, measureBreakdownID, dimValueID, newColumnName);
+            
+            return PartialView("ViewColumnControl", model);
+        }
+
+        /// <summary>
+        ///     Helper method which is used to update the drop down
+        ///     of Measure Breakdowns based on a selected
+        ///     Measure
+        /// </summary>
+        /// <param name="measureID">The ID of the selected Measure</param>
+        /// <returns>The data to populate the drop down of Measure Breakdowns as JSON</returns>
+        public JsonResult GetMeasureBreakdownsForMeasure(int measureID)
+        {
+            DataViewDataAccess dataAccess = new DataViewDataAccess();
+
+            return Json(dataAccess.getMeasureBreakdownsForMeasure(measureID));
+        }
+
+        /// <summary>
+        ///     Helper method which is used to update the drop down
+        ///     of Dimension Set Combinations based on a selected
+        ///     Measure Breakdown
+        /// </summary>
+        /// <param name="measureBreakdownID">The ID of the selected Measure Breakdown</param>
+        /// <returns>The data to populate the drop down of Dimension Set Combinations as JSON</returns>
+        public JsonResult GetDimensionSetCombinationsForMeasureBreakdown(int measureBreakdownID)
+        {
+            DataViewDataAccess dataAccess = new DataViewDataAccess();
+
+            return Json(dataAccess.getDimensionSetCombinationsForMeasureBreakdowns(measureBreakdownID));
         }
     }
 }

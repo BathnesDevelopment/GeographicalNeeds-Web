@@ -16,7 +16,7 @@ namespace Data_Loading_Tool.Database
     {
         public Geography()
         {
-            this.FactInstances = new HashSet<FactInstance>();
+            this.MeasureInstances = new HashSet<MeasureInstance>();
         }
     
         public int GeographyID { get; set; }
@@ -41,6 +41,6 @@ namespace Data_Loading_Tool.Database
         public System.Data.Entity.Spatial.DbGeometry SP_GEOMETRY { get; set; }
     
         public virtual GeographyType GeographyType { get; set; }
-        public virtual ICollection<FactInstance> FactInstances { get; set; }
+        public virtual ICollection<MeasureInstance> MeasureInstances { get; set; }
     }
 }

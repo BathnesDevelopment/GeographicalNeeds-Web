@@ -12,13 +12,13 @@ namespace Data_Loading_Tool.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class FactDimensionMapping
+    public partial class DimensionSetMember
     {
-        public int FactDimensionMappingID { get; set; }
-        public int FactDimensionSetID { get; set; }
-        public int DimensionValueID { get; set; }
+        public int DimensionSetMemberID { get; set; }
+        public int DimensionID { get; set; }
+        public int DimensionSetID { get; set; }
     
-        public virtual DimensionValue DimensionValue { get; set; }
-        public virtual FactDimensionSet FactDimensionSet { get; set; }
+        public virtual Dimension Dimension { get; set; }
+        public virtual DimensionSet DimensionSet { get; set; }
     }
 }

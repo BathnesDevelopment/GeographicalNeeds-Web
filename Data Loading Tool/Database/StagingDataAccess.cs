@@ -21,7 +21,7 @@ namespace Data_Loading_Tool.Database
         /// </summary>
         /// <returns></returns>
         public IEnumerable<GeneralStagingModel> getStagingTables()
-        {
+        {            
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
 
             IEnumerable<GeneralStagingModel> tables = context.StagingDatasets.Select(x => new GeneralStagingModel() { TableName = x.DatasetName, TableID = x.StagingDatasetID });            
@@ -77,13 +77,33 @@ namespace Data_Loading_Tool.Database
         /// <returns></returns>
         public StagingDetailModel getStagingDetails(int datasetID)
         {
+            DataTable dt;
+            SqlDataAdapter sda;
+
             StagingDetailModel model = new StagingDetailModel();
 
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
 
             model.StagingDatasetName = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).DatasetName;
 
-            model.Columns = context.StagingDatasets.Single(x => x.StagingDatasetID.Equals(datasetID)).StagingColumns.Select(x => x.ColumnName);
+            List<String> columns = context.StagingColumns.Where(x => x.StagingDatasetID.Equals(datasetID)).Select(x => x.ColumnName).ToList();
+
+            String sql = String.Format("Select {1} from [{0}]", model.StagingDatasetName, String.Join(",", columns.Select(x => String.Format("[{0}]", x))));
+
+            using (SqlConnection connection = new SqlConnection(
+               context.Database.Connection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand(sql, connection);
+                command.Connection.Open();
+
+                sda = new SqlDataAdapter(command);
+                dt = new DataTable("Results");
+                sda.Fill(dt);
+            }
+
+            context.Dispose();
+
+            model.Data = dt;
 
             return model;
         }

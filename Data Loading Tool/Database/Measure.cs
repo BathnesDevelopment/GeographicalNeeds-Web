@@ -12,18 +12,16 @@ namespace Data_Loading_Tool.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class DimensionValue
+    public partial class Measure
     {
-        public DimensionValue()
+        public Measure()
         {
-            this.DimensionSetCombinationMembers = new HashSet<DimensionSetCombinationMember>();
+            this.MeasureBreakdowns = new HashSet<MeasureBreakdown>();
         }
     
-        public int DimensionValueID { get; set; }
-        public int DimensionID { get; set; }
-        public string DimensionValue1 { get; set; }
+        public int MeasureID { get; set; }
+        public string MeasureName { get; set; }
     
-        public virtual Dimension Dimension { get; set; }
-        public virtual ICollection<DimensionSetCombinationMember> DimensionSetCombinationMembers { get; set; }
+        public virtual ICollection<MeasureBreakdown> MeasureBreakdowns { get; set; }
     }
 }

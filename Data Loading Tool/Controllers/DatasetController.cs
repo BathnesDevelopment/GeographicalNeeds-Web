@@ -26,7 +26,7 @@ namespace Data_Loading_Tool.Controllers
         {
             DatasetDataAccess dataAccess = new DatasetDataAccess();
 
-            CreateDimensionModel model = dataAccess.populateCreateDimensionModel(stagingDatasetID);
+            CreateDimensionModel model = dataAccess.PopulateCreateDimensionModel(stagingDatasetID);
 
             List<Breadcrumb> trail = new List<Breadcrumb>();
 
@@ -52,11 +52,11 @@ namespace Data_Loading_Tool.Controllers
         {
             DatasetDataAccess dataAccess = new DatasetDataAccess();
 
-            if (!dataAccess.isCreateDimensionModelValid(model))
+            if (!dataAccess.IsCreateDimensionModelValid(model))
             {
                 ModelState.AddModelError("DimensionName", "The Dimension Name must be unique");
 
-                model = dataAccess.populateCreateDimensionModel(model.StagingDatasetID);
+                model = dataAccess.PopulateCreateDimensionModel(model.StagingDatasetID);
 
                 List<Breadcrumb> trail = new List<Breadcrumb>();
 
@@ -71,13 +71,13 @@ namespace Data_Loading_Tool.Controllers
 
             try
             {
-                dataAccess.createDimension(model);
+                dataAccess.CreateDimension(model);
             }
             catch (SqlException)
             {
                 ModelState.AddModelError("", "An error occured when creating the dimension. Please ensure that the Dimension Name is unique and that the values are unique within it.");
 
-                model = dataAccess.populateCreateDimensionModel(model.StagingDatasetID);
+                model = dataAccess.PopulateCreateDimensionModel(model.StagingDatasetID);
 
                 List<Breadcrumb> trail = new List<Breadcrumb>();
 

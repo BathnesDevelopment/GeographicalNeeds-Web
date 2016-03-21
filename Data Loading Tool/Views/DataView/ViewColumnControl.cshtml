@@ -1,0 +1,25 @@
+﻿@model Data_Loading_Tool.Models.ViewColumnModel
+
+@using (Html.BeginCollectionItem("Columns"))
+{
+    <div class="form-group">        
+        @Html.HiddenFor(x => Model.ColumnName)
+        @Html.DisplayFor(x => Model.ColumnName)
+    </div>
+    <div class="form-group">
+        @Html.HiddenFor(x => Model.SelectedMeasureID)
+        @Html.HiddenFor(x => Model.SelectedMeasure)
+        @Html.DisplayFor(x => Model.SelectedMeasure)       
+    </div>
+    <div class="form-group">
+        @Html.HiddenFor(x => Model.SelectedMeasureBreakdownID)
+        @Html.HiddenFor(x => Model.SelectedMeasureBreakdown)
+        @Html.DisplayFor(x => Model.SelectedMeasureBreakdown)        
+    </div>
+    <div class="form-group">
+        @Html.HiddenFor(x => Model.SelectedDimensionValueID)
+        @Html.HiddenFor(x => Model.SelectedDimensionValue)
+        @Html.DisplayFor(x => Model.SelectedDimensionValue)        
+    </div>
+}
+

@@ -4,33 +4,53 @@
     ViewBag.Title = "Staging Table Details";
 }
 
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/Content/dataTables.tableTools.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.dataTables.min.JS"></script>
+    <script src="~/Scripts/dataTables.tableTools.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#dataView').DataTable(
+                                    {
+                                        dom: 'T<"clear">lfrtip',
+                                        "orderClasses": false,
+                                        tableTools: { "sSwfPath": "../Content/copy_csv_xls_pdf.swf" }
+                                    }
+                                    );
+
+        });
+    </script>
+}
 <h2>Staging Table Details</h2>
 
-<fieldset>
-    <legend>DatasetDetailModel</legend>
+<table border="1" cellpadding="5" id="dataView" class="table display" cellspacing="0">
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.StagingDatasetName)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.StagingDatasetName)
-    </div>
-    <br />
-    
-    <div class="display-label">
-        Columns
-    </div>
-        @foreach (var column in Model.Columns)
+    <thead>
+        <tr>
+            @foreach (System.Data.DataColumn col in Model.Data.Columns)
+            {
+                <th>@col.Caption</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (System.Data.DataRow row in Model.Data.Rows)
         {
-            <div class="display-field">
-                @Html.DisplayFor(model => column)
-            </div>
+            <tr>
+                @foreach (var cell in row.ItemArray)
+                {
+                    <td>@cell.ToString()</td>
+                }
+            </tr>
         }
-</fieldset>
+    </tbody>
+</table>
+
 <p>
     @Html.ActionLink("Back to List", "Index", new { }, new { @class = "btn" })
 </p>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

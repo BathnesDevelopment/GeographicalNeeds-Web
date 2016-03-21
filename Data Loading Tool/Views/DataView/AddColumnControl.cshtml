@@ -1,0 +1,35 @@
+﻿@model Data_Loading_Tool.Models.CreateViewColumnModel
+
+@using (Html.BeginCollectionItem("Columns"))
+{
+    <div class="form-group">
+        @Html.RequiredLabelFor(model => model.ColummName, new { @class = "control-label" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => Model.ColummName, new { @class = "form-control", id = "ColumnName" })
+        @Html.ValidationMessageFor(model => model.ColummName)
+    </div>
+    <div class="form-group">
+        @Html.RequiredLabelFor(model => model.SelectedMeasure, new { @class = "control-label" })
+    </div>
+    <div class="form-group">
+        @Html.DropDownListFor(x => Model.SelectedMeasure, Model.Measures, "Please choose a Measure", new { @class = "form-control", id = "NewMeasures" })
+        @Html.ValidationMessageFor(model => model.SelectedMeasure)
+    </div>
+    <div class="form-group">
+        @Html.RequiredLabelFor(model => model.SelectedMeasureBreakdown, new { @class = "control-label" })
+    </div>
+    <div class="form-group">
+        @Html.DropDownListFor(x => Model.SelectedMeasureBreakdown, Model.MeasureBreakdowns, "Please choose a Measure Breakdown", new { @class = "form-control", id = "NewBreakdowns" })
+        @Html.ValidationMessageFor(model => model.SelectedMeasureBreakdown)
+    </div>
+    <div class="form-group">
+        @Html.RequiredLabelFor(model => model.SelectedDimensionValue, new { @class = "control-label" })
+    </div>
+    <div class="form-group">
+        @Html.DropDownListFor(x => Model.SelectedDimensionValue, Model.DimensionValues, "Please choose a Dimension Value set", new { @class = "form-control", id = "NewDimensionValues" })
+        @Html.ValidationMessageFor(model => model.SelectedDimensionValue)
+    </div>
+}
+
+

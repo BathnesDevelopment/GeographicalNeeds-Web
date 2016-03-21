@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel;
+using System.Data;
 namespace Data_Loading_Tool.Models
 {
     /// <summary>
@@ -14,7 +15,7 @@ namespace Data_Loading_Tool.Models
         [DisplayName("Staging Dataset Name")]
         public String StagingDatasetName { get; set; }
 
-        public IEnumerable<String> Columns { get; set; }
+        public DataTable Data { get; set; }
 
     }
 }

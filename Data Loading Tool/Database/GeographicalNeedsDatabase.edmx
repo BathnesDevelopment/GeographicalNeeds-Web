@@ -1,0 +1,974 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DataViewColumn">
+          <Key>
+            <PropertyRef Name="DataViewColumnID" />
+          </Key>
+          <Property Name="DataViewColumnID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DataViewID" Type="int" Nullable="false" />
+          <Property Name="ColumnName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DataViews">
+          <Key>
+            <PropertyRef Name="DataViewID" />
+          </Key>
+          <Property Name="DataViewID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ViewName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Dimension">
+          <Key>
+            <PropertyRef Name="DimensionID" />
+          </Key>
+          <Property Name="DimensionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DimensionName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DimensionSet">
+          <Key>
+            <PropertyRef Name="DimensionSetID" />
+          </Key>
+          <Property Name="DimensionSetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DimensionSetName" Type="varchar" MaxLength="1000" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DimensionSetCombination">
+          <Key>
+            <PropertyRef Name="DimensionSetCombinationID" />
+          </Key>
+          <Property Name="DimensionSetCombinationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DimensionSetID" Type="int" Nullable="false" />
+          <Property Name="DimensionSetCombinationName" Type="varchar" MaxLength="1000" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DimensionSetCombinationMember">
+          <Key>
+            <PropertyRef Name="DimensionSetCombinationMember" />
+          </Key>
+          <Property Name="DimensionSetCombinationMember" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DimensionSetCombinationID" Type="int" Nullable="false" />
+          <Property Name="DimensionValueID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DimensionSetMember">
+          <Key>
+            <PropertyRef Name="DimensionSetMemberID" />
+          </Key>
+          <Property Name="DimensionSetMemberID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DimensionID" Type="int" Nullable="false" />
+          <Property Name="DimensionSetID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DimensionValue">
+          <Key>
+            <PropertyRef Name="DimensionValueID" />
+          </Key>
+          <Property Name="DimensionValueID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DimensionID" Type="int" Nullable="false" />
+          <Property Name="DimensionValue" Type="varchar" MaxLength="800" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Geography">
+          <Key>
+            <PropertyRef Name="GeographyID" />
+          </Key>
+          <Property Name="GeographyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GeographyTypeID" Type="int" />
+          <Property Name="MsoaCode" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MsoaName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="WardCode" Type="varchar" MaxLength="20" />
+          <Property Name="WardName" Type="varchar" MaxLength="50" />
+          <Property Name="LsoaCode" Type="varchar" MaxLength="20" />
+          <Property Name="LsoaName" Type="varchar" MaxLength="50" />
+          <Property Name="Postcode" Type="varchar" MaxLength="20" />
+          <Property Name="UPRN" Type="float" />
+          <Property Name="USRN" Type="float" />
+          <Property Name="NAMENUMBER" Type="nvarchar" MaxLength="300" />
+          <Property Name="STREET" Type="nvarchar" MaxLength="100" />
+          <Property Name="LOCATION" Type="nvarchar" MaxLength="50" />
+          <Property Name="TOWN" Type="nvarchar" MaxLength="50" />
+          <Property Name="EASTING" Type="numeric" Precision="22" Scale="4" />
+          <Property Name="NORTHING" Type="numeric" Precision="22" Scale="4" />
+          <Property Name="LATITUDE" Type="float" />
+          <Property Name="LONGITUDE" Type="float" />
+          <Property Name="SP_GEOMETRY" Type="geometry" />
+        </EntityType>
+        <EntityType Name="GeographyType">
+          <Key>
+            <PropertyRef Name="GeographyTypeID" />
+          </Key>
+          <Property Name="GeographyTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GeographyType" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="OrderInHierarchy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Measure">
+          <Key>
+            <PropertyRef Name="MeasureID" />
+          </Key>
+          <Property Name="MeasureID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MeasureName" Type="varchar" MaxLength="1000" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MeasureBreakdown">
+          <Key>
+            <PropertyRef Name="MeasureBreakdownID" />
+          </Key>
+          <Property Name="MeasureBreakdownID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MeasureBreakdownName" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="MeasureID" Type="int" Nullable="false" />
+          <Property Name="DimensionSetID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MeasureInstance">
+          <Key>
+            <PropertyRef Name="MeasureInstanceID" />
+          </Key>
+          <Property Name="MeasureInstanceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MeasureBreakdownID" Type="int" Nullable="false" />
+          <Property Name="DimensionSetCombinationID" Type="int" Nullable="false" />
+          <Property Name="GeographyID" Type="int" />
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="LoadReference" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StagingColumns">
+          <Key>
+            <PropertyRef Name="StagingColumnID" />
+          </Key>
+          <Property Name="StagingColumnID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StagingDatasetID" Type="int" Nullable="false" />
+          <Property Name="ColumnName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StagingDatasets">
+          <Key>
+            <PropertyRef Name="StagingDatasetID" />
+          </Key>
+          <Property Name="StagingDatasetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DatasetName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__DataViewC__DataV__3D5E1FD2">
+          <End Role="DataViews" Type="Self.DataViews" Multiplicity="1" />
+          <End Role="DataViewColumn" Type="Self.DataViewColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DataViews">
+              <PropertyRef Name="DataViewID" />
+            </Principal>
+            <Dependent Role="DataViewColumn">
+              <PropertyRef Name="DataViewID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__1920BF5C">
+          <End Role="Dimension" Type="Self.Dimension" Multiplicity="1" />
+          <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dimension">
+              <PropertyRef Name="DimensionID" />
+            </Principal>
+            <Dependent Role="DimensionValue">
+              <PropertyRef Name="DimensionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__1DE57479">
+          <End Role="Dimension" Type="Self.Dimension" Multiplicity="1" />
+          <End Role="DimensionSetMember" Type="Self.DimensionSetMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dimension">
+              <PropertyRef Name="DimensionID" />
+            </Principal>
+            <Dependent Role="DimensionSetMember">
+              <PropertyRef Name="DimensionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__1ED998B2">
+          <End Role="DimensionSet" Type="Self.DimensionSet" Multiplicity="1" />
+          <End Role="DimensionSetMember" Type="Self.DimensionSetMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionSet">
+              <PropertyRef Name="DimensionSetID" />
+            </Principal>
+            <Dependent Role="DimensionSetMember">
+              <PropertyRef Name="DimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__21B6055D">
+          <End Role="DimensionSet" Type="Self.DimensionSet" Multiplicity="1" />
+          <End Role="DimensionSetCombination" Type="Self.DimensionSetCombination" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionSet">
+              <PropertyRef Name="DimensionSetID" />
+            </Principal>
+            <Dependent Role="DimensionSetCombination">
+              <PropertyRef Name="DimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__24927208">
+          <End Role="DimensionSetCombination" Type="Self.DimensionSetCombination" Multiplicity="1" />
+          <End Role="DimensionSetCombinationMember" Type="Self.DimensionSetCombinationMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionSetCombination">
+              <PropertyRef Name="DimensionSetCombinationID" />
+            </Principal>
+            <Dependent Role="DimensionSetCombinationMember">
+              <PropertyRef Name="DimensionSetCombinationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__25869641">
+          <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="1" />
+          <End Role="DimensionSetCombinationMember" Type="Self.DimensionSetCombinationMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionValue">
+              <PropertyRef Name="DimensionValueID" />
+            </Principal>
+            <Dependent Role="DimensionSetCombinationMember">
+              <PropertyRef Name="DimensionValueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Geography__Geogr__1273C1CD">
+          <End Role="GeographyType" Type="Self.GeographyType" Multiplicity="0..1" />
+          <End Role="Geography" Type="Self.Geography" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeographyType">
+              <PropertyRef Name="GeographyTypeID" />
+            </Principal>
+            <Dependent Role="Geography">
+              <PropertyRef Name="GeographyTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MeasureBr__Dimen__534D60F1">
+          <End Role="DimensionSet" Type="Self.DimensionSet" Multiplicity="1" />
+          <End Role="MeasureBreakdown" Type="Self.MeasureBreakdown" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionSet">
+              <PropertyRef Name="DimensionSetID" />
+            </Principal>
+            <Dependent Role="MeasureBreakdown">
+              <PropertyRef Name="DimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MeasureBr__Measu__52593CB8">
+          <End Role="Measure" Type="Self.Measure" Multiplicity="1" />
+          <End Role="MeasureBreakdown" Type="Self.MeasureBreakdown" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Measure">
+              <PropertyRef Name="MeasureID" />
+            </Principal>
+            <Dependent Role="MeasureBreakdown">
+              <PropertyRef Name="MeasureID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MeasureIn__Dimen__571DF1D5">
+          <End Role="DimensionSetCombination" Type="Self.DimensionSetCombination" Multiplicity="1" />
+          <End Role="MeasureInstance" Type="Self.MeasureInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionSetCombination">
+              <PropertyRef Name="DimensionSetCombinationID" />
+            </Principal>
+            <Dependent Role="MeasureInstance">
+              <PropertyRef Name="DimensionSetCombinationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MeasureIn__Geogr__5812160E">
+          <End Role="Geography" Type="Self.Geography" Multiplicity="0..1" />
+          <End Role="MeasureInstance" Type="Self.MeasureInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Geography">
+              <PropertyRef Name="GeographyID" />
+            </Principal>
+            <Dependent Role="MeasureInstance">
+              <PropertyRef Name="GeographyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MeasureIn__Measu__5629CD9C">
+          <End Role="MeasureBreakdown" Type="Self.MeasureBreakdown" Multiplicity="1" />
+          <End Role="MeasureInstance" Type="Self.MeasureInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MeasureBreakdown">
+              <PropertyRef Name="MeasureBreakdownID" />
+            </Principal>
+            <Dependent Role="MeasureInstance">
+              <PropertyRef Name="MeasureBreakdownID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StagingCo__Stagi__36B12243">
+          <End Role="StagingDatasets" Type="Self.StagingDatasets" Multiplicity="1" />
+          <End Role="StagingColumns" Type="Self.StagingColumns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StagingDatasets">
+              <PropertyRef Name="StagingDatasetID" />
+            </Principal>
+            <Dependent Role="StagingColumns">
+              <PropertyRef Name="StagingDatasetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Model1StoreContainer">
+          <EntitySet Name="DataViewColumn" EntityType="Self.DataViewColumn" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DataViews" EntityType="Self.DataViews" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dimension" EntityType="Self.Dimension" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DimensionSet" EntityType="Self.DimensionSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DimensionSetCombination" EntityType="Self.DimensionSetCombination" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DimensionSetCombinationMember" EntityType="Self.DimensionSetCombinationMember" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DimensionSetMember" EntityType="Self.DimensionSetMember" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DimensionValue" EntityType="Self.DimensionValue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Geography" EntityType="Self.Geography" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GeographyType" EntityType="Self.GeographyType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Measure" EntityType="Self.Measure" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MeasureBreakdown" EntityType="Self.MeasureBreakdown" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MeasureInstance" EntityType="Self.MeasureInstance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StagingColumns" EntityType="Self.StagingColumns" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StagingDatasets" EntityType="Self.StagingDatasets" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__DataViewC__DataV__3D5E1FD2" Association="Self.FK__DataViewC__DataV__3D5E1FD2">
+            <End Role="DataViews" EntitySet="DataViews" />
+            <End Role="DataViewColumn" EntitySet="DataViewColumn" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__1920BF5C" Association="Self.FK__Dimension__Dimen__1920BF5C">
+            <End Role="Dimension" EntitySet="Dimension" />
+            <End Role="DimensionValue" EntitySet="DimensionValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__1DE57479" Association="Self.FK__Dimension__Dimen__1DE57479">
+            <End Role="Dimension" EntitySet="Dimension" />
+            <End Role="DimensionSetMember" EntitySet="DimensionSetMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__1ED998B2" Association="Self.FK__Dimension__Dimen__1ED998B2">
+            <End Role="DimensionSet" EntitySet="DimensionSet" />
+            <End Role="DimensionSetMember" EntitySet="DimensionSetMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__21B6055D" Association="Self.FK__Dimension__Dimen__21B6055D">
+            <End Role="DimensionSet" EntitySet="DimensionSet" />
+            <End Role="DimensionSetCombination" EntitySet="DimensionSetCombination" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__24927208" Association="Self.FK__Dimension__Dimen__24927208">
+            <End Role="DimensionSetCombination" EntitySet="DimensionSetCombination" />
+            <End Role="DimensionSetCombinationMember" EntitySet="DimensionSetCombinationMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__25869641" Association="Self.FK__Dimension__Dimen__25869641">
+            <End Role="DimensionValue" EntitySet="DimensionValue" />
+            <End Role="DimensionSetCombinationMember" EntitySet="DimensionSetCombinationMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Geography__Geogr__1273C1CD" Association="Self.FK__Geography__Geogr__1273C1CD">
+            <End Role="GeographyType" EntitySet="GeographyType" />
+            <End Role="Geography" EntitySet="Geography" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MeasureBr__Dimen__534D60F1" Association="Self.FK__MeasureBr__Dimen__534D60F1">
+            <End Role="DimensionSet" EntitySet="DimensionSet" />
+            <End Role="MeasureBreakdown" EntitySet="MeasureBreakdown" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MeasureBr__Measu__52593CB8" Association="Self.FK__MeasureBr__Measu__52593CB8">
+            <End Role="Measure" EntitySet="Measure" />
+            <End Role="MeasureBreakdown" EntitySet="MeasureBreakdown" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MeasureIn__Dimen__571DF1D5" Association="Self.FK__MeasureIn__Dimen__571DF1D5">
+            <End Role="DimensionSetCombination" EntitySet="DimensionSetCombination" />
+            <End Role="MeasureInstance" EntitySet="MeasureInstance" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MeasureIn__Geogr__5812160E" Association="Self.FK__MeasureIn__Geogr__5812160E">
+            <End Role="Geography" EntitySet="Geography" />
+            <End Role="MeasureInstance" EntitySet="MeasureInstance" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MeasureIn__Measu__5629CD9C" Association="Self.FK__MeasureIn__Measu__5629CD9C">
+            <End Role="MeasureBreakdown" EntitySet="MeasureBreakdown" />
+            <End Role="MeasureInstance" EntitySet="MeasureInstance" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StagingCo__Stagi__36B12243" Association="Self.FK__StagingCo__Stagi__36B12243">
+            <End Role="StagingDatasets" EntitySet="StagingDatasets" />
+            <End Role="StagingColumns" EntitySet="StagingColumns" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DataViewColumn">
+          <Key>
+            <PropertyRef Name="DataViewColumnID" />
+          </Key>
+          <Property Name="DataViewColumnID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DataViewID" Type="Int32" Nullable="false" />
+          <Property Name="ColumnName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DataView" Relationship="Self.FK__DataViewC__DataV__3D5E1FD2" FromRole="DataViewColumn" ToRole="DataViews" />
+        </EntityType>
+        <EntityType Name="DataView">
+          <Key>
+            <PropertyRef Name="DataViewID" />
+          </Key>
+          <Property Name="DataViewID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ViewName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DataViewColumns" Relationship="Self.FK__DataViewC__DataV__3D5E1FD2" FromRole="DataViews" ToRole="DataViewColumn" />
+        </EntityType>
+        <EntityType Name="Dimension">
+          <Key>
+            <PropertyRef Name="DimensionID" />
+          </Key>
+          <Property Name="DimensionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DimensionName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DimensionValues" Relationship="Self.FK__Dimension__Dimen__1920BF5C" FromRole="Dimension" ToRole="DimensionValue" />
+          <NavigationProperty Name="DimensionSetMembers" Relationship="Self.FK__Dimension__Dimen__1DE57479" FromRole="Dimension" ToRole="DimensionSetMember" />
+        </EntityType>
+        <EntityType Name="DimensionSet">
+          <Key>
+            <PropertyRef Name="DimensionSetID" />
+          </Key>
+          <Property Name="DimensionSetID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DimensionSetName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DimensionSetMembers" Relationship="Self.FK__Dimension__Dimen__1ED998B2" FromRole="DimensionSet" ToRole="DimensionSetMember" />
+          <NavigationProperty Name="DimensionSetCombinations" Relationship="Self.FK__Dimension__Dimen__21B6055D" FromRole="DimensionSet" ToRole="DimensionSetCombination" />
+          <NavigationProperty Name="MeasureBreakdowns" Relationship="Self.FK__MeasureBr__Dimen__2B3F6F97" FromRole="DimensionSet" ToRole="MeasureBreakdown" />
+        </EntityType>
+        <EntityType Name="DimensionSetCombination">
+          <Key>
+            <PropertyRef Name="DimensionSetCombinationID" />
+          </Key>
+          <Property Name="DimensionSetCombinationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DimensionSetID" Type="Int32" Nullable="false" />
+          <Property Name="DimensionSetCombinationName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DimensionSet" Relationship="Self.FK__Dimension__Dimen__21B6055D" FromRole="DimensionSetCombination" ToRole="DimensionSet" />
+          <NavigationProperty Name="DimensionSetCombinationMembers" Relationship="Self.FK__Dimension__Dimen__24927208" FromRole="DimensionSetCombination" ToRole="DimensionSetCombinationMember" />
+          <NavigationProperty Name="MeasureInstances" Relationship="Model1.FK__MeasureIn__Dimen__571DF1D5" FromRole="DimensionSetCombination" ToRole="MeasureInstance" />
+        </EntityType>
+        <EntityType Name="DimensionSetCombinationMember">
+          <Key>
+            <PropertyRef Name="DimensionSetCombinationMember1" />
+          </Key>
+          <Property Name="DimensionSetCombinationMember1" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DimensionSetCombinationID" Type="Int32" Nullable="false" />
+          <Property Name="DimensionValueID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DimensionSetCombination" Relationship="Self.FK__Dimension__Dimen__24927208" FromRole="DimensionSetCombinationMember" ToRole="DimensionSetCombination" />
+          <NavigationProperty Name="DimensionValue" Relationship="Self.FK__Dimension__Dimen__25869641" FromRole="DimensionSetCombinationMember" ToRole="DimensionValue" />
+        </EntityType>
+        <EntityType Name="DimensionSetMember">
+          <Key>
+            <PropertyRef Name="DimensionSetMemberID" />
+          </Key>
+          <Property Name="DimensionSetMemberID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DimensionID" Type="Int32" Nullable="false" />
+          <Property Name="DimensionSetID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Dimension" Relationship="Self.FK__Dimension__Dimen__1DE57479" FromRole="DimensionSetMember" ToRole="Dimension" />
+          <NavigationProperty Name="DimensionSet" Relationship="Self.FK__Dimension__Dimen__1ED998B2" FromRole="DimensionSetMember" ToRole="DimensionSet" />
+        </EntityType>
+        <EntityType Name="DimensionValue">
+          <Key>
+            <PropertyRef Name="DimensionValueID" />
+          </Key>
+          <Property Name="DimensionValueID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DimensionID" Type="Int32" Nullable="false" />
+          <Property Name="DimensionValue1" Type="String" MaxLength="800" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Dimension" Relationship="Self.FK__Dimension__Dimen__1920BF5C" FromRole="DimensionValue" ToRole="Dimension" />
+          <NavigationProperty Name="DimensionSetCombinationMembers" Relationship="Self.FK__Dimension__Dimen__25869641" FromRole="DimensionValue" ToRole="DimensionSetCombinationMember" />
+        </EntityType>
+        <EntityType Name="Geography">
+          <Key>
+            <PropertyRef Name="GeographyID" />
+          </Key>
+          <Property Name="GeographyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GeographyTypeID" Type="Int32" />
+          <Property Name="MsoaCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MsoaName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WardCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="WardName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LsoaCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LsoaName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Postcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="UPRN" Type="Double" />
+          <Property Name="USRN" Type="Double" />
+          <Property Name="NAMENUMBER" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="STREET" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LOCATION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TOWN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EASTING" Type="Decimal" Precision="22" Scale="4" />
+          <Property Name="NORTHING" Type="Decimal" Precision="22" Scale="4" />
+          <Property Name="LATITUDE" Type="Double" />
+          <Property Name="LONGITUDE" Type="Double" />
+          <Property Name="SP_GEOMETRY" Type="Geometry" />
+          <NavigationProperty Name="GeographyType" Relationship="Self.FK__Geography__Geogr__1273C1CD" FromRole="Geography" ToRole="GeographyType" />
+          <NavigationProperty Name="MeasureInstances" Relationship="Model1.FK__MeasureIn__Geogr__5812160E" FromRole="Geography" ToRole="MeasureInstance" />
+        </EntityType>
+        <EntityType Name="GeographyType">
+          <Key>
+            <PropertyRef Name="GeographyTypeID" />
+          </Key>
+          <Property Name="GeographyTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GeographyType1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OrderInHierarchy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Geographies" Relationship="Self.FK__Geography__Geogr__1273C1CD" FromRole="GeographyType" ToRole="Geography" />
+        </EntityType>
+        <EntityType Name="Measure">
+          <Key>
+            <PropertyRef Name="MeasureID" />
+          </Key>
+          <Property Name="MeasureID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MeasureName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="MeasureBreakdowns" Relationship="Self.FK__MeasureBr__Measu__2A4B4B5E" FromRole="Measure" ToRole="MeasureBreakdown" />
+        </EntityType>
+        <EntityType Name="MeasureBreakdown">
+          <Key>
+            <PropertyRef Name="MeasureBreakdownID" />
+          </Key>
+          <Property Name="MeasureBreakdownID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MeasureBreakdownName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MeasureID" Type="Int32" Nullable="false" />
+          <Property Name="DimensionSetID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DimensionSet" Relationship="Self.FK__MeasureBr__Dimen__2B3F6F97" FromRole="MeasureBreakdown" ToRole="DimensionSet" />
+          <NavigationProperty Name="Measure" Relationship="Self.FK__MeasureBr__Measu__2A4B4B5E" FromRole="MeasureBreakdown" ToRole="Measure" />
+          <NavigationProperty Name="MeasureInstances" Relationship="Model1.FK__MeasureIn__Measu__5629CD9C" FromRole="MeasureBreakdown" ToRole="MeasureInstance" />
+        </EntityType>
+        <EntityType Name="StagingColumn">
+          <Key>
+            <PropertyRef Name="StagingColumnID" />
+          </Key>
+          <Property Name="StagingColumnID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StagingDatasetID" Type="Int32" Nullable="false" />
+          <Property Name="ColumnName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="StagingDataset" Relationship="Self.FK__StagingCo__Stagi__36B12243" FromRole="StagingColumns" ToRole="StagingDatasets" />
+        </EntityType>
+        <EntityType Name="StagingDataset">
+          <Key>
+            <PropertyRef Name="StagingDatasetID" />
+          </Key>
+          <Property Name="StagingDatasetID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DatasetName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="StagingColumns" Relationship="Self.FK__StagingCo__Stagi__36B12243" FromRole="StagingDatasets" ToRole="StagingColumns" />
+        </EntityType>
+        <Association Name="FK__DataViewC__DataV__3D5E1FD2">
+          <End Role="DataViews" Type="Self.DataView" Multiplicity="1" />
+          <End Role="DataViewColumn" Type="Self.DataViewColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DataViews">
+              <PropertyRef Name="DataViewID" />
+            </Principal>
+            <Dependent Role="DataViewColumn">
+              <PropertyRef Name="DataViewID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__1920BF5C">
+          <End Role="Dimension" Type="Self.Dimension" Multiplicity="1" />
+          <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dimension">
+              <PropertyRef Name="DimensionID" />
+            </Principal>
+            <Dependent Role="DimensionValue">
+              <PropertyRef Name="DimensionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__1DE57479">
+          <End Role="Dimension" Type="Self.Dimension" Multiplicity="1" />
+          <End Role="DimensionSetMember" Type="Self.DimensionSetMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dimension">
+              <PropertyRef Name="DimensionID" />
+            </Principal>
+            <Dependent Role="DimensionSetMember">
+              <PropertyRef Name="DimensionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__1ED998B2">
+          <End Role="DimensionSet" Type="Self.DimensionSet" Multiplicity="1" />
+          <End Role="DimensionSetMember" Type="Self.DimensionSetMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionSet">
+              <PropertyRef Name="DimensionSetID" />
+            </Principal>
+            <Dependent Role="DimensionSetMember">
+              <PropertyRef Name="DimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__21B6055D">
+          <End Role="DimensionSet" Type="Self.DimensionSet" Multiplicity="1" />
+          <End Role="DimensionSetCombination" Type="Self.DimensionSetCombination" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionSet">
+              <PropertyRef Name="DimensionSetID" />
+            </Principal>
+            <Dependent Role="DimensionSetCombination">
+              <PropertyRef Name="DimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MeasureBr__Dimen__2B3F6F97">
+          <End Role="DimensionSet" Type="Self.DimensionSet" Multiplicity="1" />
+          <End Role="MeasureBreakdown" Type="Self.MeasureBreakdown" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionSet">
+              <PropertyRef Name="DimensionSetID" />
+            </Principal>
+            <Dependent Role="MeasureBreakdown">
+              <PropertyRef Name="DimensionSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__24927208">
+          <End Role="DimensionSetCombination" Type="Self.DimensionSetCombination" Multiplicity="1" />
+          <End Role="DimensionSetCombinationMember" Type="Self.DimensionSetCombinationMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionSetCombination">
+              <PropertyRef Name="DimensionSetCombinationID" />
+            </Principal>
+            <Dependent Role="DimensionSetCombinationMember">
+              <PropertyRef Name="DimensionSetCombinationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dimension__Dimen__25869641">
+          <End Role="DimensionValue" Type="Self.DimensionValue" Multiplicity="1" />
+          <End Role="DimensionSetCombinationMember" Type="Self.DimensionSetCombinationMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionValue">
+              <PropertyRef Name="DimensionValueID" />
+            </Principal>
+            <Dependent Role="DimensionSetCombinationMember">
+              <PropertyRef Name="DimensionValueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Geography__Geogr__1273C1CD">
+          <End Role="GeographyType" Type="Self.GeographyType" Multiplicity="0..1" />
+          <End Role="Geography" Type="Self.Geography" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeographyType">
+              <PropertyRef Name="GeographyTypeID" />
+            </Principal>
+            <Dependent Role="Geography">
+              <PropertyRef Name="GeographyTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MeasureBr__Measu__2A4B4B5E">
+          <End Role="Measure" Type="Self.Measure" Multiplicity="1" />
+          <End Role="MeasureBreakdown" Type="Self.MeasureBreakdown" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Measure">
+              <PropertyRef Name="MeasureID" />
+            </Principal>
+            <Dependent Role="MeasureBreakdown">
+              <PropertyRef Name="MeasureID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StagingCo__Stagi__36B12243">
+          <End Role="StagingDatasets" Type="Self.StagingDataset" Multiplicity="1" />
+          <End Role="StagingColumns" Type="Self.StagingColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StagingDatasets">
+              <PropertyRef Name="StagingDatasetID" />
+            </Principal>
+            <Dependent Role="StagingColumns">
+              <PropertyRef Name="StagingDatasetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Geographical_NeedsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DataViewColumns" EntityType="Self.DataViewColumn" />
+          <EntitySet Name="DataViews" EntityType="Self.DataView" />
+          <EntitySet Name="Dimensions" EntityType="Self.Dimension" />
+          <EntitySet Name="DimensionSets" EntityType="Self.DimensionSet" />
+          <EntitySet Name="DimensionSetCombinations" EntityType="Self.DimensionSetCombination" />
+          <EntitySet Name="DimensionSetCombinationMembers" EntityType="Self.DimensionSetCombinationMember" />
+          <EntitySet Name="DimensionSetMembers" EntityType="Self.DimensionSetMember" />
+          <EntitySet Name="DimensionValues" EntityType="Self.DimensionValue" />
+          <EntitySet Name="Geographies" EntityType="Self.Geography" />
+          <EntitySet Name="GeographyTypes" EntityType="Self.GeographyType" />
+          <EntitySet Name="Measures" EntityType="Self.Measure" />
+          <EntitySet Name="MeasureBreakdowns" EntityType="Self.MeasureBreakdown" />
+          <EntitySet Name="StagingColumns" EntityType="Self.StagingColumn" />
+          <EntitySet Name="StagingDatasets" EntityType="Self.StagingDataset" />
+          <AssociationSet Name="FK__DataViewC__DataV__3D5E1FD2" Association="Self.FK__DataViewC__DataV__3D5E1FD2">
+            <End Role="DataViews" EntitySet="DataViews" />
+            <End Role="DataViewColumn" EntitySet="DataViewColumns" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__1920BF5C" Association="Self.FK__Dimension__Dimen__1920BF5C">
+            <End Role="Dimension" EntitySet="Dimensions" />
+            <End Role="DimensionValue" EntitySet="DimensionValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__1DE57479" Association="Self.FK__Dimension__Dimen__1DE57479">
+            <End Role="Dimension" EntitySet="Dimensions" />
+            <End Role="DimensionSetMember" EntitySet="DimensionSetMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__1ED998B2" Association="Self.FK__Dimension__Dimen__1ED998B2">
+            <End Role="DimensionSet" EntitySet="DimensionSets" />
+            <End Role="DimensionSetMember" EntitySet="DimensionSetMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__21B6055D" Association="Self.FK__Dimension__Dimen__21B6055D">
+            <End Role="DimensionSet" EntitySet="DimensionSets" />
+            <End Role="DimensionSetCombination" EntitySet="DimensionSetCombinations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MeasureBr__Dimen__2B3F6F97" Association="Self.FK__MeasureBr__Dimen__2B3F6F97">
+            <End Role="DimensionSet" EntitySet="DimensionSets" />
+            <End Role="MeasureBreakdown" EntitySet="MeasureBreakdowns" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__24927208" Association="Self.FK__Dimension__Dimen__24927208">
+            <End Role="DimensionSetCombination" EntitySet="DimensionSetCombinations" />
+            <End Role="DimensionSetCombinationMember" EntitySet="DimensionSetCombinationMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dimension__Dimen__25869641" Association="Self.FK__Dimension__Dimen__25869641">
+            <End Role="DimensionValue" EntitySet="DimensionValues" />
+            <End Role="DimensionSetCombinationMember" EntitySet="DimensionSetCombinationMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Geography__Geogr__1273C1CD" Association="Self.FK__Geography__Geogr__1273C1CD">
+            <End Role="GeographyType" EntitySet="GeographyTypes" />
+            <End Role="Geography" EntitySet="Geographies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MeasureBr__Measu__2A4B4B5E" Association="Self.FK__MeasureBr__Measu__2A4B4B5E">
+            <End Role="Measure" EntitySet="Measures" />
+            <End Role="MeasureBreakdown" EntitySet="MeasureBreakdowns" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StagingCo__Stagi__36B12243" Association="Self.FK__StagingCo__Stagi__36B12243">
+            <End Role="StagingDatasets" EntitySet="StagingDatasets" />
+            <End Role="StagingColumns" EntitySet="StagingColumns" />
+          </AssociationSet>
+          <EntitySet Name="MeasureInstances" EntityType="Model1.MeasureInstance" />
+          <AssociationSet Name="FK__MeasureIn__Dimen__571DF1D5" Association="Model1.FK__MeasureIn__Dimen__571DF1D5">
+            <End Role="DimensionSetCombination" EntitySet="DimensionSetCombinations" />
+            <End Role="MeasureInstance" EntitySet="MeasureInstances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MeasureIn__Geogr__5812160E" Association="Model1.FK__MeasureIn__Geogr__5812160E">
+            <End Role="Geography" EntitySet="Geographies" />
+            <End Role="MeasureInstance" EntitySet="MeasureInstances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MeasureIn__Measu__5629CD9C" Association="Model1.FK__MeasureIn__Measu__5629CD9C">
+            <End Role="MeasureBreakdown" EntitySet="MeasureBreakdowns" />
+            <End Role="MeasureInstance" EntitySet="MeasureInstances" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="MeasureInstance">
+          <Key>
+            <PropertyRef Name="MeasureInstanceID" />
+          </Key>
+          <Property Name="MeasureInstanceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MeasureBreakdownID" Type="Int32" Nullable="false" />
+          <Property Name="DimensionSetCombinationID" Type="Int32" Nullable="false" />
+          <Property Name="GeographyID" Type="Int32" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="LoadReference" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DimensionSetCombination" Relationship="Model1.FK__MeasureIn__Dimen__571DF1D5" FromRole="MeasureInstance" ToRole="DimensionSetCombination" />
+          <NavigationProperty Name="Geography" Relationship="Model1.FK__MeasureIn__Geogr__5812160E" FromRole="MeasureInstance" ToRole="Geography" />
+          <NavigationProperty Name="MeasureBreakdown" Relationship="Model1.FK__MeasureIn__Measu__5629CD9C" FromRole="MeasureInstance" ToRole="MeasureBreakdown" />
+        </EntityType>
+        <Association Name="FK__MeasureIn__Dimen__571DF1D5">
+          <End Type="Model1.DimensionSetCombination" Role="DimensionSetCombination" Multiplicity="1" />
+          <End Type="Model1.MeasureInstance" Role="MeasureInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DimensionSetCombination">
+              <PropertyRef Name="DimensionSetCombinationID" />
+            </Principal>
+            <Dependent Role="MeasureInstance">
+              <PropertyRef Name="DimensionSetCombinationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MeasureIn__Geogr__5812160E">
+          <End Type="Model1.Geography" Role="Geography" Multiplicity="0..1" />
+          <End Type="Model1.MeasureInstance" Role="MeasureInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Geography">
+              <PropertyRef Name="GeographyID" />
+            </Principal>
+            <Dependent Role="MeasureInstance">
+              <PropertyRef Name="GeographyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MeasureIn__Measu__5629CD9C">
+          <End Type="Model1.MeasureBreakdown" Role="MeasureBreakdown" Multiplicity="1" />
+          <End Type="Model1.MeasureInstance" Role="MeasureInstance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MeasureBreakdown">
+              <PropertyRef Name="MeasureBreakdownID" />
+            </Principal>
+            <Dependent Role="MeasureInstance">
+              <PropertyRef Name="MeasureBreakdownID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Model1StoreContainer" CdmEntityContainer="Geographical_NeedsEntities">
+          <EntitySetMapping Name="DataViewColumns">
+            <EntityTypeMapping TypeName="Model1.DataViewColumn">
+              <MappingFragment StoreEntitySet="DataViewColumn">
+                <ScalarProperty Name="DataViewColumnID" ColumnName="DataViewColumnID" />
+                <ScalarProperty Name="DataViewID" ColumnName="DataViewID" />
+                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DataViews">
+            <EntityTypeMapping TypeName="Model1.DataView">
+              <MappingFragment StoreEntitySet="DataViews">
+                <ScalarProperty Name="DataViewID" ColumnName="DataViewID" />
+                <ScalarProperty Name="ViewName" ColumnName="ViewName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dimensions">
+            <EntityTypeMapping TypeName="Model1.Dimension">
+              <MappingFragment StoreEntitySet="Dimension">
+                <ScalarProperty Name="DimensionID" ColumnName="DimensionID" />
+                <ScalarProperty Name="DimensionName" ColumnName="DimensionName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DimensionSets">
+            <EntityTypeMapping TypeName="Model1.DimensionSet">
+              <MappingFragment StoreEntitySet="DimensionSet">
+                <ScalarProperty Name="DimensionSetID" ColumnName="DimensionSetID" />
+                <ScalarProperty Name="DimensionSetName" ColumnName="DimensionSetName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DimensionSetCombinations">
+            <EntityTypeMapping TypeName="Model1.DimensionSetCombination">
+              <MappingFragment StoreEntitySet="DimensionSetCombination">
+                <ScalarProperty Name="DimensionSetCombinationID" ColumnName="DimensionSetCombinationID" />
+                <ScalarProperty Name="DimensionSetID" ColumnName="DimensionSetID" />
+                <ScalarProperty Name="DimensionSetCombinationName" ColumnName="DimensionSetCombinationName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DimensionSetCombinationMembers">
+            <EntityTypeMapping TypeName="Model1.DimensionSetCombinationMember">
+              <MappingFragment StoreEntitySet="DimensionSetCombinationMember">
+                <ScalarProperty Name="DimensionSetCombinationMember1" ColumnName="DimensionSetCombinationMember" />
+                <ScalarProperty Name="DimensionSetCombinationID" ColumnName="DimensionSetCombinationID" />
+                <ScalarProperty Name="DimensionValueID" ColumnName="DimensionValueID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DimensionSetMembers">
+            <EntityTypeMapping TypeName="Model1.DimensionSetMember">
+              <MappingFragment StoreEntitySet="DimensionSetMember">
+                <ScalarProperty Name="DimensionSetMemberID" ColumnName="DimensionSetMemberID" />
+                <ScalarProperty Name="DimensionID" ColumnName="DimensionID" />
+                <ScalarProperty Name="DimensionSetID" ColumnName="DimensionSetID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DimensionValues">
+            <EntityTypeMapping TypeName="Model1.DimensionValue">
+              <MappingFragment StoreEntitySet="DimensionValue">
+                <ScalarProperty Name="DimensionValueID" ColumnName="DimensionValueID" />
+                <ScalarProperty Name="DimensionID" ColumnName="DimensionID" />
+                <ScalarProperty Name="DimensionValue1" ColumnName="DimensionValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Geographies">
+            <EntityTypeMapping TypeName="Model1.Geography">
+              <MappingFragment StoreEntitySet="Geography">
+                <ScalarProperty Name="GeographyID" ColumnName="GeographyID" />
+                <ScalarProperty Name="GeographyTypeID" ColumnName="GeographyTypeID" />
+                <ScalarProperty Name="MsoaCode" ColumnName="MsoaCode" />
+                <ScalarProperty Name="MsoaName" ColumnName="MsoaName" />
+                <ScalarProperty Name="WardCode" ColumnName="WardCode" />
+                <ScalarProperty Name="WardName" ColumnName="WardName" />
+                <ScalarProperty Name="LsoaCode" ColumnName="LsoaCode" />
+                <ScalarProperty Name="LsoaName" ColumnName="LsoaName" />
+                <ScalarProperty Name="Postcode" ColumnName="Postcode" />
+                <ScalarProperty Name="UPRN" ColumnName="UPRN" />
+                <ScalarProperty Name="USRN" ColumnName="USRN" />
+                <ScalarProperty Name="NAMENUMBER" ColumnName="NAMENUMBER" />
+                <ScalarProperty Name="STREET" ColumnName="STREET" />
+                <ScalarProperty Name="LOCATION" ColumnName="LOCATION" />
+                <ScalarProperty Name="TOWN" ColumnName="TOWN" />
+                <ScalarProperty Name="EASTING" ColumnName="EASTING" />
+                <ScalarProperty Name="NORTHING" ColumnName="NORTHING" />
+                <ScalarProperty Name="LATITUDE" ColumnName="LATITUDE" />
+                <ScalarProperty Name="LONGITUDE" ColumnName="LONGITUDE" />
+                <ScalarProperty Name="SP_GEOMETRY" ColumnName="SP_GEOMETRY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GeographyTypes">
+            <EntityTypeMapping TypeName="Model1.GeographyType">
+              <MappingFragment StoreEntitySet="GeographyType">
+                <ScalarProperty Name="GeographyTypeID" ColumnName="GeographyTypeID" />
+                <ScalarProperty Name="GeographyType1" ColumnName="GeographyType" />
+                <ScalarProperty Name="OrderInHierarchy" ColumnName="OrderInHierarchy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Measures">
+            <EntityTypeMapping TypeName="Model1.Measure">
+              <MappingFragment StoreEntitySet="Measure">
+                <ScalarProperty Name="MeasureID" ColumnName="MeasureID" />
+                <ScalarProperty Name="MeasureName" ColumnName="MeasureName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MeasureBreakdowns">
+            <EntityTypeMapping TypeName="Model1.MeasureBreakdown">
+              <MappingFragment StoreEntitySet="MeasureBreakdown">
+                <ScalarProperty Name="MeasureBreakdownID" ColumnName="MeasureBreakdownID" />
+                <ScalarProperty Name="MeasureBreakdownName" ColumnName="MeasureBreakdownName" />
+                <ScalarProperty Name="MeasureID" ColumnName="MeasureID" />
+                <ScalarProperty Name="DimensionSetID" ColumnName="DimensionSetID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StagingColumns">
+            <EntityTypeMapping TypeName="Model1.StagingColumn">
+              <MappingFragment StoreEntitySet="StagingColumns">
+                <ScalarProperty Name="StagingColumnID" ColumnName="StagingColumnID" />
+                <ScalarProperty Name="StagingDatasetID" ColumnName="StagingDatasetID" />
+                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StagingDatasets">
+            <EntityTypeMapping TypeName="Model1.StagingDataset">
+              <MappingFragment StoreEntitySet="StagingDatasets">
+                <ScalarProperty Name="StagingDatasetID" ColumnName="StagingDatasetID" />
+                <ScalarProperty Name="DatasetName" ColumnName="DatasetName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MeasureInstances">
+            <EntityTypeMapping TypeName="Model1.MeasureInstance">
+              <MappingFragment StoreEntitySet="MeasureInstance">
+                <ScalarProperty Name="LoadReference" ColumnName="LoadReference" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="GeographyID" ColumnName="GeographyID" />
+                <ScalarProperty Name="DimensionSetCombinationID" ColumnName="DimensionSetCombinationID" />
+                <ScalarProperty Name="MeasureBreakdownID" ColumnName="MeasureBreakdownID" />
+                <ScalarProperty Name="MeasureInstanceID" ColumnName="MeasureInstanceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -19,7 +19,7 @@ namespace Data_Loading_Tool.Models
 
         [DisplayName("Staging Table Name")]
         public String StagingTableName { get; set; }
-        
+
         [Required]
         [StringLength(100)]
         [DisplayName("Measure Name")]
@@ -41,6 +41,10 @@ namespace Data_Loading_Tool.Models
         [Required]
         [DisplayName("Geography Type")]
         public int GeographyTypeID { get; set; }
+
+        public IEnumerable<SelectListItem> DimensionsForMeasureBreakdown { get; set; }
+
+        public List<int> selectedDimensions { get; set; }
 
         public IList<CreateMeasureDetailModel> MeasureDetails { get; set; }
 

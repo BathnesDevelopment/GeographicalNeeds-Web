@@ -16,7 +16,6 @@ namespace Data_Loading_Tool.Database
     {
         public GeographyType()
         {
-            this.Facts = new HashSet<Fact>();
             this.Geographies = new HashSet<Geography>();
         }
     
@@ -24,7 +23,6 @@ namespace Data_Loading_Tool.Database
         public string GeographyType1 { get; set; }
         public int OrderInHierarchy { get; set; }
     
-        public virtual ICollection<Fact> Facts { get; set; }
         public virtual ICollection<Geography> Geographies { get; set; }
     }
 }

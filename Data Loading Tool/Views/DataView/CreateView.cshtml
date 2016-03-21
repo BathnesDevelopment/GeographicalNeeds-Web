@@ -1,0 +1,152 @@
+﻿@model Data_Loading_Tool.Models.CreateViewModel
+
+@{
+    ViewBag.Title = "Create View ";
+}
+
+<h2>Create View </h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>CreateViewModel</legend>
+        <div class="form-group">
+            @Html.RequiredLabelFor(model => model.ViewName, new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.EditorFor(model => model.ViewName)
+            @Html.ValidationMessageFor(model => model.ViewName)
+        </div>
+
+        <div class="form-group">
+            @Html.RequiredLabelFor(model => model.SelectedGeographyType, new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.DropDownListFor(x => Model.SelectedGeographyType, Model.GeographyTypes, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.SelectedGeographyType)
+        </div>
+
+        <div class="form-group" id="columnRows">
+            @foreach (var col in Model.Columns)
+            { 
+                Html.RenderPartial("ViewColumnControl", col);
+            }            
+        </div>
+        
+        <div class="form-group">
+            @Html.RequiredLabelFor(model => model.NewColumnModel.ColummName, new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.TextBoxFor(x => Model.NewColumnModel.ColummName, new { @class = "form-control", id = "ColumnName" })
+            @Html.ValidationMessageFor(model => model.NewColumnModel.ColummName)
+        </div>
+        <div class="form-group">
+            @Html.RequiredLabelFor(model => model.NewColumnModel.SelectedMeasure, new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.DropDownListFor(x => Model.NewColumnModel.SelectedMeasure, Model.NewColumnModel.Measures, "Please choose a Measure", new { @class = "form-control", id = "NewMeasures" })
+            @Html.ValidationMessageFor(model => model.NewColumnModel.SelectedMeasure)
+        </div>
+        <div class="form-group">
+            @Html.RequiredLabelFor(model => model.NewColumnModel.SelectedMeasureBreakdown, new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.DropDownListFor(x => Model.NewColumnModel.SelectedMeasureBreakdown, Model.NewColumnModel.MeasureBreakdowns, "Please choose a Measure Breakdown", new { @class = "form-control", id = "NewBreakdowns" })
+            @Html.ValidationMessageFor(model => model.NewColumnModel.SelectedMeasureBreakdown)
+        </div>
+        <div class="form-group">
+            @Html.RequiredLabelFor(model => model.NewColumnModel.SelectedDimensionValue, new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.DropDownListFor(x => Model.NewColumnModel.SelectedDimensionValue, Model.NewColumnModel.DimensionValues, "Please choose a Dimension Value set", new { @class = "form-control", id = "NewDimensionValues" })
+            @Html.ValidationMessageFor(model => model.NewColumnModel.SelectedDimensionValue)
+        </div>
+        
+        @Html.ActionLink("Add column...", "BlankColumnEditorRow", null, new { id = "addItem" }) 
+        
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Create" />
+        </div>
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+    $("#addItem").click(function () {
+        $.ajax({
+            url: '/DataView/AddColumnRow' + '?measureID=' + $('#NewMeasures').val() + '&measureBreakdownID=' + $('#NewBreakdowns').val() + '&dimValueID=' + $('#NewDimensionValues').val() + '&newColumnName=' + $('#ColumnName').val(),
+            cache: false,
+            success: function (html) { $("#columnRows").append(html); }
+        });
+        return false;
+    });
+
+    $(document).ready(function () {        
+
+        //Dropdownlist Selectedchange event
+        $("#NewMeasures").change(function () {
+            $("#NewBreakdowns").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetMeasureBreakdownsForMeasure")', // we are calling json method
+
+                    dataType: 'json',
+
+                    data: { measureID: $("#NewMeasures").val() },
+                    // here we are get value of selected country and passing same value as input to json method GetStates.
+
+                    success: function (breakdown) {
+                        // states contains the JSON formatted list
+                        // of states passed from the controller
+
+                        $.each(breakdown, function (i, breakdown) {
+                            $("#NewBreakdowns").append('<option value="' + breakdown.Value + '">' +
+                                 breakdown.Text + '</option>');
+                            // here we are adding option for breakdowns
+
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve Breakdowns.' + ex);
+                    }
+                });
+                return false;
+            })
+
+            //Dropdownlist Selectedchange event
+            $("#NewBreakdowns").change(function () {
+                $("#NewDimensionValues").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetDimensionSetCombinationsForMeasureBreakdown")', // we are calling json method
+
+                    dataType: 'json',
+
+                    data: { measureBreakdownID: $("#NewBreakdowns").val() },
+                    // here we are get value of selected country and passing same value as input to json method GetStates.
+
+                    success: function (breakdown) {
+                        // states contains the JSON formatted list
+                        // of states passed from the controller
+
+                        $.each(breakdown, function (i, breakdown) {
+                            $("#NewDimensionValues").append('<option value="' + breakdown.Value + '">' +
+                                 breakdown.Text + '</option>');
+                            // here we are adding option for breakdowns
+
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve Dimension Values.' + ex);
+                    }
+                });
+                return false;
+            })
+        });
+    </script>
+}
