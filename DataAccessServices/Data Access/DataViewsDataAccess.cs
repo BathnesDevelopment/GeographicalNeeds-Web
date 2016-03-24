@@ -9,15 +9,14 @@ namespace DataAccessServices.Data_Access
 {
     public class DataViewsDataAccess
     {
-        public DataTable getViewData(int viewID)
+        public DataTable getViewData(String viewName)
         {
             DataTable dt;
             SqlDataAdapter sda;
 
             Geographical_NeedsEntities context = new Geographical_NeedsEntities();
 
-            String columns = String.Join(",", context.DataViews.Single(x => x.DataViewID.Equals(viewID)).DataViewColumns.Select(x => String.Format("[{0}]", x.ColumnName)));
-            String viewName = context.DataViews.Single(x => x.DataViewID.Equals(viewID)).ViewName;
+            String columns = String.Join(",", context.DataViews.Single(x => x.ViewName.Equals(viewName)).DataViewColumns.Select(x => String.Format("[{0}]", x.ColumnName)));            
 
             String sql = String.Format("Select {1} from [{0}]", viewName, columns);
 

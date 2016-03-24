@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Data;
 
 namespace GeographicalNeedsService
 {
@@ -12,7 +13,7 @@ namespace GeographicalNeedsService
     public interface IDataViewService
     {
         [OperationContract]
-        string GetViewData(int value);               
+        DataTable GetViewData(String viewName);               
     }
 
    

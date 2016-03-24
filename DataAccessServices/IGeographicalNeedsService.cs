@@ -14,7 +14,7 @@ namespace DataAccessServices
     public interface IGeographicalNeedsService
     {
         [OperationContract]
-        DataTable GetViewData(int viewId);
+        DataTable GetViewData(String viewName);
     }
 
 }

@@ -5,15 +5,21 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.Data;
+using System.ServiceModel.Web;
+using System.ServiceModel.Activation;
 
 namespace GeographicalNeedsService
-{
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
+{    
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]        
     public class DataViewService : IDataViewService
     {
-        public String GetViewData(int value)
+        [WebInvoke(Method = "GET",
+         RequestFormat = WebMessageFormat.Json,
+         ResponseFormat = WebMessageFormat.Json)]
+        public DataTable GetViewData(String viewName)
         {
-            return string.Format("You entered: {0}", value);
+            return new DataTable();
         }
     }
 }

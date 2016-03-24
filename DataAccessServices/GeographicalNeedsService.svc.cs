@@ -21,11 +21,11 @@ namespace DataAccessServices
         [WebInvoke(Method = "GET",
          RequestFormat = WebMessageFormat.Json,
          ResponseFormat = WebMessageFormat.Json)]
-        public DataTable GetViewData(int viewID)
+        public DataTable GetViewData(String viewName)
         {
             DataViewsDataAccess dataAccess = new DataViewsDataAccess();
 
-            return dataAccess.getViewData(viewID);
+            return dataAccess.getViewData(viewName);
         }
     }
 }
