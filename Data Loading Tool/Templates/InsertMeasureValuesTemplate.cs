@@ -85,14 +85,14 @@ namespace Data_Loading_Tool.Templates
             
             #line default
             #line hidden
-            this.Write(" A\r\ninner join \r\nGeography G\r\non \r\nA.");
+            this.Write(" A\r\ninner join \r\nGeography G\r\non \r\nA.[");
             
             #line 30 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(StagingGeographyColumn));
             
             #line default
             #line hidden
-            this.Write(" =\r\ncase ");
+            this.Write("] =\r\ncase ");
             
             #line 31 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\InsertMeasureValuesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(GeographyTypeID));

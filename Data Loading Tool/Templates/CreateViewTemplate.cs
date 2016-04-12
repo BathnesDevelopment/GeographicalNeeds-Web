@@ -99,7 +99,7 @@ namespace Data_Loading_Tool.Templates
 			break;
 		case 6:
 			geogColumn = "CouncilArea";
-			geogAlias = "CouncilArea";
+			geogAlias = "Whole Council Area";
 			break;
 	}
 
@@ -113,14 +113,14 @@ namespace Data_Loading_Tool.Templates
             
             #line default
             #line hidden
-            this.Write(" as ");
+            this.Write(" as [");
             
             #line 51 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(geogAlias));
             
             #line default
             #line hidden
-            this.Write("\r\nfrom\r\n(\r\nselect \r\n\tG.");
+            this.Write("]\r\nfrom\r\n(\r\nselect \r\n\tG.");
             
             #line 55 "C:\Development\Ben B\Code\Geographical Needs\Data Loading Tool\Templates\CreateViewTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(geogColumn));

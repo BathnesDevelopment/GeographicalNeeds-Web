@@ -44,11 +44,11 @@ select
 			break;
 		case 6:
 			geogColumn = "CouncilArea";
-			geogAlias = "CouncilArea";
+			geogAlias = "Whole Council Area";
 			break;
 	}
 #>	
-	Geog.<#=geogColumn#> as <#=geogAlias#>
+	Geog.<#=geogColumn#> as [<#=geogAlias#>]
 from
 (
 select 

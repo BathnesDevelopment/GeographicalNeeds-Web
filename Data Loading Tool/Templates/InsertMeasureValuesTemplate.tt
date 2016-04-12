@@ -27,7 +27,7 @@ from <#= StagingTableName #> A
 inner join 
 Geography G
 on 
-A.<#= StagingGeographyColumn #> =
+A.[<#= StagingGeographyColumn #>] =
 case <#= GeographyTypeID #>
 	when  
 		1

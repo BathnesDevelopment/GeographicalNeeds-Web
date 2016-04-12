@@ -68,18 +68,18 @@ namespace Data_Loading_Tool.Database
 
             newDim.DimensionName = model.DimensionName;
 
-            DimensionSet newSet = context.DimensionSets.Create();
-            newSet.DimensionSetName = String.Format("By {0}", model.DimensionName);
+            //DimensionSet newSet = context.DimensionSets.Create();
+            //newSet.DimensionSetName = String.Format("By {0}", model.DimensionName);
 
-            DimensionSetMember newMember = context.DimensionSetMembers.Create();
+            //DimensionSetMember newMember = context.DimensionSetMembers.Create();
 
-            newDim.DimensionSetMembers.Add(newMember);
-            newSet.DimensionSetMembers.Add(newMember);
+            //newDim.DimensionSetMembers.Add(newMember);
+            //newSet.DimensionSetMembers.Add(newMember);
 
             String stagingColumnName = context.StagingColumns.Single(x => x.StagingColumnID.Equals(model.DimColumnInStaging)).ColumnName;
             String stagingTableName = context.StagingColumns.Single(x => x.StagingColumnID.Equals(model.DimColumnInStaging)).StagingDataset.DatasetName;
 
-            String sqlQuery = String.Format("select distinct {0} from {1}", stagingColumnName, stagingTableName);
+            String sqlQuery = String.Format("select distinct [{0}] from [{1}]", stagingColumnName, stagingTableName);
             IEnumerable<String> stagingDimensionValues = context.Database.SqlQuery<String>(sqlQuery);
 
             foreach (String dimValue in stagingDimensionValues)
@@ -92,8 +92,8 @@ namespace Data_Loading_Tool.Database
             }
 
             context.Dimensions.Add(newDim);
-            context.DimensionSets.Add(newSet);
-            context.DimensionSetMembers.Add(newMember);
+            //context.DimensionSets.Add(newSet);
+            //context.DimensionSetMembers.Add(newMember);
 
             context.SaveChanges();
 
@@ -290,8 +290,6 @@ namespace Data_Loading_Tool.Database
             {
                 Dimension dim = context.Dimensions.Single(x => x.DimensionID.Equals(dimID));
 
-
-
                 foreach (DimensionSet set in allNewSets)
                 {
                     DimensionSet derivedSet = context.DimensionSets.Create();
@@ -398,7 +396,7 @@ namespace Data_Loading_Tool.Database
                     foreach (var value in values)
 	                {
                         var detail = model.MeasureValueDetails.Single(x => x.DimValueID.Equals(value.DimensionValueID));
-                        whereClauses.Add(String.Format("[{0}] = '{1}'", detail.DimColumnInStaging, detail.DimValueInStaging));
+                        whereClauses.Add(String.Format("[{0}] = '{1}'", detail.DimColumnInStaging, detail.DimValueInStaging.Replace("'", "''")));
 	                }
                     String whereClause = String.Format("Where {0}", String.Join(" AND ", whereClauses));
 
